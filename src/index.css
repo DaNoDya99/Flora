@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    margin: 0;
+}
+
+.frame {
+    width: 315px;
+    height: 165px;
+    margin: 20px;
+    position: relative;
+}
+
+.fade {
+    height: 100%;
+    width: 100%;
+    position:absolute;
+    background: -webkit-linear-gradient(left,
+    rgba(0,0,0,0.65) 0%,
+    rgba(0,0,0,0) 20%,
+    rgba(0,0,0,0) 80%,
+    rgba(0,0,0,0.65) 100%
+    );
+}
+
+.nunito-sans-light {
+    font-family: "Nunito Sans", sans-serif !important;
+    font-optical-sizing: auto !important;
+    font-style: normal !important;
+    font-variation-settings:
+          "wdth" 100,
+          "YTLC" 500 !important;
+}
+
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
+    margin-top: 5.7em;
+    width: 25em;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop{
+    background-color: unset !important;
+}
+
+.css-5uz6um-MuiTypography-root{
+    font-family: unset !important;
+}
