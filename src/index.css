@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+body {
     margin: 0;
 }
 
@@ -18,13 +18,12 @@ body{
 .fade {
     height: 100%;
     width: 100%;
-    position:absolute;
+    position: absolute;
     background: -webkit-linear-gradient(left,
-    rgba(0,0,0,0.65) 0%,
-    rgba(0,0,0,0) 20%,
-    rgba(0,0,0,0) 80%,
-    rgba(0,0,0,0.65) 100%
-    );
+            rgba(0, 0, 0, 0.65) 0%,
+            rgba(0, 0, 0, 0) 20%,
+            rgba(0, 0, 0, 0) 80%,
+            rgba(0, 0, 0, 0.65) 100%);
 }
 
 .nunito-sans-light {
@@ -32,20 +31,29 @@ body{
     font-optical-sizing: auto !important;
     font-style: normal !important;
     font-variation-settings:
-          "wdth" 100,
-          "YTLC" 500 !important;
+        "wdth" 100,
+        "YTLC" 500 !important;
 }
 
-.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
     margin-top: 5.7em;
     width: 25em;
     background-color: rgba(255, 255, 255, 0.9) !important;
 }
 
-.css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop{
+.css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
     background-color: unset !important;
 }
 
-.css-5uz6um-MuiTypography-root{
+.css-5uz6um-MuiTypography-root {
     font-family: unset !important;
+}
+
+@media only screen and (max-width: 1536px) {
+    .css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+        margin-top: 4.4em;
+        width: 20em;
+        height: 88vh !important;
+        background-color: rgba(255, 255, 255, 0.9) !important;
+    }
 }

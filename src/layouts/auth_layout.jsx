@@ -15,7 +15,7 @@ function AuthLayout() {
                 <div className={"w-[40%]"}>
                     <img src={AuthBackgroundImage}
                          alt="background image"
-                        className={"object-cover w-full h-[90vh] mt-1 opacity-75"}
+                        className={"object-cover w-full h-screen mt-1 opacity-75"}
                     />
                 </div>
             </div>

@@ -9,15 +9,15 @@ function Register() {
 
     return (
         <>
-            <div className={'flex flex-col items-center h-[90vh] justify-center nunito-sans-light'}>
+            <div className={'flex flex-col items-center h-[90vh] justify-center nunito-sans-light max-2xl:my-5'}>
                 <div className={'w-[35em] flex flex-col items-center'}>
                     <img src={LogoNameImage}
                          alt="logo"
-                         className="w-48 h-48 rounded-full shadow-lg"
+                         className="w-48 h-48 rounded-full shadow-lg max-2xl:w-24 max-2xl:h-24"
                     />
                     <div>
-                        <h1 className={'text-4xl font-semibold text-center mt-5 '}>Sign Up to Flower Hub</h1>
-                        <form action="" className={'flex flex-col mt-10 space-y-8'}>
+                        <h1 className={'text-4xl font-semibold text-center mt-5 max-2xl:text-3xl'}>Sign Up to Flower Hub</h1>
+                        <form action="" className={'flex flex-col mt-10 space-y-8 max-2xl:mt-5 max-2xl:space-y-5'}>
                             <div className={'flex gap-2'}>
                                 <FormControl>
                                     <InputLabel htmlFor="firstName">First name</InputLabel>

@@ -8,7 +8,7 @@ import ProductImage from "../assets/images/product.jpg";
 
 export default function ImgMediaCard() {
     return (
-        <Card sx={{ maxWidth: 280, maxHeight: 450}} className={'hover:scale-[101%] nunito-sans-light'}>
+        <Card sx={{ maxWidth: 280, maxHeight: 450 }} className={'hover:scale-[101%] nunito-sans-light max-2xl:w-[13em] max-2xl:h-[19.5em]'}>
             <CardMedia
                 component="img"
                 alt="green iguana"
@@ -17,30 +17,31 @@ export default function ImgMediaCard() {
                 sx={{
                     objectFit: 'contain',
                     objectPosition: 'center',
-                    width: 280,
-                    height: 280,
+                    // width: 280,
+                    // height: 280,
 
                 }}
+                className={'max-2xl:w-[13em] max-2xl:h-[13em]'}
             />
-            <CardContent className={'flex flex-col items-center'}>
-                <Typography gutterBottom variant="h5" component="div">
+            <CardContent className={'flex flex-col items-center'} sx={{ py: 0.5 }}>
+                <Typography gutterBottom component="div" className='max-2xl:text-sm font-semibold'>
                     AFFAIRS OF HEARTS
                 </Typography>
-                <Typography sx={{fontSize: '1.5em'}}>
+                <Typography className='max-2xl:text-sm'>
                     Rs. 6000.00
                 </Typography>
             </CardContent>
             <CardActions>
                 <Button variant="contained"
-                        color="secondary3"
-                        sx={{fontSize: '1.2em',
-                            fontWeight: 'bold',
-                            textTransform: 'none',
-                            width: 280,
-                            height: '2.5em',
-                        }}
-                        className={'nunito-sans-light'}
-                >Add to Cart
+                    color="secondary3"
+                    sx={{
+                        fontWeight: 'bold',
+                        textTransform: 'none',
+                        width: 280,
+                        height: '2em',
+                    }}
+
+                ><span className={'nunito-sans-light text-[1rem]'}>Add to Cart</span>
                 </Button>
             </CardActions>
         </Card>

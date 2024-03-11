@@ -12,10 +12,10 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LogoImage from '../assets/images/logo-only-image.png';
 import AccountIcon from '../assets/svgs/account.svg';
-import {useSelector} from "react-redux";
-import {Link} from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
-import {styled} from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 const pages = ["Categories", "About", "Contact"];
 
@@ -25,11 +25,11 @@ const DrawerStyled = styled(Drawer)(() => ({
 }))
 function ResponsiveAppBar() {
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
-    const settings = loggedIn ? [{'name' : 'Profile','link' : '/auth/login'},
-        {'name' : 'Logout', 'link' : '/auth/logout'}] : [{'name' : 'Login', 'link' : '/auth/login'},
-        {'name' : 'Register', 'link' : '/auth/register'}];
+    const settings = loggedIn ? [{ 'name': 'Profile', 'link': '/auth/login' },
+    { 'name': 'Logout', 'link': '/auth/logout' }] : [{ 'name': 'Login', 'link': '/auth/login' },
+    { 'name': 'Register', 'link': '/auth/register' }];
 
-    let profile_image =  <img src={AccountIcon} className={"w-8 h-8"} alt="Account"/>
+    let profile_image = <img src={AccountIcon} className={"w-8 h-8"} alt="Account" />
 
     const [open, setOpen] = React.useState(false);
 
@@ -39,7 +39,7 @@ function ResponsiveAppBar() {
 
 
     if (loggedIn) {
-        profile_image = <img src={AccountIcon} className={"w-8 h-8"} alt="Account"/>
+        profile_image = <img src={AccountIcon} className={"w-8 h-8"} alt="Account" />
     }
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -62,10 +62,10 @@ function ResponsiveAppBar() {
 
     return (
         <AppBar position="sticky" color={"primary"} className={'nunito-sans-light'}>
-            <Container maxWidth="xl" className={"p-1"}>
+            <Container maxWidth="xl" className={"p-1 max-2xl:p-0"}>
                 <Toolbar disableGutters>
                     <Box>
-                        <img src={LogoImage} className="w-16 h-16 rounded-full shadow-lg max-[900px]:hidden" alt="logo"/>
+                        <img src={LogoImage} className="w-16 h-16 rounded-full shadow-lg max-[900px]:hidden max-2xl:w-12 max-2xl:h-12" alt="logo" />
                     </Box>
                     <Typography
                         variant="h6"
@@ -122,7 +122,7 @@ function ResponsiveAppBar() {
                             ))}
                         </Menu>
                     </Box>
-                    <img src={LogoImage} className="w-16 h-16 rounded-full shadow-lg min-[900px]:hidden" alt="logo"/>
+                    <img src={LogoImage} className="w-16 h-16 rounded-full shadow-lg min-[900px]:hidden" alt="logo" />
                     <Typography
                         variant="h5"
                         noWrap
@@ -147,10 +147,10 @@ function ResponsiveAppBar() {
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'black', display: 'block', marginX: 1}}
+                                sx={{ my: 2, color: 'black', display: 'block', marginX: 1 }}
                             >
-                                {page === 'Categories' ? <Typography textAlign="center" sx={{fontSize : 16}} onClick={toggleDrawer(true)}>{page}</Typography>
-                                    : <Typography textAlign="center" sx={{fontSize : 16}}>{page}</Typography>}
+                                {page === 'Categories' ? <Typography textAlign="center" sx={{ fontSize: 16 }} onClick={toggleDrawer(true)}>{page}</Typography>
+                                    : <Typography textAlign="center" sx={{ fontSize: 16 }}>{page}</Typography>}
                             </Button>
                         ))}
                     </Box>
@@ -189,44 +189,44 @@ function ResponsiveAppBar() {
                 </Toolbar>
             </Container>
             <DrawerStyled anchor={'left'} open={open} onClose={toggleDrawer(false)} hideBackdrop={false}>
-                <div className={'m-5 flex flex-col justify-center'}>
+                <div className={'m-5 flex flex-col justify-center max-2xl:my-0'}>
                     <div className={'w-full text-center'}>
-                        <h1 className={'text-4xl font-semibold'}>Our Collections</h1>
+                        <h1 className={'text-4xl font-bold max-2xl:text-3xl max-2xl:mt-5'}>Our Collections</h1>
                     </div>
-                    <div className={"my-10 space-y-5 mx-5"}>
+                    <div className={"my-10 space-y-5 mx-5 max-2xl:my-5 max-2xl:mx-2"}>
                         <div>
-                            <div className={'text-2xl'}>
+                            <div className={'text-2xl max-2xl:text-xl max-2xl:font-semibold'}>
                                 🎉 Occasional Delights
                             </div>
-                            <div className={'ms-14 my-4 space-y-4'}>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'products/birthday'} onClick={toggleDrawer(false)}>Birthday</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Love & Romance</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Anniversary</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Wedding</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Congratulations</Link></h2>
+                            <div className={'ms-14 my-4 max-2xl:my-2 space-y-4 max-2xl:space-y-2'}>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'products/birthday'} onClick={toggleDrawer(false)}>Birthday</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Love & Romance</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Anniversary</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Wedding</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Congratulations</Link></h2>
                             </div>
                         </div>
                         <div>
-                            <div className={'text-2xl'}>
+                            <div className={'text-2xl max-2xl:text-xl max-2xl:font-semibold'}>
                                 🌷 Flower Type Elegance
                             </div>
-                            <div className={'ms-14 my-4 space-y-4'}>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Lilies</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Roses</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Chrysanthemums</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Gerbera</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Mix</Link></h2>
+                            <div className={'ms-14 my-4 max-2xl:my-2 space-y-4 max-2xl:space-y-2'}>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Lilies</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Roses</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Chrysanthemums</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Gerbera</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Mix</Link></h2>
                             </div>
                         </div>
                         <div>
-                            <div className={'text-2xl'}>
+                            <div className={'text-2xl max-2xl:text-xl max-2xl:font-semibold'}>
                                 🌈 Colorful Blossoms
                             </div>
-                            <div className={'ms-14 my-4 space-y-4'}>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Pink</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Red</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>White</Link></h2>
-                                <h2 className={'hover:font-semibold'}>- <Link to={'#'}>Yellow</Link></h2>
+                            <div className={'ms-14 my-4 max-2xl:my-2 space-y-4 max-2xl:space-y-2'}>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Pink</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Red</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>White</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Yellow</Link></h2>
                             </div>
                         </div>
                     </div>
