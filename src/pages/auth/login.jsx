@@ -14,7 +14,7 @@ function Login() {
 
     return (
         <>
-            <div className={'flex flex-col items-center h-[80vh] justify-center nunito-sans-light max-2xl:h-[88vh]'}>
+            <div className={'flex flex-col items-center h-screen justify-center nunito-sans-light max-2xl:h-[88vh]'}>
                 <div className={'w-[35em] flex flex-col items-center'}>
                     <img src={LogoNameImage}
                          alt="logo"

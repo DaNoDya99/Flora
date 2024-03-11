@@ -5,7 +5,7 @@ import AuthBackgroundImage from "../assets/images/auth-background.jpg";
 function AuthLayout() {
     return (
         <div className={'nunito-sans-light'}>
-            <ResponsiveAppBar/>
+            <ResponsiveAppBar sticky={false}/>
             <div className={'flex'}>
                 <div className={"w-[60%]"}>
                     <main>

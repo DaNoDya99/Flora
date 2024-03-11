@@ -9,7 +9,7 @@ function Register() {
 
     return (
         <>
-            <div className={'flex flex-col items-center h-[90vh] justify-center nunito-sans-light max-2xl:my-5'}>
+            <div className={'flex flex-col items-center h-screen justify-center nunito-sans-light max-2xl:my-5'}>
                 <div className={'w-[35em] flex flex-col items-center'}>
                     <img src={LogoNameImage}
                          alt="logo"

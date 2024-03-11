@@ -3,12 +3,29 @@ import Button from "@mui/material/Button";
 import ImgMediaCard from "../../components/card.jsx";
 import DescriptiveCard from "../../components/descriptive-card.jsx";
 import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
 // import { useSelector, useDispatch } from 'react-redux'
 // import {addProduct, removeProduct} from "../../store/slices/product_slice.js";
 
 function Home() {
     // const products = useSelector(state => state.product);
     // const dispatch = useDispatch();
+    const [noOfCards, setNoOfCards] = useState(5);
+
+    useEffect(() => {
+        const handleResize = () => {
+
+            if (window.innerWidth < 1536) {
+                setNoOfCards(4);
+            } else if (window.innerWidth >=1536){
+                setNoOfCards(5);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+    });
+
+    const cardsArray = Array.from({ length: noOfCards }, (_, index) => index);
 
     const collections = [
             {
@@ -83,12 +100,13 @@ function Home() {
             <div className={'flex flex-col justify-center items-center py-10 nunito-sans-light bg-primary'}>
                 <h1 className={'text-4xl font-semibold'}>Featured Products</h1>
                 <div className={'mt-10 px-[10em] flex justify-between w-full max-2xl:px-[6em]'}>
-                    <Link to={'product/birthday/001'}>
-                        <ImgMediaCard/>
-                    </Link>
-                    <ImgMediaCard/>
-                    <ImgMediaCard/>
-                    <ImgMediaCard/>
+                    {
+                        cardsArray.map((index) => (
+                            <Link key={index} to={'product/birthday/001'}>
+                                <ImgMediaCard/>
+                            </Link>
+                        ))
+                    }
                 </div>
             </div>
 

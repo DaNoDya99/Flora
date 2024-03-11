@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
+import PropTypes from "prop-types";
 
 const pages = ["Categories", "About", "Contact"];
 
@@ -23,13 +24,14 @@ const DrawerStyled = styled(Drawer)(() => ({
     height: 90,
     width: '10em'
 }))
-function ResponsiveAppBar() {
+function ResponsiveAppBar(props) {
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
     const settings = loggedIn ? [{ 'name': 'Profile', 'link': '/auth/login' },
     { 'name': 'Logout', 'link': '/auth/logout' }] : [{ 'name': 'Login', 'link': '/auth/login' },
     { 'name': 'Register', 'link': '/auth/register' }];
 
     let profile_image = <img src={AccountIcon} className={"w-8 h-8"} alt="Account" />
+    const sticky = props.sticky;
 
     const [open, setOpen] = React.useState(false);
 
@@ -61,7 +63,7 @@ function ResponsiveAppBar() {
     };
 
     return (
-        <AppBar position="sticky" color={"primary"} className={'nunito-sans-light'}>
+        <AppBar position={sticky ? 'sticky' : 'fixed'} color={"primary"} className={'nunito-sans-light'}>
             <Container maxWidth="xl" className={"p-1 max-2xl:p-0"}>
                 <Toolbar disableGutters>
                     <Box>
@@ -237,4 +239,7 @@ function ResponsiveAppBar() {
     );
 }
 
+ResponsiveAppBar.propTypes = {
+    sticky: PropTypes.bool.isRequired,
+}
 export default ResponsiveAppBar;

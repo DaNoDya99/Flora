@@ -4,6 +4,7 @@ import { FormControl, FormControlLabel, FormLabel, Pagination, Radio, RadioGroup
 import AuthBackgroundImage from "../../assets/images/auth-background.jpg";
 import Typography from "@mui/material/Typography";
 import ImgMediaCard from "../../components/card.jsx";
+import {useEffect, useState} from "react";
 
 function Products() {
     const category = useLoaderData();
@@ -13,6 +14,23 @@ function Products() {
         { path: '/categories', name: 'Categories', last: false },
         { path: `/products/${category}`, name: category[0].toUpperCase() + category.slice(1), last: true }
     ];
+
+    const [noOfCards, setNoOfCards] = useState(8);
+
+    useEffect(() => {
+        const handleResize = () => {
+
+            if (window.innerWidth < 1536) {
+                setNoOfCards(6);
+            } else if (window.innerWidth >=1536){
+                setNoOfCards(8);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+    });
+
+    const cardsArray = Array.from({ length: noOfCards }, (_, index) => index);
 
     return (
         <div className={'min-h-[90vh] py-14 px-[10em] max-2xl:px-[8em]'}>
@@ -55,16 +73,14 @@ function Products() {
                     </div>
                 </div>
                 <div className={'flex flex-wrap flex-row justify-between gap-5 ms-10 w-[80%]'}>
-                    <Link to={'/product/' + category + '/001'}>
-                        <ImgMediaCard />
-                    </Link>
-                    <ImgMediaCard />
-                    <ImgMediaCard />
-                    <ImgMediaCard />
-                    <ImgMediaCard />
-                    <ImgMediaCard />
-                    <ImgMediaCard />
-                    <ImgMediaCard />
+                    {
+                        cardsArray.map((index) => (
+                            <Link key={index} to={'/product/' + category + '/001'}>
+                                <ImgMediaCard />
+                            </Link>
+                        ))
+
+                    }
                 </div>
             </div>
             <div className={'w-full flex justify-center mt-14'}>

@@ -5,7 +5,7 @@ import Footer from "../components/footer.jsx";
 function CustomerLayout() {
     return (
         <div className={'nunito-sans-light'}>
-            <ResponsiveAppBar/>
+            <ResponsiveAppBar sticky={true}/>
             <main>
                 <Outlet />
             </main>

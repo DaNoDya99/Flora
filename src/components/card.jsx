@@ -24,10 +24,10 @@ export default function ImgMediaCard() {
                 className={'max-2xl:w-[13em] max-2xl:h-[13em]'}
             />
             <CardContent className={'flex flex-col items-center'} sx={{ py: 0.5 }}>
-                <Typography gutterBottom component="div" className='max-2xl:text-sm font-semibold'>
+                <Typography gutterBottom component="div" className='max-2xl:text-sm !font-bold'>
                     AFFAIRS OF HEARTS
                 </Typography>
-                <Typography className='max-2xl:text-sm'>
+                <Typography className='max-2xl:text-sm !font-semibold'>
                     Rs. 6000.00
                 </Typography>
             </CardContent>
