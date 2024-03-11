@@ -62,7 +62,7 @@ function ResponsiveAppBar() {
 
     return (
         <AppBar position="sticky" color={"primary"} className={'nunito-sans-light'}>
-            <Container maxWidth="xl" className={"p-2"}>
+            <Container maxWidth="xl" className={"p-1"}>
                 <Toolbar disableGutters>
                     <Box>
                         <img src={LogoImage} className="w-16 h-16 rounded-full shadow-lg max-[900px]:hidden" alt="logo"/>
@@ -78,7 +78,7 @@ function ResponsiveAppBar() {
                             fontWeight: 700,
                             letterSpacing: '.2rem',
                             textDecoration: 'none',
-                            fontSize: '2rem',
+                            fontSize: '1.5rem',
                             paddingLeft: '1em',
                         }}
                         className={"text-black nunito-sans-light"}
@@ -149,8 +149,8 @@ function ResponsiveAppBar() {
                                 onClick={handleCloseNavMenu}
                                 sx={{ my: 2, color: 'black', display: 'block', marginX: 1}}
                             >
-                                {page === 'Categories' ? <Typography textAlign="center" sx={{fontSize : 20}} onClick={toggleDrawer(true)}>{page}</Typography>
-                                    : <Typography textAlign="center" sx={{fontSize : 20}}>{page}</Typography>}
+                                {page === 'Categories' ? <Typography textAlign="center" sx={{fontSize : 16}} onClick={toggleDrawer(true)}>{page}</Typography>
+                                    : <Typography textAlign="center" sx={{fontSize : 16}}>{page}</Typography>}
                             </Button>
                         ))}
                     </Box>

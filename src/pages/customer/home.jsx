@@ -60,7 +60,7 @@ function Home() {
                     <img src={HomeBackgroundImage}
                          className={'w-full object-cover opacity-75'}
                          alt=""/>
-                    <div className={'absolute left-[15em] top-[36vh] space-y-5'}>
+                    <div className={'absolute left-[15em] top-[36vh] space-y-5 max-2xl:left-[8em]'}>
                         <h1 className={'text-6xl text-white font-bold'}>Discover the Beauty of Blooms.</h1>
                         <p className={'text-white text-5xl'}>Welcome to Flower Hub - Where </p>
                         <p className={'text-white text-5xl'}>Nature Meets Elegance! </p>
@@ -82,18 +82,17 @@ function Home() {
 
             <div className={'flex flex-col justify-center items-center py-10 nunito-sans-light bg-primary'}>
                 <h1 className={'text-4xl font-semibold'}>Featured Products</h1>
-                <div className={'mt-10 px-[10em] flex justify-between w-full'}>
+                <div className={'mt-10 px-[10em] flex justify-between w-full max-2xl:px-[6em]'}>
                     <Link to={'product/birthday/001'}>
                         <ImgMediaCard/>
                     </Link>
                     <ImgMediaCard/>
                     <ImgMediaCard/>
                     <ImgMediaCard/>
-                    <ImgMediaCard/>
                 </div>
             </div>
 
-            <div className={'flex flex-col items-center px-[10em] py-10 nunito-sans-light'}>
+            <div className={'flex flex-col items-center px-[10em] py-10 nunito-sans-light max-2xl:px-[6em]'}>
                 <h1 className={'text-4xl font-semibold'}>Our Collections</h1>
                 <div className={'flex justify-between mt-10'}>
                     {collections.map((collection, index) => (
@@ -102,7 +101,7 @@ function Home() {
                 </div>
             </div>
 
-            <div className={'flex flex-col items-center px-[10em] py-10 bg-primary nunito-sans-light'}>
+            <div className={'flex flex-col items-center px-[10em] py-10 bg-primary nunito-sans-light max-2xl:px-[6em]'}>
                 <h1 className={'text-4xl font-semibold'}>Why Choose Us?</h1>
                 <div className={'flex'}>
                     <div className={'flex flex-col justify-center items-start w-[50%] space-y-10'}>
