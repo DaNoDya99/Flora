@@ -14,10 +14,10 @@ function Breadcrumb(props) {
                 aria-label="breadcrumb"
             >
                 {path.map((item, key) => (
-                    item.last ? <Link underline="hover" className={'font-semibold underline text-[1.2rem]'} key={key} color="inherit" to={item.path}>
+                    item.last ? <Link underline="hover" className={'font-semibold underline text-[1.2rem] max-2xl:text-sm'} key={key} color="inherit" to={item.path}>
                             {item.name}
                         </Link> :
-                        <Link underline="hover" key={key} className={'text-[1.2rem] hover:font-semibold'} to={item.path}>
+                        <Link underline="hover" key={key} className={'text-[1.2rem] hover:font-semibold max-2xl:text-sm'} to={item.path}>
                             {item.name}
                         </Link>
                 ))}

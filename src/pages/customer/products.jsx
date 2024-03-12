@@ -15,9 +15,15 @@ function Products() {
         { path: `/products/${category}`, name: category[0].toUpperCase() + category.slice(1), last: true }
     ];
 
-    const [noOfCards, setNoOfCards] = useState(8);
+    const [noOfCards, setNoOfCards] = useState(0);
 
     useEffect(() => {
+        if (window.innerWidth < 1536) {
+            setNoOfCards(6);
+        } else if (window.innerWidth >=1536){
+            setNoOfCards(8);
+        }
+
         const handleResize = () => {
 
             if (window.innerWidth < 1536) {
@@ -28,12 +34,12 @@ function Products() {
         };
 
         window.addEventListener('resize', handleResize);
-    });
+    }, [setNoOfCards]);
 
     const cardsArray = Array.from({ length: noOfCards }, (_, index) => index);
 
     return (
-        <div className={'min-h-[90vh] py-14 px-[10em] max-2xl:px-[8em]'}>
+        <div className={'min-h-[90vh] py-14 px-[10em] max-2xl:px-[6em]  max-2xl:py-10'}>
             <Breadcrumb path={path} />
             <div className={'w-full flex min-h-[78vh] mt-5 nunito-sans-light'}>
                 <div className={'w-[20%] border-2 border-secondary3 rounded relative max-h-[60.4vh] max-2xl:w-[30%] max-2xl:max-h-[90vh]'}>

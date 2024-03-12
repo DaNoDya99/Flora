@@ -10,11 +10,16 @@ import {useEffect, useState} from "react";
 function Home() {
     // const products = useSelector(state => state.product);
     // const dispatch = useDispatch();
-    const [noOfCards, setNoOfCards] = useState(5);
+    const [noOfCards, setNoOfCards] = useState(0);
 
     useEffect(() => {
-        const handleResize = () => {
+        if (window.innerWidth < 1536) {
+            setNoOfCards(4);
+        } else if (window.innerWidth >=1536){
+            setNoOfCards(5);
+        }
 
+        const handleResize = () => {
             if (window.innerWidth < 1536) {
                 setNoOfCards(4);
             } else if (window.innerWidth >=1536){
@@ -23,7 +28,7 @@ function Home() {
         };
 
         window.addEventListener('resize', handleResize);
-    });
+    },[setNoOfCards]);
 
     const cardsArray = Array.from({ length: noOfCards }, (_, index) => index);
 
