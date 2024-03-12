@@ -20,7 +20,7 @@ const customTheme = {
 function ImgCarousel() {
     return (
         <Flowbite theme={{theme: customTheme}}>
-            <Carousel slide={false} className={'h-[30em]'}>
+            <Carousel slide={false} className={'h-[40em] max-2xl:h-[30em]'}>
                 <img src={ProductImage} alt="..." />
                 <img src={ProductImage} alt="..." />
                 <img src={ProductImage} alt="..." />
