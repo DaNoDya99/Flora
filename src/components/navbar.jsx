@@ -17,6 +17,11 @@ import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import Modal from '@mui/material/Modal';
+import CloseIcon from '@mui/icons-material/Close';
+import Divider from '@mui/material/Divider';
+import ProductionQuantityLimitsOutlinedIcon from '@mui/icons-material/ProductionQuantityLimitsOutlined';
 
 const pages = ["Categories", "About", "Contact"];
 
@@ -24,24 +29,38 @@ const DrawerStyled = styled(Drawer)(() => ({
     height: 90,
     width: '10em'
 }))
+
+const style = {
+    position: 'fixed',
+    top: '16em',
+    left: '75%',
+    transform: 'translate(-50%, -50%)',
+    width: 600,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
+
 function ResponsiveAppBar(props) {
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
     const settings = loggedIn ? [{ 'name': 'Profile', 'link': '/auth/login' },
     { 'name': 'Logout', 'link': '/auth/logout' }] : [{ 'name': 'Login', 'link': '/auth/login' },
     { 'name': 'Register', 'link': '/auth/register' }];
 
-    let profile_image = <img src={AccountIcon} className={"w-8 h-8"} alt="Account" />
+    let profile_image = <img src={AccountIcon} className={"w-6 h-6"} alt="Account" />
     const sticky = props.sticky;
 
     const [open, setOpen] = React.useState(false);
+    const [openModal, setOpenModal] = React.useState(false);
+
+    console.log(openModal);
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     };
 
-
     if (loggedIn) {
-        profile_image = <img src={AccountIcon} className={"w-8 h-8"} alt="Account" />
+        profile_image = <img src={AccountIcon} className={"w-6 h-6"} alt="Account" />
     }
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -159,7 +178,7 @@ function ResponsiveAppBar(props) {
 
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                            <IconButton onClick={handleOpenUserMenu}>
                                 {profile_image}
                             </IconButton>
                         </Tooltip>
@@ -188,6 +207,49 @@ function ResponsiveAppBar(props) {
                             ))}
                         </Menu>
                     </Box>
+                    <div className={'ms-5'}>
+                        <div>
+                            <IconButton>
+                                <ShoppingCartOutlinedIcon onClick={() => setOpenModal(true)} />
+                            </IconButton>
+                            <div className='rounded-full bg-secondary2/60 absolute top-3 right-0 h-5 w-5 flex justify-center items-center'>0</div>
+                        </div>
+                        
+                        <div>
+                            <Modal
+                                open={openModal}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                            >
+                                <Box sx={style}>
+                                    <div className={'flex justify-between items-center'}>
+                                        <Typography id="modal-modal-title" variant="h6" component="h3">
+                                            Your Bag
+                                        </Typography>
+                                        <div className='flex text-gray-500 items-center gap-2'>
+                                            <div>{0} item(s)</div>
+                                            <CloseIcon onClick={() => setOpenModal(false)} className={'text-red-600'} />
+                                        </div>
+                                    </div>
+                                    <Divider variant="middle" className='!my-2' />
+                                    <div className='w-full flex flex-col items-center py-8'>
+                                        <ProductionQuantityLimitsOutlinedIcon className={'!text-6xl text-gray-400'} />
+                                        <p className={'text-gray-400'}>No items in the cart</p>
+                                    </div>
+                                    <div className={'flex justify-between'}>
+                                        <Typography className={'!font-semibold !text-gray-600'}>SUB TOTAL</Typography>
+                                        <Typography className={'!font-semibold !text-gray-600'}>Rs. 00.00</Typography>
+                                    </div>
+                                    <div className={'text-[.7em]'}>Taxes and shipping calculated at the checkout</div>
+                                    <div className={'flex justify-center mt-5'}>
+                                        <Button variant="contained" color="secondary3" className={'w-[60%] !h-9'}>
+                                            <Typography className={'!text-sm font-semibold'}>Continue Shopping</Typography>
+                                        </Button>
+                                    </div>
+                                </Box>
+                            </Modal>
+                        </div>
+                    </div>
                 </Toolbar>
             </Container>
             <DrawerStyled anchor={'left'} open={open} onClose={toggleDrawer(false)} hideBackdrop={false}>
@@ -242,4 +304,5 @@ function ResponsiveAppBar(props) {
 ResponsiveAppBar.propTypes = {
     sticky: PropTypes.bool.isRequired,
 }
+
 export default ResponsiveAppBar;

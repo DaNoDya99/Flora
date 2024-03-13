@@ -12,6 +12,7 @@ import Home from "./pages/customer/home.jsx";
 import Product from "./pages/customer/product.jsx";
 import Products from "./pages/customer/products.jsx";
 import ResetPassword from "./pages/auth/reset-password.jsx";
+import CartDetails from "./pages/customer/cart-details.jsx";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route>
@@ -31,6 +32,7 @@ const router = createBrowserRouter(createRoutesFromElements(
                     id: params.id
                 }
             }}/>
+            <Route path={'cart-details'} element={<CartDetails/>}/>
         </Route>
     </Route>
 ));
