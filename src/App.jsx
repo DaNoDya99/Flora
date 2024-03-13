@@ -34,6 +34,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             }}/>
             <Route path={'cart-details'} element={<CartDetails/>}/>
         </Route>
+        <Route path={"order"} element={} />
     </Route>
 ));
 
