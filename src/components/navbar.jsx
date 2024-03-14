@@ -263,7 +263,7 @@ function ResponsiveAppBar(props) {
                                 🎉 Occasional Delights
                             </div>
                             <div className={'ms-14 my-4 max-2xl:my-2 space-y-4 max-2xl:space-y-2'}>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'products/birthday'} onClick={toggleDrawer(false)}>Birthday</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/birthday'} onClick={toggleDrawer(false)}>Birthday</Link></h2>
                                 <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Love & Romance</Link></h2>
                                 <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Anniversary</Link></h2>
                                 <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Wedding</Link></h2>

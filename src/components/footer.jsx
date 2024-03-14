@@ -2,10 +2,11 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 
+
 function Footer() {
     return (
         <div>
-            <div className={'w-full py-10 px-[10em] bg-secondary3 flex justify-between'}>
+            <div className={'w-full py-10 px-[10em] max-2xl:px-[6em] bg-secondary3 flex justify-between'}>
                 <div className={'nunito-sans-light'}>
                     <h1 className={'font-semibold text-2xl mb-4'}>HEAD OFFICE</h1>
                     <div className={'space-y-2'}>

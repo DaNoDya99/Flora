@@ -54,7 +54,7 @@ function Product() {
                         <div className={'text-2xl font-semibold'}>
                             Rs. 6000.00
                         </div>
-                        <NumberInput/>
+                        <NumberInput small={false}/>
                         <div className={'flex flex-col items-center py-10 space-y-4'}>
                             <Button variant="contained" color="secondary3" className={'w-[60%] h-12'}>
                                 <Typography className={'!text-xl font-semibold'}>Add to Cart</Typography>

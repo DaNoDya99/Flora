@@ -13,6 +13,9 @@ import Product from "./pages/customer/product.jsx";
 import Products from "./pages/customer/products.jsx";
 import ResetPassword from "./pages/auth/reset-password.jsx";
 import CartDetails from "./pages/customer/cart-details.jsx";
+import OrderLayout from "./layouts/order_layout.jsx";
+import DeliveryDetails from "./pages/customer/delivery-details.jsx";
+import ShoppingCart from "./pages/customer/shopping-cart.jsx";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route>
@@ -21,6 +24,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path={"register"} element={<Register/>} />
             <Route path={"forgot-password"} element={<ResetPassword/>} />
         </Route>
+
         <Route path={"/"} element={<CustomerLayout/>} >
             <Route index element={<Home/>} />
             <Route path={"products/:category"} element={<Products/>} loader={({params}) => {
@@ -32,9 +36,13 @@ const router = createBrowserRouter(createRoutesFromElements(
                     id: params.id
                 }
             }}/>
-            <Route path={'cart-details'} element={<CartDetails/>}/>
         </Route>
-        <Route path={"order"} element={} />
+        
+        <Route path={"order"} element={<OrderLayout/>} >
+            <Route path={'shopping-cart'} element={<ShoppingCart/>}/>
+            <Route path={'cart-details'} element={<CartDetails/>}/>
+            <Route path={'delivery-details'} element={<DeliveryDetails/>}/>
+        </Route>
     </Route>
 ));
 
