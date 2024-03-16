@@ -12,8 +12,8 @@ function CartDetails(){
     }
 
     return (
-        <div className={'px-[10em] pb-[5em] flex justify-between w-full'}>
-            <div className={'w-[50%] mr-5 rounded-lg bg-primary py-10 px-16 shadow-lg'}>
+        <div className={'px-[10em] pb-[5em] flex justify-between w-full max-2xl:px-[6em]'}>
+            <div className={'w-[50%] mr-5 rounded-lg bg-primary py-10 px-16 shadow-lg max-2xl:px-6'}>
                 <form action="" className={'space-y-6'}>
                     <div className={'font-semibold nunito-sans-light text-2xl'}>Recipient Information</div>
                     <FormControl className={'w-full'}>
@@ -78,7 +78,7 @@ function CartDetails(){
                     </div>
                 </form>
             </div>
-            <div className={'w-[50%] ms-5 rounded-lg bg-primary py-10 px-16 max-h-[25em] shadow-lg'}>
+            <div className={'w-[50%] ms-5 rounded-lg bg-primary py-10 px-16 max-h-[25em] shadow-lg max-2xl:px-5'}>
                 <div className={'flex justify-between items-center'}>
                     <div className={'font-semibold 2xl:!text-xl'}>Order Summary</div>
                     <div className={'text-sm'}>{2}&nbsp;Item(s)</div>
