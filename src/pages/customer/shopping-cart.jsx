@@ -1,5 +1,4 @@
-import React from 'react';
-import { Paper, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider, Button } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider, Button } from '@mui/material';
 import ProductImage from "../../assets/images/product.jpg"
 import DeleteIcon from '@mui/icons-material/Delete';
 import NumberInput from '../../components/number-input';

@@ -43,7 +43,7 @@ function OrderLayout() {
                 {states.cart ? <div className={'w-1/3 h-1 bg-secondary3'}></div> :<LinearProgress className={'w-1/3'} color={'secondary'}/>}
                 <div className="flex flex-col items-center justify-center mx-5">
                     <Link to={'/order/cart-details'}>
-                        <AccountCircleIcon className={'text-secondary !text-5xl 2xl:!text-7xl'}/>
+                        <AccountCircleIcon className={states.sender_receiver ? 'text-secondary3 !text-5xl 2xl:!text-7xl' : 'text-secondary !text-5xl 2xl:!text-7xl'}/>
                     </Link>
                     <div className={'w-full text-center text-sm font-semibold !nunito-sans-light 2xl:text-lg'}>Sender / Receiver Details</div>
                 </div>
@@ -51,14 +51,14 @@ function OrderLayout() {
                 {states.sender_receiver ? <div className={'w-1/3 h-1 bg-secondary3'}></div> :<LinearProgress className={'w-1/3'} color={'secondary'}/>}
                 <div className="flex flex-col items-center justify-center mx-5">
                     <Link to={'/order/delivery-details'}>
-                        <LocalShippingIcon className={'text-secondary !text-5xl 2xl:!text-7xl'}/>
+                        <LocalShippingIcon className={states.delivery ? 'text-secondary3 !text-5xl 2xl:!text-7xl' : 'text-secondary !text-5xl 2xl:!text-7xl'}/>
                     </Link>
                     <div className={'w-full text-center text-sm font-semibold !nunito-sans-light 2xl:text-lg'}>Delivery Details</div>
                 </div>
                 {/*<LinearProgress className={'w-1/3'} color={'secondary'}/>*/}
                 {states.delivery ? <div className={'w-1/3 h-1 bg-secondary3'}></div> :<LinearProgress className={'w-1/3'} color={'secondary'}/>}
                 <div className="flex flex-col items-center justify-center ms-5">
-                    <PaymentIcon className={'text-secondary !text-5xl 2xl:!text-7xl'}/>
+                    <PaymentIcon className={states.payment ? 'text-secondary3 !text-5xl 2xl:!text-7xl' : 'text-secondary !text-5xl 2xl:!text-7xl'}/>
                     <div className={'w-full text-center text-sm font-semibold !nunito-sans-light 2xl:text-lg'}>Payment</div>
                 </div>
             </div>

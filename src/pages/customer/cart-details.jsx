@@ -69,8 +69,8 @@ function CartDetails(){
                     </FormControl>
 
                     <FormControl className={'w-full mt-5'}>
-                        <InputLabel htmlFor={'address'} required><span className={'!nunito-sans-light'}>Sender phone</span></InputLabel>
-                        <Input id={'address'} required name={'address'} type={'text-area'}/>
+                        <InputLabel htmlFor={'phone'} required><span className={'!nunito-sans-light'}>Sender phone</span></InputLabel>
+                        <Input id={'phone'} required name={'phone'}/>
                     </FormControl>
 
                     <div className={'flex justify-between w-full'}>
