@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import {Link, Outlet} from "react-router-dom";
 import ResponsiveAppBar from "../components/navbar.jsx";
 import Footer from "../components/footer.jsx";
 import { useLocation } from "react-router-dom";
@@ -21,31 +21,45 @@ function OrderLayout() {
     useEffect(() => {
         if(from === 'shopping_cart'){
             setStates({...states, cart : state});
+        } else if(from === 'delivery_details'){
+            setStates({...states, delivery : state});
+        } else if(from === 'sender_receiver_details'){
+            setStates({...states, sender_receiver : state});
+        } else if(from === 'payment'){
+            setStates({...states, payment : state});
         }
-    }, [location]);
+    }, [from, location, state, states]);
 
     return (
         <div className={'nunito-sans-light'}>
             <ResponsiveAppBar sticky={true} />
             <div className="px-[10em] max-2xl:px-[6em] flex py-14 max-2xl:py-10 justify-between items-center">
                 <div className="flex flex-col items-center justify-center mr-5">
-                    <CheckCircleIcon className={states.cart ? 'text-secondary3 !text-5xl' : 'text-secondary !text-5xl'}/>
-                    <div className={'w-full text-center text-sm font-semibold !nunito-sans-light'}>Cart</div>
+                    <Link to={'/order/shopping-cart'}>
+                        <CheckCircleIcon className={states.cart ? 'text-secondary3 !text-5xl 2xl:!text-7xl' : 'text-secondary !text-5xl 2xl:!text-7xl'}/>
+                    </Link>
+                    <div className={'w-full text-center text-sm font-semibold !nunito-sans-light 2xl:text-lg'}>Cart</div>
                 </div>
                 {states.cart ? <div className={'w-1/3 h-1 bg-secondary3'}></div> :<LinearProgress className={'w-1/3'} color={'secondary'}/>}
                 <div className="flex flex-col items-center justify-center mx-5">
-                    <AccountCircleIcon className={'text-secondary !text-5xl'}/>
-                    <div className={'w-full text-center text-sm font-semibold !nunito-sans-light'}>Sender / Receiver Details</div>
+                    <Link to={'/order/cart-details'}>
+                        <AccountCircleIcon className={'text-secondary !text-5xl 2xl:!text-7xl'}/>
+                    </Link>
+                    <div className={'w-full text-center text-sm font-semibold !nunito-sans-light 2xl:text-lg'}>Sender / Receiver Details</div>
                 </div>
-                <LinearProgress className={'w-1/3'} color={'secondary'}/>
+                {/*<LinearProgress className={'w-1/3'} color={'secondary'}/>*/}
+                {states.sender_receiver ? <div className={'w-1/3 h-1 bg-secondary3'}></div> :<LinearProgress className={'w-1/3'} color={'secondary'}/>}
                 <div className="flex flex-col items-center justify-center mx-5">
-                    <LocalShippingIcon className={'text-secondary !text-5xl'}/>
-                    <div className={'w-full text-center text-sm font-semibold !nunito-sans-light'}>Delivery Details</div>
+                    <Link to={'/order/delivery-details'}>
+                        <LocalShippingIcon className={'text-secondary !text-5xl 2xl:!text-7xl'}/>
+                    </Link>
+                    <div className={'w-full text-center text-sm font-semibold !nunito-sans-light 2xl:text-lg'}>Delivery Details</div>
                 </div>
-                <LinearProgress className={'w-1/3'} color={'secondary'}/>
+                {/*<LinearProgress className={'w-1/3'} color={'secondary'}/>*/}
+                {states.delivery ? <div className={'w-1/3 h-1 bg-secondary3'}></div> :<LinearProgress className={'w-1/3'} color={'secondary'}/>}
                 <div className="flex flex-col items-center justify-center ms-5">
-                    <PaymentIcon className={'text-secondary !text-5xl'}/>
-                    <div className={'w-full text-center text-sm font-semibold !nunito-sans-light'}>Payment</div>
+                    <PaymentIcon className={'text-secondary !text-5xl 2xl:!text-7xl'}/>
+                    <div className={'w-full text-center text-sm font-semibold !nunito-sans-light 2xl:text-lg'}>Payment</div>
                 </div>
             </div>
             <main>
