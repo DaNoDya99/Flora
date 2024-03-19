@@ -16,6 +16,7 @@ import CartDetails from "./pages/customer/cart-details.jsx";
 import OrderLayout from "./layouts/order_layout.jsx";
 import DeliveryDetails from "./pages/customer/delivery-details.jsx";
 import ShoppingCart from "./pages/customer/shopping-cart.jsx";
+import PaymentDetails from "./pages/customer/payment-details.jsx";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route>
@@ -42,6 +43,7 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path={'shopping-cart'} element={<ShoppingCart/>}/>
             <Route path={'cart-details'} element={<CartDetails/>}/>
             <Route path={'delivery-details'} element={<DeliveryDetails/>}/>
+            <Route path={'payment-details'} element={<PaymentDetails/>}/>
         </Route>
     </Route>
 ));

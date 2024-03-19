@@ -1,7 +1,6 @@
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import {FormControlLabel, Radio} from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import dayjs, { Dayjs } from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
@@ -10,10 +9,14 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import {useState} from 'react';
 import {Button} from "@mui/material";
-
+import {useNavigate} from "react-router-dom";
 
 function DeliveryDetails(){
     const [value, setValue] = useState(dayjs());
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate('/order/payment-details', { state: { component : 'delivery_details', state : true } });
+    }
 
     return (
         <div className={'px-[10em] pb-[5em] flex justify-between w-full max-2xl:px-[6em]'}>
@@ -90,7 +93,7 @@ function DeliveryDetails(){
 
             </div>
 
-            <div className={'w-[50%] ms-5 rounded-lg bg-primary py-10 px-16 max-h-[23em] shadow-lg max-2xl:px-5'}>
+            <div className={'w-[50%] ms-5 rounded-lg bg-primary py-10 px-16 max-h-[23em] shadow-lg max-2xl:px-5 2xl:max-h-[26em]'}>
                 <div className={'flex justify-between items-center'}>
                     <div className={'font-semibold 2xl:!text-xl'}>Order Summary</div>
                     <div className={'text-sm'}>{2}&nbsp;Item(s)</div>
@@ -121,7 +124,7 @@ function DeliveryDetails(){
                     </div>
 
                     {/* Review your order button */}
-                    <Button variant="contained" color="secondary3" className={'w-full h-8 2xl:h-10'}>
+                    <Button variant="contained" color="secondary3" className={'w-full h-8 2xl:h-10'} onClick={handleClick}>
                         <div className={'!text-sm font-semibold'}>Review your order</div>
                     </Button>
 
