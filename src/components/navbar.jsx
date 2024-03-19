@@ -22,6 +22,9 @@ import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import Divider from '@mui/material/Divider';
 import ProductionQuantityLimitsOutlinedIcon from '@mui/icons-material/ProductionQuantityLimitsOutlined';
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Input from "@mui/material/Input";
 
 const pages = ["Categories", "About", "Contact"];
 
@@ -41,19 +44,31 @@ const style = {
     p: 4,
 };
 
+const style2 = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 500,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
+
 function ResponsiveAppBar(props) {
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
-    const settings = loggedIn ? [{ 'name': 'Profile', 'link': '/auth/login' },
-    { 'name': 'Logout', 'link': '/auth/logout' }] : [{ 'name': 'Login', 'link': '/auth/login' },
-    { 'name': 'Register', 'link': '/auth/register' }];
+    const settings = loggedIn ? [{ 'name': 'Edward Samuel', 'link': '/' },
+        {'name' : 'edwardsam@gmail.com','link' : '/'},
+        {'name' : 'Settings','link' : '/'},
+        { 'name': 'Logout', 'link': '/auth/logout' }] : [{ 'name': 'Login', 'link': '/auth/login' },
+        { 'name': 'Register', 'link': '/auth/register' }];
 
     let profile_image = <img src={AccountIcon} className={"w-6 h-6"} alt="Account" />
     const sticky = props.sticky;
 
     const [open, setOpen] = React.useState(false);
     const [openModal, setOpenModal] = React.useState(false);
-
-    console.log(openModal);
+    const [openSettingsModal, setOpenSettingsModal] = React.useState(false);
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -80,6 +95,14 @@ function ResponsiveAppBar(props) {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const openSettings = () => {
+        setOpenSettingsModal(true);
+    }
+
+    const closeSettings = () => {
+        setOpenSettingsModal(false);
+    }
 
     return (
         <AppBar position={sticky ? 'sticky' : 'fixed'} color={"primary"} className={'nunito-sans-light'}>
@@ -200,9 +223,8 @@ function ResponsiveAppBar(props) {
                         >
                             {Object.keys(settings).map((key, index) => (
                                 <MenuItem key={index} onClick={handleCloseUserMenu}>
-                                    <Link to={settings[key].link}>
-                                        <Typography textAlign="center" className={'nunito-sans-light'}>{settings[key].name}</Typography>
-                                    </Link>
+                                    {settings[key].name !== 'Settings' ? <Link to={settings[key].link}><Typography textAlign="center" className={'nunito-sans-light'}>{settings[key].name}</Typography></Link>
+                                        : <Typography textAlign="center" className={'nunito-sans-light'} onClick={openSettings}>{settings[key].name}</Typography>}
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -297,6 +319,44 @@ function ResponsiveAppBar(props) {
 
                 </div>
             </DrawerStyled>
+            <Modal
+                open={openSettingsModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style2}>
+                    <div className={'flex justify-between items-center'}>
+                        <Typography id="modal-modal-title" variant="h6" component="h3">
+                            Settings
+                        </Typography>
+                        <CloseIcon onClick={closeSettings} className={'text-red-600'} />
+                    </div>
+                    <div className={'w-full mt-10'}>
+                        <form action="" className={'w-full space-y-6'}>
+                            <div className={'flex gap-2 w-full'}>
+                                <FormControl className={'w-[50%]'}>
+                                    <InputLabel htmlFor="firstName">First name</InputLabel>
+                                    <Input id="firstName" name={'firstName'} value={'Edward'}/>
+                                </FormControl>
+
+                                <FormControl className={'w-[50%]'}>
+                                    <InputLabel htmlFor="lastName">Last name</InputLabel>
+                                    <Input id="lastName" name={'lastName'} value={'Samuel'}/>
+                                </FormControl>
+                            </div>
+
+                            <FormControl className={'w-full'}>
+                                <InputLabel htmlFor="email">Email</InputLabel>
+                                <Input id="email" name={'email'} value={'edwardsam@gmail.com'}/>
+                            </FormControl>
+
+                            <Button variant="contained" color="secondary2" className={'w-full !mt-14'}>
+                                <span className={'font-semibold'}>Save</span>
+                            </Button>
+                        </form>
+                    </div>
+                </Box>
+            </Modal>
         </AppBar>
     );
 }

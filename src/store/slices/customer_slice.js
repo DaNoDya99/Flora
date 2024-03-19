@@ -4,7 +4,7 @@ const customerSlice = createSlice({
     name: 'customer',
     initialState: {
         data : {
-            loggedIn: false,
+            loggedIn: true,
         }
     },
     reducers: {

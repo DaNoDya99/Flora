@@ -43,22 +43,22 @@ function PaymentDetails() {
                 </div> 
                 <div className={'flex justify-between mt-4 px-5 py-2 bg-white rounded-md shadow-sm'}>
                     <div>
-                        <div className={"text-sm font-semibold"}>Receiver Name</div>
-                        <div className={"text-[.7rem]"}>Edward Samuel</div>
+                        <div className={"text-sm font-semibold 2xl:text-lg"}>Receiver Name</div>
+                        <div className={"text-[.7rem] 2xl:text-sm"}>Edward Samuel</div>
                     </div>
                     <div>
-                        <div className={"text-sm font-semibold"}>Receiver Address</div>
-                        <div className={"text-[.7rem]"}>107 / 2</div>
-                        <div className={"text-[.7rem]"}>Weragama Road</div>
-                        <div className={"text-[.7rem]"}>Wadduwa</div>
+                        <div className={"text-sm font-semibold 2xl:text-lg"}>Receiver Address</div>
+                        <div className={"text-[.7rem] 2xl:text-sm"}>107 / 2</div>
+                        <div className={"text-[.7rem] 2xl:text-sm"}>Weragama Road</div>
+                        <div className={"text-[.7rem] 2xl:text-sm"}>Wadduwa</div>
                     </div>
                     <div>
-                        <div className={"text-sm font-semibold"}>Receiver Phone</div>
-                        <div className={"text-[.7rem]"}>0778965445</div>
+                        <div className={"text-sm font-semibold 2xl:text-lg"}>Receiver Phone</div>
+                        <div className={"text-[.7rem] 2xl:text-sm"}>0778965445</div>
                     </div>
                     <div>
-                        <div className={"text-sm font-semibold"}>Delivery Date</div>
-                        <div className={"text-[.7rem]"}>2024-04-06</div>
+                        <div className={"text-sm font-semibold 2xl:text-lg"}>Delivery Date</div>
+                        <div className={"text-[.7rem] 2xl:text-sm"}>2024-04-06</div>
                     </div>
                 </div>
 
