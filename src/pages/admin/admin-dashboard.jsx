@@ -25,40 +25,50 @@ const xLabels = getWeekdays();
 
 function AdminDashboard() {
     return (
-        <div className={'flex flex-col gap-5 w-full'}>
-            <div className={'flex w-full gap-5'}>
-                <div className={'w-[50%] h-[43vh] shadow-lg'}></div>
-                <div className={'w-[50%] h-[43vh] shadow-lg p-5 space-y-2 flex flex-col items-center justify-center'}>
+        <div className={'flex flex-col gap-5 w-full max-2xl:gap-2'}>
+            <div className={'flex w-full gap-5 max-2xl:gap-2'}>
+                <div className={'w-[50%] h-[43vh] shadow-lg max-2xl:h-[42vh]'}></div>
+                <div className={'w-[50%] h-[43vh] shadow-lg p-5 space-y-2 flex flex-col items-center justify-center max-2xl:h-[42vh]'}>
                     <div className={'text-center'}>
-                        <h1 className={'text-2xl font-semibold'}>Comparison of Daily Income: This Week vs. Last Week</h1>
+                        <h1 className={'text-2xl font-semibold max-2xl:text-sm'}>Comparison of Daily Income: This Week vs. Last Week</h1>
                     </div>
-                    <div className={'w-[90%] h-[35vh] flex justify-center'}>
+                    <div className={'w-[90%] h-[35vh] flex justify-center max-2xl:w-full'}>
                         <LineChart
                             series={[
-                                { data: lastWeek, label: 'This Week', id: 'pvId' },
+                                { data: lastWeek, label: 'This Week', id: 'pvId'},
                                 { data: thisWeek, label: 'Last Week', id: 'uvId' },
                             ]}
-                            xAxis={[{ scaleType: 'point', data: xLabels, label:"Week Days", labelStyle: {fontSize: '1.2rem',fontWeight: 'bold'}}]}
-                            yAxis={[{ scaleType: 'linear', label: 'Income',labelStyle: {fontSize: '1.2rem',fontWeight: 'bold'}, position: 'right'}]}
+                            xAxis={[{ scaleType: 'point', data: xLabels, label:"Week Days", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
+                            yAxis={[{ scaleType: 'linear', label: 'Income',labelStyle: {fontSize: '1rem',fontWeight: 'bold'}, position: 'right'}]}
+                            slotProps={{legend : {
+                                position: {vertical: 'top', horizontal: 'right'},
+                                direction: 'column',
+                                labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
+                            }}}
                         />
                     </div>
                 </div>
             </div>
-            <div className={'flex w-full gap-5'}>
-                <div className={'w-[50%] h-[43vh] shadow-lg space-y-2 flex flex-col items-center justify-center'}>
+            <div className={'flex w-full gap-5 max-2xl:gap-2'}>
+                <div className={'w-[50%] h-[43vh] shadow-lg space-y-2 flex flex-col items-center justify-center max-2xl:h-[42vh]'}>
                     <div className={'text-center'}>
-                        <h1 className={'text-2xl font-semibold'}>Top Selling Bouquets with in the Week</h1>
+                        <h1 className={'text-2xl font-semibold max-2xl:text-sm'}>Top Selling Bouquets with in the Week</h1>
                     </div>
-                    <div className={'w-[90%] h-[35vh] flex justify-center'}>
+                    <div className={'w-[90%] h-[35vh] flex justify-center max-2xl:w-full'}>
                         <BarChart
                             series={[
                                 { data: quantity, label: 'Quantity', id: 'pvId' },
                             ]}
-                            xAxis={[{ data: products, scaleType: 'band' ,label:"Product ID", labelStyle: {fontSize: '1.2rem',fontWeight: 'bold'}}]}
+                            xAxis={[{ data: products, scaleType: 'band' ,label:"Product ID", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
+                            slotProps={{legend : {
+                                position: {vertical: 'top', horizontal: 'right'},
+                                direction: 'column',
+                                labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
+                            }}}
                         />
                     </div>
                 </div>
-                <div className={'w-[50%] h-[43vh] shadow-lg'}></div>
+                <div className={'w-[50%] h-[43vh] shadow-lg max-2xl:h-[42vh]'}></div>
             </div>
         </div>
     );

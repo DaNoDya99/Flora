@@ -7,7 +7,7 @@ function Sidebar(props) {
 
     return (
         <div>
-            <div className={'w-[18em] bg-secondary h-[100vh] px-5 py-10 2xl:py-20'}>
+            <div className={'w-[15em] bg-secondary h-[100vh] px-5 py-10 2xl:py-20 2xl:w-[18em]'}>
                 <div className={'flex justify-evenly items-center'}>
                     <img src={LogoOnlyImage} alt="Logo"
                          className={'h-12 w-12 rounded-full shadow-sm'}/>
