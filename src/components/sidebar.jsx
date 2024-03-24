@@ -1,9 +1,34 @@
 import PropTypes from "prop-types";
 import LogoOnlyImage from "../assets/images/logo-only-image.png";
+import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 function Sidebar(props) {
 
     const sidebarItems = props.items;
+    const [dashboardItem, setDashboardItem] = useState({});
+    const [activeItem, setActiveItem] = useState('dashboard');
+    const urls = {
+        Dashboard: '/admin/dashboard',
+        Inventory: '/admin/inventory',
+        Employee: '/admin/employee',
+    }
+
+    useEffect(() => {
+        if(activeItem === 'Dashboard') {
+            setDashboardItem({Dashboard: true, Inventory: false, Employee: false, Logout: false});
+        }else if(activeItem === 'Inventory') {
+            setDashboardItem({Dashboard: false, Inventory: true, Employee: false, Logout: false});
+        }else if(activeItem === 'Employee') {
+            setDashboardItem({Dashboard: false, Inventory: false, Employee: true, Logout: false});
+        }else if(activeItem === 'Logout') {
+            setDashboardItem({Dashboard: false, Inventory: false, Employee: false, Logout: true});
+        }else {
+            setDashboardItem({Dashboard: true, Inventory: false, Employee: false, Logout: false});
+        }
+    }, [activeItem]);
+
+    console.log(dashboardItem);
 
     return (
         <div>
@@ -17,9 +42,12 @@ function Sidebar(props) {
                     {Object.keys(sidebarItems).map((key, index) => {
                         const item = sidebarItems[key];
                         return (
-                            <div key={index} className={'flex gap-3 justify-start items-center'}>
-                                <item.icon className={'!text-3xl 2xl:!text-4xl'}/>
-                                <div className={'text-sm 2xl:text-lg'}>{item.name}</div>
+                            <div key={index} className={dashboardItem[item.name] ? 'flex gap-3 justify-start items-center scale-110 font-semibold'
+                                : 'flex gap-3 justify-start items-center'} onClick={() => setActiveItem(item.name)}>
+                                <Link to={urls[item.name]} key={index} className={'flex gap-3 justify-start items-center'}>
+                                    <item.icon className={'!text-3xl 2xl:!text-4xl'}/>
+                                    <div className={'text-sm 2xl:text-lg'}>{item.name}</div>
+                                </Link>
                             </div>
                         );
                     })}

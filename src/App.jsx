@@ -21,6 +21,8 @@ import EmployeeAuthLayout from "./layouts/employee-auth-layout.jsx";
 import EmployeeLogin from "./pages/auth/employee-login.jsx";
 import EmployeeLayout from "./layouts/employee-layout.jsx";
 import AdminDashboard from "./pages/admin/admin-dashboard.jsx";
+import AdminEmployee from "./pages/admin/admin-employee.jsx";
+import AdminInventory from "./pages/admin/admin-inventory.jsx";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route>
@@ -56,6 +58,8 @@ const router = createBrowserRouter(createRoutesFromElements(
 
         <Route path={'admin'} element={<EmployeeLayout/>} >
             <Route path={'dashboard'} element={<AdminDashboard/>} />
+            <Route path={'inventory'} element={<AdminInventory/>} />
+            <Route path={'employee'} element={<AdminEmployee/>} />
         </Route>
     </Route>
 ));

@@ -2,7 +2,8 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import {BarChart} from "@mui/x-charts";
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {useLoaderData} from "react-router-dom";
 dayjs.extend(customParseFormat);
 
 const thisWeek = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
@@ -38,6 +39,7 @@ const rows = [
   ];
 
 function AdminDashboard() {
+
     return (
         <div className={'flex flex-col gap-5 w-full max-2xl:gap-2'}>
             <div className={'flex w-full gap-5 max-2xl:gap-2'}>
@@ -83,6 +85,7 @@ function AdminDashboard() {
                                 direction: 'column',
                                 labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
                             }}}
+                            colors={['#FFC0CB', '#FFA07A']}
                         />
                     </div>
                 </div>
@@ -103,6 +106,7 @@ function AdminDashboard() {
                                 direction: 'column',
                                 labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
                             }}}
+                            colors={['#FFC0CB']}
                         />
                     </div>
                 </div>
