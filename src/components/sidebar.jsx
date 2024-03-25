@@ -6,27 +6,33 @@ import {Link} from "react-router-dom";
 function Sidebar(props) {
 
     const sidebarItems = props.items;
+    const empType = props.empType;
     const [dashboardItem, setDashboardItem] = useState({});
     const [activeItem, setActiveItem] = useState('dashboard');
-    const urls = {
-        Dashboard: '/admin/dashboard',
-        Inventory: '/admin/inventory',
-        Employee: '/admin/employee',
+    const urls = {};
+
+    if (empType === 'admin') {
+        urls['Dashboard'] = '/admin/dashboard';
+        urls['Inventory'] = '/admin/inventory';
+        urls['Employee'] = '/admin/employee';
+        urls['Delivery'] = '/admin/delivery';
+    }else {
+        urls['Dashboard'] = '/delivery/dashboard';
+        urls['Pending Orders'] = '/delivery/pending-orders';
     }
 
     useEffect(() => {
-        if(activeItem === 'Dashboard') {
-            setDashboardItem({Dashboard: true, Inventory: false, Employee: false, Logout: false});
-        }else if(activeItem === 'Inventory') {
-            setDashboardItem({Dashboard: false, Inventory: true, Employee: false, Logout: false});
-        }else if(activeItem === 'Employee') {
-            setDashboardItem({Dashboard: false, Inventory: false, Employee: true, Logout: false});
-        }else if(activeItem === 'Logout') {
-            setDashboardItem({Dashboard: false, Inventory: false, Employee: false, Logout: true});
-        }else {
-            setDashboardItem({Dashboard: true, Inventory: false, Employee: false, Logout: false});
+        let dashboardItem = {};
+        sidebarItems.forEach(item => {
+            dashboardItem[item.name] = false;
+        });
+        if(activeItem === 'dashboard') {
+            dashboardItem['Dashboard'] = true;
+        }else{
+            dashboardItem[activeItem] = true;
         }
-    }, [activeItem]);
+        setDashboardItem(dashboardItem);
+    }, [sidebarItems]);
 
     console.log(dashboardItem);
 
@@ -59,7 +65,8 @@ function Sidebar(props) {
 }
 
 Sidebar.propTypes = {
-    items: PropTypes.array.isRequired
+    items: PropTypes.array.isRequired,
+    empType: PropTypes.string.isRequired
 };
 
 export default Sidebar;

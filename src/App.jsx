@@ -23,6 +23,9 @@ import EmployeeLayout from "./layouts/employee-layout.jsx";
 import AdminDashboard from "./pages/admin/admin-dashboard.jsx";
 import AdminEmployee from "./pages/admin/admin-employee.jsx";
 import AdminInventory from "./pages/admin/admin-inventory.jsx";
+import DeliveryDashboard from "./pages/delivery/delivery-dashboard.jsx";
+import DeliveryPendingOrders from "./pages/delivery/delivery-pending-orders.jsx";
+import AdminDelivery from "./pages/admin/admin-delivery.jsx";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route>
@@ -60,6 +63,12 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path={'dashboard'} element={<AdminDashboard/>} />
             <Route path={'inventory'} element={<AdminInventory/>} />
             <Route path={'employee'} element={<AdminEmployee/>} />
+            <Route path={'delivery'} element={<AdminDelivery/>} />
+        </Route>
+
+        <Route path={"delivery"} element={<EmployeeLayout/>} >
+            <Route path={"dashboard"} element={<DeliveryDashboard/>} />
+            <Route path={"pending-orders"} element={<DeliveryPendingOrders/>} />
         </Route>
     </Route>
 ));
