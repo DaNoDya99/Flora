@@ -26,6 +26,7 @@ import AdminInventory from "./pages/admin/admin-inventory.jsx";
 import DeliveryDashboard from "./pages/delivery/delivery-dashboard.jsx";
 import DeliveryPendingOrders from "./pages/delivery/delivery-pending-orders.jsx";
 import AdminDelivery from "./pages/admin/admin-delivery.jsx";
+import Orders from "./pages/customer/orders.jsx";
 
 const router = createBrowserRouter(createRoutesFromElements(
     <Route>
@@ -46,6 +47,7 @@ const router = createBrowserRouter(createRoutesFromElements(
                     id: params.id
                 }
             }}/>
+            <Route path={'orders'} element={<Orders/>} />
         </Route>
         
         <Route path={"order"} element={<OrderLayout/>} >
@@ -68,7 +70,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
         <Route path={"delivery"} element={<EmployeeLayout/>} >
             <Route path={"dashboard"} element={<DeliveryDashboard/>} />
-            <Route path={"pending-orders"} element={<DeliveryPendingOrders/>} />
+            <Route path={"pending-deliveries"} element={<DeliveryPendingOrders/>} />
         </Route>
     </Route>
 ));

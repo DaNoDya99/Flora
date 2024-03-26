@@ -15,7 +15,7 @@ function EmployeeLayout() {
     const location = useLocation();
 
     // const employee = location.state && location.state.employee;
-    const employee = 'delivery';
+    const employee = 'admin';
 
     let sidebarItems = employee === 'admin' ? [
         {name: 'Dashboard', icon: DashboardIcon},
@@ -25,7 +25,7 @@ function EmployeeLayout() {
         {name: 'Logout', icon: LogoutIcon}
     ] : [
         {name: 'Dashboard', icon: DashboardIcon},
-        {name: 'Pending Orders', icon: GradingIcon},
+        {name: 'Pending Deliveries', icon: GradingIcon},
         {name: 'Logout', icon: LogoutIcon}
     ];
 

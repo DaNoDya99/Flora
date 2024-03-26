@@ -18,7 +18,7 @@ function Sidebar(props) {
         urls['Delivery'] = '/admin/delivery';
     }else {
         urls['Dashboard'] = '/delivery/dashboard';
-        urls['Pending Orders'] = '/delivery/pending-orders';
+        urls['Pending Deliveries'] = '/delivery/pending-deliveries';
     }
 
     useEffect(() => {

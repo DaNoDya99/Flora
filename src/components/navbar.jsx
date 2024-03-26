@@ -59,6 +59,7 @@ function ResponsiveAppBar(props) {
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
     const settings = loggedIn ? [{ 'name': 'Edward Samuel', 'link': '/' },
         {'name' : 'edwardsam@gmail.com','link' : '/'},
+        {'name' : 'My Orders','link' : '/orders'},
         {'name' : 'Settings','link' : '/'},
         { 'name': 'Logout', 'link': '/auth/logout' }] : [{ 'name': 'Login', 'link': '/auth/login' },
         { 'name': 'Register', 'link': '/auth/register' }];
