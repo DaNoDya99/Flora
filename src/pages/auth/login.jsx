@@ -8,9 +8,18 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {login2} from "../../store/slices/customer_slice.js";
+
 function Login() {
 
     const [passwordVisibility, setPasswordVisibility] = useState(false);
+    const dispatch = useDispatch();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(login2({"email":"danodyasupun7@gmail.com", "password":"990511Dsa#"}));
+    }
 
     return (
         <>
@@ -22,7 +31,7 @@ function Login() {
                     />
                     <div>
                         <h1 className={'text-4xl font-semibold text-center mt-5 max-2xl:text-3xl'}>Sign In to Flower Hub</h1>
-                        <form action="" className={'flex flex-col mt-10 space-y-10 max-2xl:mt-5 max-2xl:space-y-5'}>
+                        <form action="" className={'flex flex-col mt-10 space-y-10 max-2xl:mt-5 max-2xl:space-y-5'} onSubmit={handleSubmit}>
                             <FormControl>
                                 <InputLabel htmlFor={'email'} required>Email</InputLabel>
                                 <Input id={'email'} required name={'email'} />
@@ -40,7 +49,7 @@ function Login() {
                                 />
                             </FormControl>
 
-                            <Button variant="contained" color="secondary2" className='max-2xl:!mt-5'>
+                            <Button variant="contained" color="secondary2" className='max-2xl:!mt-5' type={'submit'}>
                                 Sign In
                             </Button>
                             <div className={'w-full text-center'}>

@@ -5,8 +5,17 @@ import AuthBackgroundImage from "../../assets/images/auth-background.jpg";
 import Typography from "@mui/material/Typography";
 import ImgMediaCard from "../../components/card.jsx";
 import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
 
 function Products() {
+    const loggedIn = useSelector(state => state.customer.data.loggedIn);
+    const role = useSelector(state => state.customer.data.role);
+    useEffect(() => {
+        if (!loggedIn || role !== 'customer') {
+            window.location.href = '/auth/login';
+        }
+    }, [loggedIn, role]);
+
     const category = useLoaderData();
 
     const path = [

@@ -28,6 +28,7 @@ import DeliveryPendingOrders from "./pages/delivery/delivery-pending-orders.jsx"
 import AdminDelivery from "./pages/admin/admin-delivery.jsx";
 import Orders from "./pages/customer/orders.jsx";
 
+
 const router = createBrowserRouter(createRoutesFromElements(
     <Route>
         <Route path={"auth"} element={<AuthLayout/>} >

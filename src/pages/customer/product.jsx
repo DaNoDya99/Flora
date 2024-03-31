@@ -5,16 +5,28 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import NumberInput from "../../components/number-input.jsx";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import {useSelector} from "react-redux";
+import {useEffect} from "react";
 
 function Product() {
     const product = useLoaderData();
     console.log(product);
+
+    const loggedIn = useSelector(state => state.customer.data.loggedIn);
+    const role = useSelector(state => state.customer.data.role);
+    useEffect(() => {
+        if (!loggedIn || role !== 'customer') {
+            window.location.href = '/auth/login';
+        }
+    }, [loggedIn, role]);
 
     const paths = [{ path: '/', name: 'Home', last: false },
             { path: '', name: 'Categories', last: false },
             { path: '/products/birthday', name: 'Birthday', last: false },
             {path: '/product/birthday/001',name:'Affairs of Hearts', last:true}
         ]
+
+
 
     return (
         <div className={'py-14 max-2xl:py-10 px-[10em] max-2xl:px-[6em]'}>
