@@ -3,9 +3,19 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import {Button, Divider, NativeSelect} from "@mui/material";
+import {useSelector} from "react-redux";
+import {useEffect} from "react";
 
 function CartDetails(){
     const navigate = useNavigate();
+    const loggedIn = useSelector(state => state.customer.data.loggedIn);
+    const role = useSelector(state => state.customer.data.role);
+
+    useEffect(() => {
+        if (!loggedIn || role !== 'customer') {
+            window.location.href = '/auth/login';
+        }
+    }, [loggedIn, role]);
 
     const handleClick = () => {
         navigate('/order/delivery-details', { state: { component : 'sender_receiver_details', state : true } });

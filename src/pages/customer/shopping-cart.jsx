@@ -3,8 +3,18 @@ import ProductImage from "../../assets/images/product.jpg"
 import DeleteIcon from '@mui/icons-material/Delete';
 import NumberInput from '../../components/number-input';
 import { useNavigate } from "react-router-dom";
+import {useSelector} from "react-redux";
+import {useEffect} from "react";
 
 function ShoppingCart() {
+    const loggedIn = useSelector(state => state.customer.data.loggedIn);
+    const role = useSelector(state => state.customer.data.role);
+
+    useEffect(() => {
+        if (!loggedIn || role !== 'customer') {
+            window.location.href = '/auth/login';
+        }
+    }, [loggedIn, role]);
 
     const navigate = useNavigate();
 

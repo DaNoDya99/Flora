@@ -3,8 +3,17 @@ import Divider from '@mui/material/Divider';
 import CashOnDeliveryImage from "../../assets/images/cash-on-delivery.png";
 import CreditCardImage from "../../assets/images/credit-card.png";
 import {Button} from "@mui/material";
+import {useSelector} from "react-redux";
+import {useEffect} from "react";
 
 function PaymentDetails() {
+    const loggedIn = useSelector(state => state.customer.data.loggedIn);
+    const role = useSelector(state => state.customer.data.role);
+    useEffect(() => {
+        if (!loggedIn || role !== 'customer') {
+            window.location.href = '/auth/login';
+        }
+    }, [loggedIn, role]);
 
     return (
         <div className={'px-[10em] pb-[5em] flex justify-between w-full max-2xl:px-[6em]'}>

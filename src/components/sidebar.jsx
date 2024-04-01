@@ -1,9 +1,40 @@
 import PropTypes from "prop-types";
 import LogoOnlyImage from "../assets/images/logo-only-image.png";
+import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 function Sidebar(props) {
 
     const sidebarItems = props.items;
+    const empType = props.empType;
+    const [dashboardItem, setDashboardItem] = useState({});
+    const [activeItem, setActiveItem] = useState('dashboard');
+    const urls = {};
+
+    if (empType === 'admin') {
+        urls['Dashboard'] = '/admin/dashboard';
+        urls['Inventory'] = '/admin/inventory';
+        urls['Employee'] = '/admin/employee';
+        urls['Delivery'] = '/admin/delivery';
+    }else {
+        urls['Dashboard'] = '/delivery/dashboard';
+        urls['Pending Deliveries'] = '/delivery/pending-deliveries';
+    }
+
+    useEffect(() => {
+        let dashboardItem = {};
+        sidebarItems.forEach(item => {
+            dashboardItem[item.name] = false;
+        });
+        if(activeItem === 'dashboard') {
+            dashboardItem['Dashboard'] = true;
+        }else{
+            dashboardItem[activeItem] = true;
+        }
+        setDashboardItem(dashboardItem);
+    }, [sidebarItems]);
+
+    console.log(dashboardItem);
 
     return (
         <div>
@@ -17,9 +48,12 @@ function Sidebar(props) {
                     {Object.keys(sidebarItems).map((key, index) => {
                         const item = sidebarItems[key];
                         return (
-                            <div key={index} className={'flex gap-3 justify-start items-center'}>
-                                <item.icon className={'!text-3xl 2xl:!text-4xl'}/>
-                                <div className={'text-sm 2xl:text-lg'}>{item.name}</div>
+                            <div key={index} className={dashboardItem[item.name] ? 'flex gap-3 justify-start items-center scale-110 font-semibold'
+                                : 'flex gap-3 justify-start items-center'} onClick={() => setActiveItem(item.name)}>
+                                <Link to={urls[item.name]} key={index} className={'flex gap-3 justify-start items-center'}>
+                                    <item.icon className={'!text-3xl 2xl:!text-4xl'}/>
+                                    <div className={'text-sm 2xl:text-lg'}>{item.name}</div>
+                                </Link>
                             </div>
                         );
                     })}
@@ -31,7 +65,8 @@ function Sidebar(props) {
 }
 
 Sidebar.propTypes = {
-    items: PropTypes.array.isRequired
+    items: PropTypes.array.isRequired,
+    empType: PropTypes.string.isRequired
 };
 
 export default Sidebar;

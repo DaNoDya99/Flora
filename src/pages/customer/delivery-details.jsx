@@ -7,11 +7,20 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 function DeliveryDetails(){
+    const loggedIn = useSelector(state => state.customer.data.loggedIn);
+    const role = useSelector(state => state.customer.data.role);
+    useEffect(() => {
+        if (!loggedIn || role !== 'customer') {
+            window.location.href = '/auth/login';
+        }
+    }, [loggedIn, role]);
+
     const [value, setValue] = useState(dayjs());
     const navigate = useNavigate();
     const handleClick = () => {
