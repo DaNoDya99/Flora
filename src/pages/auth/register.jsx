@@ -5,12 +5,13 @@ import Input from '@mui/material/Input';
 import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {register} from "../../store/slices/customer_slice.js";
 
 function Register() {
 
     const dispatch = useDispatch();
+    const errors = useSelector(state => state.customer.data.errors);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -29,8 +30,7 @@ function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // console.log(formData);
+        formData.isActivated = false;
         dispatch(register(formData));
     }
 
@@ -44,6 +44,9 @@ function Register() {
                     />
                     <div>
                         <h1 className={'text-4xl font-semibold text-center mt-5 max-2xl:text-3xl'}>Sign Up to Flower Hub</h1>
+                        {
+                            errors.message ? <div className={'text-red-500 text-center p-2 my-3 border-2 border-red-500 rounded-md'}>{errors.message}</div> : null
+                        }
                         <form action="" className={'flex flex-col mt-10 space-y-8 max-2xl:mt-5 max-2xl:space-y-5'} onSubmit={handleSubmit}>
                             <div className={'flex gap-2'}>
                                 <FormControl>

@@ -25,6 +25,8 @@ import ProductionQuantityLimitsOutlinedIcon from '@mui/icons-material/Production
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
+import { useDispatch } from 'react-redux';
+import { logout } from '../store/slices/customer_slice';
 
 const pages = ["Categories", "About", "Contact"];
 
@@ -70,6 +72,7 @@ function ResponsiveAppBar(props) {
     const [open, setOpen] = React.useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [openSettingsModal, setOpenSettingsModal] = React.useState(false);
+    const dispatch = useDispatch();
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -103,6 +106,10 @@ function ResponsiveAppBar(props) {
 
     const closeSettings = () => {
         setOpenSettingsModal(false);
+    }
+
+    const handleLogout = () => {
+        dispatch(logout());
     }
 
     return (
@@ -224,8 +231,9 @@ function ResponsiveAppBar(props) {
                         >
                             {Object.keys(settings).map((key, index) => (
                                 <MenuItem key={index} onClick={handleCloseUserMenu}>
-                                    {settings[key].name !== 'Settings' ? <Link to={settings[key].link}><Typography textAlign="center" className={'nunito-sans-light'}>{settings[key].name}</Typography></Link>
-                                        : <Typography textAlign="center" className={'nunito-sans-light'} onClick={openSettings}>{settings[key].name}</Typography>}
+                                    {settings[key].name === 'Settings' ? <Typography textAlign="center" className={'nunito-sans-light'} onClick={openSettings}>{settings[key].name}</Typography>
+                                        :settings[key].name === 'Logout' ? <Typography textAlign="center" className={'nunito-sans-light'} onClick={handleLogout}>{settings[key].name}</Typography>
+                                        : <Link to={settings[key].link}><Typography textAlign="center" className={'nunito-sans-light'}>{settings[key].name}</Typography></Link>}
                                 </MenuItem>
                             ))}
                         </Menu>

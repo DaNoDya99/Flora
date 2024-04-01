@@ -10,15 +10,29 @@ import {useState} from "react";
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {login2} from "../../store/slices/customer_slice.js";
+import { useSelector } from 'react-redux';
 
 function Login() {
 
     const [passwordVisibility, setPasswordVisibility] = useState(false);
     const dispatch = useDispatch();
+    const errors = useSelector(state => state.customer.data.errors);
+
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(login2({"email":"danodyasupun7@gmail.com", "password":"990511Dsa#"}));
+        dispatch(login2(formData));
     }
 
     return (
@@ -31,10 +45,13 @@ function Login() {
                     />
                     <div>
                         <h1 className={'text-4xl font-semibold text-center mt-5 max-2xl:text-3xl'}>Sign In to Flower Hub</h1>
+                        {
+                            errors.message ? <div className={'text-red-500 text-center p-2 my-3 border-2 border-red-500 rounded-md'}>Incorrect Credentials</div> : null
+                        }
                         <form action="" className={'flex flex-col mt-10 space-y-10 max-2xl:mt-5 max-2xl:space-y-5'} onSubmit={handleSubmit}>
                             <FormControl>
                                 <InputLabel htmlFor={'email'} required>Email</InputLabel>
-                                <Input id={'email'} required name={'email'} />
+                                <Input id={'email'} required name={'email'} value={formData.email} onChange={handleChange}/>
                             </FormControl>
 
                             <FormControl>
@@ -46,6 +63,7 @@ function Login() {
                                                 : <VisibilityIcon sx={{fontSize : 'large'}} onClick={() => setPasswordVisibility(true)} className={'cursor-pointer'}/>}
                                         </InputAdornment>
                                         }
+                                    value={formData.password} onChange={handleChange}
                                 />
                             </FormControl>
 

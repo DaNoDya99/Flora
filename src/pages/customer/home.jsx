@@ -82,8 +82,8 @@ function Home() {
                     <img src={HomeBackgroundImage}
                          className={'w-full object-cover opacity-75'}
                          alt=""/>
-                    <div className={'absolute left-[15em] top-[36vh] space-y-5 max-2xl:left-[8em]'}>
-                        <h1 className={'text-6xl text-black font-bold'}>Discover the Beauty of Blooms.</h1>
+                    <div className={'absolute left-[15em] top-[36vh] space-y-8 max-2xl:left-[8em]'}>
+                        <h1 className={'text-6xl text-black font-bold'}>Discover the Beauty of Blooms...</h1>
                         <p className={'text-black text-5xl'}>Welcome to Flower Hub - Where </p>
                         <p className={'text-black text-5xl'}>Nature Meets Elegance! </p>
                         <Button variant="contained"

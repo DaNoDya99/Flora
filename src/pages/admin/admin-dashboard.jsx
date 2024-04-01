@@ -2,8 +2,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import {BarChart} from "@mui/x-charts";
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import getWeekdays from "../../utils/functions.js";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
 dayjs.extend(customParseFormat);
 
 const thisWeek = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
@@ -11,6 +10,17 @@ const lastWeek = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
 const quantity = [5,7,10,12,14,15,16];
 const products = ['P001', 'P002', 'P003', 'P004', 'P005', 'P006', 'P007'];
 
+function getWeekdays() {
+    let currentDate = dayjs();
+    let sevenDaysAgo = currentDate.subtract(7, 'day');
+    let weekdays = [];
+    for (let i = 0; i <= 7; i++) {
+        weekdays.push(sevenDaysAgo.format('dddd'));
+        sevenDaysAgo = sevenDaysAgo.add(1, 'day');
+    }
+
+    return weekdays;
+}
 
 
 function createData(id, name, quantity, price) {
@@ -28,7 +38,6 @@ const rows = [
   ];
 
 function AdminDashboard() {
-
     return (
         <div className={'flex flex-col gap-5 w-full max-2xl:gap-2'}>
             <div className={'flex w-full gap-5 max-2xl:gap-2'}>
@@ -74,7 +83,6 @@ function AdminDashboard() {
                                 direction: 'column',
                                 labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
                             }}}
-                            colors={['#FFC0CB', '#FFA07A']}
                         />
                     </div>
                 </div>
@@ -95,7 +103,6 @@ function AdminDashboard() {
                                 direction: 'column',
                                 labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
                             }}}
-                            colors={['#FFC0CB']}
                         />
                     </div>
                 </div>
