@@ -6,17 +6,37 @@ import Button from "@mui/material/Button";
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {login2} from "../../store/slices/customer_slice.js";
 import { useSelector } from 'react-redux';
+import {Bounce, toast, ToastContainer} from "react-toastify";
 
 function Login() {
 
     const [passwordVisibility, setPasswordVisibility] = useState(false);
     const dispatch = useDispatch();
-    const errors = useSelector(state => state.customer.data.errors);
+    const errors = useSelector(state => state.customer.data.errors.login);
+    const message = useSelector(state => state.customer.data.message.login);
+
+    const notify = () => toast.success(message, {
+        position: "bottom-left",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+    });
+
+    useEffect(() => {
+        if (message) {
+            notify();
+        }
+    })
 
     const [formData, setFormData] = useState({
         email: '',
@@ -48,6 +68,7 @@ function Login() {
                         {
                             errors.message ? <div className={'text-red-500 text-center p-2 my-3 border-2 border-red-500 rounded-md'}>Incorrect Credentials</div> : null
                         }
+                        <ToastContainer/>
                         <form action="" className={'flex flex-col mt-10 space-y-10 max-2xl:mt-5 max-2xl:space-y-5'} onSubmit={handleSubmit}>
                             <FormControl>
                                 <InputLabel htmlFor={'email'} required>Email</InputLabel>

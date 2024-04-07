@@ -1,5 +1,5 @@
-import {Button} from "@mui/material";
-import React from "react";
+import {Button, NativeSelect} from "@mui/material";
+import React, {useEffect} from "react";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@mui/material";
 import ProfileImage from "../../assets/images/profile.jpg";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -14,6 +14,8 @@ import AddIcon from '@mui/icons-material/Add';
 import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import FormControl from "@mui/material/FormControl";
+import {addEmployee, getEmployees, updateEmployee} from "../../store/slices/employee_slice.js";
+import {useDispatch, useSelector} from "react-redux";
 
 const columns = [
     { id: 'id', label: 'Id', minWidth: 100 },
@@ -40,24 +42,29 @@ function createData(id, image, name, age, contact, email, role, actions) {
     return { id, image, name, age, contact, email, role, actions};
 }
 
-const rows = [
-    createData(1, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 1),
-    createData(2, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 2),
-    createData(3, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 3),
-    createData(4, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 3),
-    createData(5, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 3),
-    createData(6, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 3),
-    createData(7, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 3),
-    createData(8, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 3),
-    createData(9, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 3),
-    createData(10, ProfileImage, 'Edward Samuel', 25, '0771234567', 'edwardsam@gmail.com', 'Delivery', 3),
-
-];
-
 function AdminEmployee() {
+    const dispatch = useDispatch();
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [employee, setEmployee] = React.useState({});
+    const [newEmp, setNewEmp] = React.useState({
+        firstName: '',
+        lastName: '',
+        profilePicture: '',
+        email: '',
+        contact: '',
+        emergencyContact: '',
+        address1: '',
+        address2: '',
+        address3: '',
+        city: '',
+        nic: '',
+        age: '',
+        role: '',
+        gender: '',
+        password: ''
+    });
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -80,7 +87,11 @@ function AdminEmployee() {
     const handleOpenAddEmp = () => setOpenAddEmp(true);
     const handleCloseAddEmp = () => setOpenAddEmp(false);
 
-    const handleEditEmpOpen = () => setOpenEditEmp(true);
+    const handleEditEmpOpen = (value) => {
+        setEmployee(employees.find(emp => emp.id === value));
+        setOpenEditEmp(true);
+        setDisabled(true);
+    }
 
     const handleEditEmpClose = () => {
         setOpenEditEmp(false)
@@ -90,6 +101,59 @@ function AdminEmployee() {
     const handleDeleteEmpOpen = () => setDeleteEmp(true);
 
     const handleDeleteEmpClose = () => setDeleteEmp(false);
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        setNewEmp({
+            ...newEmp,
+            [e.target.name] : file
+        })
+    }
+
+    const handleChange = (e) => {
+        setNewEmp({
+            ...newEmp,
+            [e.target.name] : e.target.value
+        });
+    }
+
+    const handleChangeEdit = (e) => {
+        setEmployee({
+            ...employee,
+            [e.target.name] : e.target.value
+        });
+    }
+
+    const handleImageUploadEdit = (e) => {
+        const file = e.target.files[0];
+        setEmployee({
+            ...employee,
+            [e.target.name] : file
+        });
+    }
+
+    const handleEditEmpSubmit = (e) => {
+        e.preventDefault();
+        console.log(employee);
+        dispatch(updateEmployee(employee));
+        dispatch(getEmployees());
+    }
+
+    const handleAddEmpSubmit = (e) => {
+        e.preventDefault();
+        // console.log(newEmp);
+        dispatch(addEmployee(newEmp));
+    }
+
+    useEffect(() => {
+        dispatch(getEmployees());
+    }, [dispatch]);
+
+    const employees = useSelector(state => state.employee.data.employees);
+
+    const rows = employees.map((employee) => {
+        return createData(employee.id, employee.image, `${employee.firstName} ${employee.lastName}`, employee.age, employee.contact, employee.email, employee.role, employee.id);
+    });
 
     return (
         <>
@@ -128,11 +192,11 @@ function AdminEmployee() {
                                                 const value = row[column.id];
                                                 return (
                                                     column.id === 'image' ? <TableCell key={column.id} align={column.align}>
-                                                        <img src={value} alt={'product'} className={'w-20 h-20 rounded-full shadow-md object-cover'}/>
+                                                        <img src={'http://localhost:3000/'+value} alt={'product'} className={'w-20 h-20 rounded-full shadow-md object-cover'}/>
                                                     </TableCell> : column.id === 'actions' ? <TableCell key={column.id} align={column.align}
                                                                                                         className={'flex items-center justify-center gap-5'}>
                                                             <DeleteIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-red-700'} onClick={handleDeleteEmpOpen}/>
-                                                            <InfoIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-blue-600'} onClick={handleEditEmpOpen}/>
+                                                            <InfoIcon key={value} className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-blue-600'} onClick={() => handleEditEmpOpen(value)}/>
                                                         </TableCell> :
                                                         <TableCell key={column.id} align={column.align} className={'!text-lg'}>
                                                             {column.format && typeof value === 'number'
@@ -170,24 +234,25 @@ function AdminEmployee() {
                             </Typography>
                             <CloseIcon onClick={handleCloseAddEmp} className={'text-red-600'} />
                         </div>
-                        <form action="" className={'mt-10'}>
+                        <form action="" className={'mt-10'} encType={'multipart/form-data'} onSubmit={handleAddEmpSubmit}>
                             <div className={'flex gap-3 justify-between'}>
                                 <div className={'w-[30%]'}>
-                                    <img src={UserImage} alt="user-image" className={'w-48 h-48 rounded-full shadow-lg'}/>
+                                    {/*<img src={UserImage} alt="user-image" className={'w-48 h-48 rounded-full shadow-lg'}/>*/}
+                                    <img src={newEmp.profilePicture ? URL.createObjectURL(newEmp.profilePicture) : UserImage} alt="user-image" className={'w-48 h-48 rounded-full shadow-lg object-cover'}/>
                                     <span className={'w-10 h-10 flex items-center justify-center bg-secondary2 rounded-full absolute top-[15em] left-[11em]'}>
-                                        <input type="file" className={'opacity-0 absolute overflow-hidden w-10 h-10'}/>
+                                        <input type="file" className={'opacity-0 absolute overflow-hidden w-10 h-10'} onChange={handleImageUpload} name={'profilePicture'}/>
                                         <AddIcon className={'cursor-pointer !w-12 !h-12 text-gray-500'}/>
                                     </span>
                                 </div>
                                 <div className={'w-[70%] space-y-12'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="firstName">First name</InputLabel>
-                                        <Input id="firstName" name={'firstName'}/>
+                                        <Input id="firstName" name={'firstName'} onChange={handleChange} value={newEmp.firstName}/>
                                     </FormControl>
 
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="lastName">Last name</InputLabel>
-                                        <Input id="lastName" name={'lastName'}/>
+                                        <Input id="lastName" name={'lastName'} onChange={handleChange} value={newEmp.lastName}/>
                                     </FormControl>
                                 </div>
                             </div>
@@ -196,47 +261,85 @@ function AdminEmployee() {
                                 <div className={'w-[50%] space-y-12'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="email">Email</InputLabel>
-                                        <Input id="email" name={'email'}/>
+                                        <Input id="email" name={'email'} onChange={handleChange} value={newEmp.email}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="emergencyContact">Emergency Contact</InputLabel>
-                                        <Input id="emergencyContact" name={'emergencyContact'}/>
+                                        <Input id="emergencyContact" name={'emergencyContact'} onChange={handleChange} value={newEmp.emergencyContact}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="address1">Address Line 1</InputLabel>
-                                        <Input id="address1" name={'address1'}/>
+                                        <Input id="address1" name={'address1'} onChange={handleChange} value={newEmp.address1}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="address3">Address Line 3</InputLabel>
-                                        <Input id="address3" name={'address3'}/>
+                                        <Input id="address3" name={'address3'} onChange={handleChange} value={newEmp.address3}/>
                                     </FormControl>
-                                {/*     NIC*/}
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="nic">NIC</InputLabel>
-                                        <Input id="nic" name={'nic'}/>
+                                        <Input id="nic" name={'nic'} onChange={handleChange} value={newEmp.nic}/>
+                                    </FormControl>
+                                    {/*Select Gender*/}
+                                    <FormControl className={'w-full mt-5'}>
+                                        <InputLabel htmlFor="gender">Gender</InputLabel>
+                                        <NativeSelect
+                                            defaultValue={'none'}
+                                            inputProps={{
+                                                name: 'gender',
+                                                id: 'gender',
+                                            }}
+                                            onChange={handleChange}
+                                            value={newEmp.gender}
+                                            name={'gender'}
+                                        >
+                                            <option value={'none'}></option>
+                                            <option value={'male'}>Male</option>
+                                            <option value={'female'}>Female</option>
+                                        </NativeSelect>
                                     </FormControl>
                                 </div>
                                 <div className={'w-[50%] space-y-12'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="contact">Contact</InputLabel>
-                                        <Input id="contact" name={'contact'}/>
+                                        <Input id="contact" name={'contact'} onChange={handleChange} value={newEmp.contact}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="age">Age</InputLabel>
-                                        <Input id="age" name={'age'}/>
+                                        <Input id="age" name={'age'} onChange={handleChange} value={newEmp.age}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="address2">Address Line 2</InputLabel>
-                                        <Input id="address2" name={'address2'}/>
+                                        <Input id="address2" name={'address2'} onChange={handleChange} value={newEmp.address2}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="city">City</InputLabel>
-                                        <Input id="city" name={'city'}/>
+                                        <Input id="city" name={'city'} onChange={handleChange} value={newEmp.city}/>
+                                    </FormControl>
+                                    <FormControl className={'w-full mt-5'}>
+                                        <InputLabel htmlFor="password">Password</InputLabel>
+                                        <Input id="password" name={'password'} onChange={handleChange} value={newEmp.password}/>
+                                    </FormControl>
+                                    <FormControl className={'w-full mt-5'}>
+                                        <InputLabel htmlFor="role">Role</InputLabel>
+                                        <NativeSelect
+                                            defaultValue={'none'}
+                                            inputProps={{
+                                                name: 'role',
+                                                id: 'role',
+                                            }}
+                                            onChange={handleChange}
+                                            value={newEmp.role}
+                                            name={'role'}
+                                        >
+                                            <option value={'none'}></option>
+                                            <option value={'delivery'}>Delivery</option>
+                                            <option value={'customer'}>Manager</option>
+                                        </NativeSelect>
                                     </FormControl>
                                 </div>
                             </div>
                             <div className={'flex justify-center mt-10'}>
-                                <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'}>
+                                <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'} type={'submit'}>
                                     Add
                                 </Button>
                             </div>
@@ -261,24 +364,24 @@ function AdminEmployee() {
 
                             <CloseIcon onClick={handleEditEmpClose} className={'text-red-600'} />
                         </div>
-                        <form action="" className={'mt-10'}>
+                        <form action="" className={'mt-10'} encType={'multipart/form-data'} onSubmit={handleEditEmpSubmit}>
                             <div className={'flex gap-3 justify-between'}>
                                 <div className={'w-[30%]'}>
-                                    <img src={UserImage} alt="user-image" className={'w-48 h-48 rounded-full shadow-lg'}/>
+                                    <img src={employee ? typeof employee.image === 'object' ? URL.createObjectURL(employee.image) :'http://localhost:3000/'+employee.image : UserImage} alt="user-image" className={'w-48 h-48 rounded-full shadow-lg object-cover'}/>
                                     <span className={'w-10 h-10 flex items-center justify-center bg-secondary2 rounded-full absolute top-[15em] left-[11em]'}>
-                                        <input type="file" className={'opacity-0 absolute overflow-hidden w-10 h-10'}/>
+                                        <input type="file" className={'opacity-0 absolute overflow-hidden w-10 h-10'} name={'image'} onChange={handleImageUploadEdit}/>
                                         <AddIcon className={'cursor-pointer !w-12 !h-12 text-gray-500'}/>
                                     </span>
                                 </div>
                                 <div className={'w-[70%] space-y-12'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="firstName">First name</InputLabel>
-                                        <Input id="firstName" name={'firstName'} defaultValue={'Edward'} disabled={disabled}/>
+                                        <Input id="firstName" name={'firstName'} defaultValue={employee.firstName} disabled={disabled} onChange={handleChangeEdit} value={employee.firstName}/>
                                     </FormControl>
 
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="lastName">Last name</InputLabel>
-                                        <Input id="lastName" name={'lastName'} defaultValue={'Samuel'} disabled={disabled}/>
+                                        <Input id="lastName" name={'lastName'} defaultValue={employee.lastName} disabled={disabled} onChange={handleChangeEdit} value={employee.lastName}/>
                                     </FormControl>
                                 </div>
                             </div>
@@ -287,46 +390,42 @@ function AdminEmployee() {
                                 <div className={'w-[50%] space-y-12'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="email">Email</InputLabel>
-                                        <Input id="email" name={'email'} defaultValue={'edwardsam@gmail.com'} disabled={disabled}/>
+                                        <Input id="email" name={'email'} defaultValue={employee.email} disabled={disabled} onChange={handleChangeEdit} value={employee.email}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="emergencyContact">Emergency Contact</InputLabel>
-                                        <Input id="emergencyContact" name={'emergencyContact'} defaultValue={'077 1234567'} disabled={disabled}/>
+                                        <Input id="emergencyContact" name={'emergencyContact'} defaultValue={employee.emergencyContact} disabled={disabled} onChange={handleChangeEdit} value={employee.emergencyContact}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="address1">Address Line 1</InputLabel>
-                                        <Input id="address1" name={'address1'} defaultValue={'108 / 5 A'} disabled={disabled}/>
+                                        <Input id="address1" name={'address1'} defaultValue={employee.addressLine1} disabled={disabled} onChange={handleChangeEdit} value={employee.address1}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="address3">Address Line 3</InputLabel>
-                                        <Input id="address3" name={'address3'} defaultValue={'Park Land'} disabled={disabled}/>
-                                    </FormControl>
-                                    <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="nic">NIC</InputLabel>
-                                        <Input id="nic" name={'nic'} defaultValue={'200014152841'} disabled={disabled}/>
+                                        <Input id="address3" name={'address3'} defaultValue={employee.addressLine3} disabled={disabled} onChange={handleChangeEdit} value={employee.address3}/>
                                     </FormControl>
                                 </div>
                                 <div className={'w-[50%] space-y-12'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="contact">Contact</InputLabel>
-                                        <Input id="contact" name={'contact'} defaultValue={'071 1234567'} disabled={disabled}/>
+                                        <Input id="contact" name={'contact'} defaultValue={employee.contact} disabled={disabled} onChange={handleChangeEdit} value={employee.contact}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="age">Age</InputLabel>
-                                        <Input id="age" name={'age'} defaultValue={32} disabled={disabled}/>
+                                        <Input id="age" name={'age'} defaultValue={employee.age} disabled={disabled} onChange={handleChangeEdit} value={employee.age}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="address2">Address Line 2</InputLabel>
-                                        <Input id="address2" name={'address2'} defaultValue={'Park Street'} disabled={disabled}/>
+                                        <Input id="address2" name={'address2'} defaultValue={employee.addressLine2} disabled={disabled} onChange={handleChangeEdit} value={employee.address2}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="city">City</InputLabel>
-                                        <Input id="city" name={'city'} defaultValue={'Colombo 7'} disabled={disabled}/>
+                                        <Input id="city" name={'city'} defaultValue={employee.city} disabled={disabled} onChange={handleChangeEdit} value={employee.city}/>
                                     </FormControl>
                                 </div>
                             </div>
                             <div className={'flex justify-center mt-10'}>
-                                <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'} disabled={disabled}>
+                                <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'} disabled={disabled} type={'submit'}>
                                     Save
                                 </Button>
                             </div>

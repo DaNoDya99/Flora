@@ -1,9 +1,9 @@
 import {LineChart} from "@mui/x-charts/LineChart";
-import getWeekdays from "../../utils/functions.js";
+import all from "../../utils/functions.js";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {PieChart} from "@mui/x-charts";
 
-const xLabels = getWeekdays();
+const xLabels = all.getWeekdays();
 
 function createData(id, ordered_date, delivery_date, days_passed) {
     return { id, ordered_date, delivery_date, days_passed  };

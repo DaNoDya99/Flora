@@ -3,6 +3,7 @@ import React from "react";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@mui/material";
 import {FormControl, InputLabel, NativeSelect} from "@mui/material";
 import ProductImage from "../../assets/images/product.jpg"
+import NoImage from "../../assets/images/no-pictures.png";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
@@ -18,6 +19,8 @@ import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import {useDispatch} from "react-redux";
+import {addProduct} from "../../store/slices/product_slice.js";
 
 const columns = [
     { id: 'id', label: 'Id', minWidth: 100 },
@@ -68,6 +71,7 @@ const rows = [
 ];
 
 function AdminInventory() {
+    const dispatch = useDispatch();
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -75,6 +79,24 @@ function AdminInventory() {
     const [openProductInfo, setOpenProductInfo] = React.useState(false);
     const [openAddProduct, setOpenAddProduct] = React.useState(false);
     const [openEditProduct, setOpenEditProduct] = React.useState(false);
+    const [product, setProduct] = React.useState({
+        productName: '',
+        reorderLevel: '',
+        price: '',
+        quantity: '',
+        description: '',
+        lilies: false,
+        chrysanthemums: false,
+        roses: false,
+        gerbera: false,
+        liliesQuantity: '',
+        chrysanthemumsQuantity: '',
+        rosesQuantity: '',
+        gerberaQuantity: '',
+        images: []
+    });
+
+
     const handleEditProductOpen = () => setOpenEditProduct(true);
 
     const handleEditProductClose = () => setOpenEditProduct(false);
@@ -99,6 +121,40 @@ function AdminInventory() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    const handleImagesUploadAdd = (e) => {
+        setProduct({...product, images: e.target.files});
+    }
+
+    const handleChangeAdd = (e) => {
+        if (e.target.name === 'lilies' || e.target.name === 'chrysanthemums' || e.target.name === 'roses' || e.target.name === 'gerbera'){
+            setProduct({...product, [e.target.name]: e.target.checked});
+        }else{
+            setProduct({...product, [e.target.name]: e.target.value});
+        }
+    }
+
+    const handleAddProduct = (e) => {
+        e.preventDefault();
+        let formData = new FormData();
+        formData.append('productName', product.productName);
+        formData.append('reorderLevel', product.reorderLevel);
+        formData.append('price', product.price);
+        formData.append('quantity', product.quantity);
+        formData.append('description', product.description);
+        formData.append('lilies', product.lilies);
+        formData.append('chrysanthemums', product.chrysanthemums);
+        formData.append('roses', product.roses);
+        formData.append('gerbera', product.gerbera);
+        formData.append('liliesQuantity', product.liliesQuantity);
+        formData.append('chrysanthemumsQuantity', product.chrysanthemumsQuantity);
+        formData.append('rosesQuantity', product.rosesQuantity);
+        formData.append('gerberaQuantity', product.gerberaQuantity);
+        for (let i = 0; i < product.images.length; i++){
+            formData.append('images', product.images[i]);
+        }
+        dispatch(addProduct(formData));
+    }
 
     return (
         <>
@@ -325,18 +381,18 @@ function AdminInventory() {
                             <CloseIcon onClick={handleAddProductClose} className={'text-red-600'} />
                         </div>
 
-                        <form action="" className={'mt-10'}>
+                        <form action="" className={'mt-10'} encType={'multipart/form-data'} onSubmit={handleAddProduct}>
                             <div className={'flex flex-col items-center w-full'}>
                                 <div className={'flex justify-around w-full'}>
-                                    <img src={ProductImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
-                                    <img src={ProductImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
-                                    <img src={ProductImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
-                                    <img src={ProductImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
-                                    <img src={ProductImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
+                                    <img src={product.images.length > 0 ? URL.createObjectURL(product.images[0]) : NoImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
+                                    <img src={product.images.length > 1 ? URL.createObjectURL(product.images[1]) : NoImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
+                                    <img src={product.images.length > 2 ? URL.createObjectURL(product.images[2]) : NoImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
+                                    <img src={product.images.length > 3 ? URL.createObjectURL(product.images[3]) : NoImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
+                                    <img src={product.images.length > 4 ? URL.createObjectURL(product.images[4]) : NoImage} alt="Product image" className={'w-[10em] h-[10em] object-cover shadow-lg rounded-md'}/>
                                 </div>
                                 <div className={'flex justify-between mt-10 gap-10'}>
                                     <span className={'w-[20em] h-10 flex items-center justify-center bg-secondary2 absolute left-[40%] rounded-md shadow-lg'}>
-                                        <input type="file" className={'opacity-0 absolute overflow-hidden w-10 h-10'}/>
+                                        <input type="file" className={'opacity-0 absolute overflow-hidden w-10 h-10'} name={'images'} onChange={handleImagesUploadAdd} multiple/>
                                         <AddIcon className={'cursor-pointer !w-10 !h-10 text-gray-500 mr-2'}/>
                                         <div className={'font-semibold'}>Upload</div>
                                     </span>
@@ -346,33 +402,33 @@ function AdminInventory() {
                                 <div className={'w-[50%] space-y-8'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="firstName">Product name</InputLabel>
-                                        <Input id="productName" name={'productName'}/>
+                                        <Input id="productName" name={'productName'} onChange={handleChangeAdd} value={product.productName}/>
                                     </FormControl>
                                 {/*    Reorder level*/}
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="firstName">Reorder Level</InputLabel>
-                                        <Input id="reorderLevel" name={'reorderLevel'} type={'number'}/>
+                                        <Input id="reorderLevel" name={'reorderLevel'} type={'number'} onChange={handleChangeAdd} value={product.reorderLevel}/>
                                     </FormControl>
 
                                     <div className={'mt-5'}>
                                         <div className={'font-semibold text-xl'}>Select flower types</div>
                                         <FormGroup className={'ms-10'}>
-                                            <FormControlLabel control={<Checkbox />} label="Lilies" />
-                                            <FormControlLabel control={<Checkbox />} label="Chrysanthemums" />
-                                            <FormControlLabel control={<Checkbox/>} label="Roses" />
-                                            <FormControlLabel control={<Checkbox />} label="Gerbera" />
+                                            <FormControlLabel control={<Checkbox name={'lilies'} onChange={handleChangeAdd} value={product.lilies}/>} label="Lilies" />
+                                            <FormControlLabel control={<Checkbox name={'chrysanthemums'} onChange={handleChangeAdd} value={product.chrysanthemums}/>} label="Chrysanthemums" />
+                                            <FormControlLabel control={<Checkbox name={'roses'} onChange={handleChangeAdd} value={product.roses}/>} label="Roses"/>
+                                            <FormControlLabel control={<Checkbox name={'gerbera'} onChange={handleChangeAdd} value={product.gerbera}/>} label="Gerbera" />
                                         </FormGroup>
                                     </div>
                                 </div>
                                 <div className={'w-[50%] space-y-8'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="firstName">Quantity</InputLabel>
-                                        <Input id="quantity" name={'quantity'} type={'number'}/>
+                                        <Input id="quantity" name={'quantity'} type={'number'} onChange={handleChangeAdd} value={product.quantity}/>
                                     </FormControl>
                                 {/*    Price*/}
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="firstName">Price</InputLabel>
-                                        <Input id="price" name={'price'} />
+                                        <Input id="price" name={'price'}  onChange={handleChangeAdd} value={product.price}/>
                                     </FormControl>
 
                                     <div className={'space-y-8'}>
@@ -381,22 +437,22 @@ function AdminInventory() {
                                             <div className={'w-[50%] space-y-8'}>
                                                 <FormControl className={'w-full'}>
                                                     <InputLabel htmlFor="firstName">Lilies Quantity</InputLabel>
-                                                    <Input id="lilies" name={'lilies'} type={'number'}/>
+                                                    <Input id="lilies" name={'lilies'} type={'number'} disabled={!product.lilies} onChange={handleChangeAdd} value={product.liliesQuantity}/>
                                                 </FormControl>
 
                                                 <FormControl className={'w-full'}>
                                                     <InputLabel htmlFor="firstName">Chrysanthemums Quantity</InputLabel>
-                                                    <Input id="chrysanthemums" name={'chrysanthemums'} type={'number'}/>
+                                                    <Input id="chrysanthemums" name={'chrysanthemums'} type={'number'} disabled={!product.chrysanthemums} onChange={handleChangeAdd} value={product.chrysanthemumsQuantity}/>
                                                 </FormControl>
                                             </div>
                                             <div className={'w-[50%] space-y-8'}>
                                                 <FormControl className={'w-full'}>
                                                     <InputLabel htmlFor="firstName">Roses Quantity</InputLabel>
-                                                    <Input id="roses" name={'roses'} type={'number'}/>
+                                                    <Input id="roses" name={'roses'} type={'number'} disabled={!product.roses} onChange={handleChangeAdd} value={product.rosesQuantity}/>
                                                 </FormControl>
                                                 <FormControl className={'w-full'}>
                                                     <InputLabel htmlFor="firstName">Gerbera Quantity</InputLabel>
-                                                    <Input id="gerbera" name={'gerbera'} type={'number'}/>
+                                                    <Input id="gerbera" name={'gerbera'} type={'number'} disabled={!product.gerbera} onChange={handleChangeAdd} value={product.gerberaQuantity}/>
                                                 </FormControl>
                                             </div>
                                         </div>
@@ -408,12 +464,12 @@ function AdminInventory() {
                             <div className={'mt-10 w-full'}>
                                 <div className={'font-semibold text-xl'}>Bouquet Description</div>
                                 <FormControl className={'w-full !mt-5'}>
-                                    <TextareaAutosize id="description" name={'description'} className={'!border-gray-400'} minRows={10}/>
+                                    <TextareaAutosize id="description" name={'description'} className={'!border-gray-400'} minRows={10} onChange={handleChangeAdd} value={product.description}/>
                                 </FormControl>
                             </div>
 
                             <div className={'flex justify-center mt-10'}>
-                                <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'}>
+                                <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'} type={'submit'}>
                                     Add Product
                                 </Button>
                             </div>

@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {api} from '../../api/api';
-
+import all from '../../utils/functions.js';
 
 const customerSlice = createSlice({
     name: 'customer',
@@ -16,8 +16,14 @@ const customerSlice = createSlice({
                 confirmPassword: ''
             },
             role : 'customer',
-            errors: {},
-            message: ''
+            errors: {
+                login: {},
+                register: {}
+            },
+            message: {
+                login: '',
+                register: ''
+            }
         }
     },
     reducers: {
@@ -46,20 +52,28 @@ const customerSlice = createSlice({
                 state.data.loggedIn = true;
                 state.data.localStorage = action.payload.customer;
                 localStorage.setItem('user', JSON.stringify(action.payload.customer));
+                state.data.message.login = action.payload.message;
+                state.data.errors.login = {};
 
-                window.location.href = '/';
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1500);
             } else {
                 action.payload.errors.message = action.payload.errors.message.replace(/"/g, '');
-                state.data.errors = action.payload.errors;
+                state.data.errors.login = action.payload.errors;
             }
         }).addCase(register.fulfilled, (state, action) => {
             if (action.payload.statusFlag === 'success') {
                 state.data.localStorage = action.payload.customer;
-                state.data.message = action.payload.message;
-                state.data.errors = {};
+                state.data.message.register = action.payload.message;
+                state.data.errors.register = {};
+
+                setTimeout(() => {
+                    window.location.href = 'login';
+                },1500);
             } else {
-                action.payload.errors.message = formatString(action.payload.errors.message.replace(/"/g, ''));
-                state.data.errors = action.payload.errors;
+                action.payload.errors.message = all.formatString(action.payload.errors.message.replace(/"/g, ''));
+                state.data.errors.register = action.payload.errors;
             }
         });
     }

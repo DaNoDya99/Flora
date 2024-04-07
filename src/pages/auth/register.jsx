@@ -4,14 +4,35 @@ import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
 import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import {register} from "../../store/slices/customer_slice.js";
+import {toast, Bounce, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
 
     const dispatch = useDispatch();
-    const errors = useSelector(state => state.customer.data.errors);
+    const errors = useSelector(state => state.customer.data.errors.register);
+    const message = useSelector(state => state.customer.data.message.register);
+
+    const notify = () => toast.success(message, {
+        position: "bottom-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+    });
+
+    useEffect(() => {
+        if (message) {
+            notify();
+        }
+    })
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -47,6 +68,7 @@ function Register() {
                         {
                             errors.message ? <div className={'text-red-500 text-center p-2 my-3 border-2 border-red-500 rounded-md'}>{errors.message}</div> : null
                         }
+                        <ToastContainer/>
                         <form action="" className={'flex flex-col mt-10 space-y-8 max-2xl:mt-5 max-2xl:space-y-5'} onSubmit={handleSubmit}>
                             <div className={'flex gap-2'}>
                                 <FormControl>
