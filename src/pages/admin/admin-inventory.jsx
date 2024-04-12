@@ -1,5 +1,5 @@
 import {Button} from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from "@mui/material";
 import {FormControl, InputLabel, NativeSelect} from "@mui/material";
 import ProductImage from "../../assets/images/product.jpg"
@@ -20,7 +20,10 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import {useDispatch} from "react-redux";
+import {useSelector} from "react-redux";
 import {addProduct} from "../../store/slices/product_slice.js";
+import { getCategories } from "../../store/slices/category_slice.js";
+import { getSubCategories } from "../../store/slices/sub_category_slice.js";
 
 const columns = [
     { id: 'id', label: 'Id', minWidth: 100 },
@@ -84,6 +87,8 @@ function AdminInventory() {
         reorderLevel: '',
         price: '',
         quantity: '',
+        category: '',
+        sub_category: '',
         description: '',
         lilies: false,
         chrysanthemums: false,
@@ -96,6 +101,13 @@ function AdminInventory() {
         images: []
     });
 
+    useEffect(() => {
+        dispatch(getCategories());
+        dispatch(getSubCategories());
+    }, [dispatch]);
+
+    const categories = useSelector((state) => state.category.data.categories);
+    const sub_categories = useSelector((state) => state.subCategory.data.subCategories);
 
     const handleEditProductOpen = () => setOpenEditProduct(true);
 
@@ -132,6 +144,8 @@ function AdminInventory() {
         }else{
             setProduct({...product, [e.target.name]: e.target.value});
         }
+
+        console.log(product);
     }
 
     const handleAddProduct = (e) => {
@@ -410,6 +424,27 @@ function AdminInventory() {
                                         <Input id="reorderLevel" name={'reorderLevel'} type={'number'} onChange={handleChangeAdd} value={product.reorderLevel}/>
                                     </FormControl>
 
+                                    <FormControl className={'w-full'}>
+                                        <InputLabel htmlFor="category">Category</InputLabel>
+                                        <NativeSelect
+                                            defaultValue={'none'}
+                                            inputProps={{
+                                                name: 'category',
+                                                id: 'category',
+                                            }}
+                                            onChange={handleChangeAdd}
+                                            value={product.category}
+                                            name={'category'}
+                                        >
+                                            <option value={''}></option>
+                                            {   
+                                                categories.map((category) => {
+                                                    return <option value={category.id}>{category.name}</option>
+                                                })
+                                            }
+                                        </NativeSelect>
+                                    </FormControl>
+
                                     <div className={'mt-5'}>
                                         <div className={'font-semibold text-xl'}>Select flower types</div>
                                         <FormGroup className={'ms-10'}>
@@ -429,6 +464,28 @@ function AdminInventory() {
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="firstName">Price</InputLabel>
                                         <Input id="price" name={'price'}  onChange={handleChangeAdd} value={product.price}/>
+                                    </FormControl>
+
+                                    <FormControl className={'w-full'}>
+                                        <InputLabel htmlFor="sub-category">Sub Category</InputLabel>
+                                        <NativeSelect
+                                            defaultValue={'none'}
+                                            inputProps={{
+                                                name: 'sub-category',
+                                                id: 'sub-category',
+                                            }}
+                                            onChange={handleChangeAdd}
+                                            value={product.category}
+                                            name={'sub-category'}
+                                        >
+                                            <option value={''}></option>
+                                            {
+                                                // if product.category === sub_category.id then display sub_category.name
+                                                sub_categories.map((sub_category) => {
+                                                    return sub_category.category_id.toString() === product.category ? <option value={sub_category.id}>{sub_category.name}</option> : null;
+                                                })
+                                            }
+                                        </NativeSelect>
                                     </FormControl>
 
                                     <div className={'space-y-8'}>
