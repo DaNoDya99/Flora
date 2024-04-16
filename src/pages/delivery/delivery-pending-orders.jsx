@@ -24,6 +24,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import CachedIcon from '@mui/icons-material/Cached';
 import GradingIcon from '@mui/icons-material/Grading';
 import {Circle} from "@mui/icons-material";
+import {useSelector} from "react-redux";
 
 const style1 = {
     position: 'absolute',
@@ -83,6 +84,12 @@ function DeliveryPendingOrders() {
     const [openOrderDetails, setOpenOrderDetails] = React.useState(false);
     const [openDeliveryStatus, setOpenDeliveryStatus] = React.useState(false);
     const [states, setStates] = useState({ordered : true, processed: false, dispatched: false,  delivered : false});
+    const isLoggedIn = useSelector(state => state.employeeAuth.loggedIn);
+    const employee = useSelector(state => state.employeeAuth.localStorage);
+
+    if (!isLoggedIn || employee.role !== 'delivery') {
+        window.location.href = '/employee/login';
+    }
 
     const handleDeliveryStatusOpen = () => {
         setOpenDeliveryStatus(true);

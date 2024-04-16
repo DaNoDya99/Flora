@@ -8,9 +8,26 @@ import VisibilityIcon from "@mui/icons-material/Visibility.js";
 import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
 import {useState} from "react";
+import {useDispatch} from "react-redux"
+import {login} from "../../store/slices/employee_auth_slice.js";
 
 function EmployeeLogin() {
+    const dispatch = useDispatch()
     const [passwordVisibility, setPasswordVisibility] = useState(false);
+    const [loginForm, setLoginForm] = useState({
+        email : '',
+        password : ''
+    })
+
+    const handleChange = (e) => {
+        setLoginForm({...loginForm,
+            [e.target.name]: e.target.value})
+    }
+
+    const handleEmployeeLogin = (e) => {
+        e.preventDefault()
+        dispatch(login(loginForm))
+    }
 
     return (
         <div>
@@ -22,10 +39,10 @@ function EmployeeLogin() {
                     />
                     <div>
                         <h1 className={'text-4xl font-semibold text-center mt-5 max-2xl:text-3xl'}>Employee Login - Flower Hub</h1>
-                        <form action="" className={'flex flex-col mt-10 space-y-10 max-2xl:mt-5 max-2xl:space-y-5'}>
+                        <form action="" className={'flex flex-col mt-10 space-y-10 max-2xl:mt-5 max-2xl:space-y-5'} onSubmit={handleEmployeeLogin}>
                             <FormControl>
                                 <InputLabel htmlFor={'email'} required>Email</InputLabel>
-                                <Input id={'email'} required name={'email'} />
+                                <Input id={'email'} required name={'email'} value={loginForm.email} onChange={handleChange}/>
                             </FormControl>
 
                             <FormControl>
@@ -37,10 +54,10 @@ function EmployeeLogin() {
                                                    : <VisibilityIcon sx={{fontSize : 'large'}} onClick={() => setPasswordVisibility(true)} className={'cursor-pointer'}/>}
                                            </InputAdornment>
                                        }
-                                />
+                                value={loginForm.password} onChange={handleChange}/>
                             </FormControl>
 
-                            <Button variant="contained" color="secondary2" className='max-2xl:!mt-5 !font-semibold'>
+                            <Button variant="contained" color="secondary2" className='max-2xl:!mt-5 !font-semibold' type={'submit'}>
                                 Sign In
                             </Button>
                             <div className={'w-full text-center'}>

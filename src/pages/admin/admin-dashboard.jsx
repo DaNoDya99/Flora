@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import {BarChart} from "@mui/x-charts";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
+import {useSelector} from "react-redux";
 dayjs.extend(customParseFormat);
 
 const thisWeek = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
@@ -38,6 +39,13 @@ const rows = [
   ];
 
 function AdminDashboard() {
+    const isLoggedIn = useSelector(state => state.employeeAuth.loggedIn);
+    const employee = useSelector(state => state.employeeAuth.localStorage);
+
+    if (!isLoggedIn || employee.role !== 'admin') {
+        window.location.href = '/employee/login';
+    }
+
     return (
         <div className={'flex flex-col gap-5 w-full max-2xl:gap-2'}>
             <div className={'flex w-full gap-5 max-2xl:gap-2'}>

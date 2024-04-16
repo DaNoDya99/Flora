@@ -2,6 +2,7 @@ import {LineChart} from "@mui/x-charts/LineChart";
 import all from "../../utils/functions.js";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {PieChart} from "@mui/x-charts";
+import {useSelector} from "react-redux";
 
 const xLabels = all.getWeekdays();
 
@@ -15,7 +16,14 @@ const rows = [
     createData('odr-001-014', '2021-10-03', '2021-10-12', 9),
 ];
 
-function DeliveryDashboard() {
+function DeliveryDashboard(){
+    const isLoggedIn = useSelector(state => state.employeeAuth.loggedIn);
+    const employee = useSelector(state => state.employeeAuth.localStorage);
+
+    if (!isLoggedIn || employee.role !== 'delivery') {
+        window.location.href = '/employee/login';
+    }
+
     return (
         <div className={'flex flex-col gap-5 w-full max-2xl:gap-2'}>
             <div className={'flex w-full gap-5 max-2xl:gap-2'}>

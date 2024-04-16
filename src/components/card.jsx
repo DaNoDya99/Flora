@@ -5,15 +5,23 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ProductImage from "../assets/images/product.jpg";
+import PropTypes from "prop-types";
 
-export default function ImgMediaCard() {
+ImgMediaCard.propTypes = {
+    product : PropTypes.object.isRequired
+}
+
+export default function ImgMediaCard(props) {
+
+    const product = props.product;
+
     return (
         <Card sx={{ maxWidth: 280, maxHeight: 450 }} className={'hover:scale-[101%] nunito-sans-light max-2xl:w-[13em] max-2xl:h-[19.5em]'}>
             <CardMedia
                 component="img"
                 alt="green iguana"
                 height="140"
-                image={ProductImage}
+                image={'http://localhost:3000/'+product.images[0].image_path}
                 sx={{
                     objectFit: 'contain',
                     objectPosition: 'center',
@@ -25,10 +33,10 @@ export default function ImgMediaCard() {
             />
             <CardContent className={'flex flex-col items-center'} sx={{ py: 0.5 }}>
                 <Typography gutterBottom component="div" className='max-2xl:text-sm !font-bold'>
-                    AFFAIRS OF HEARTS
+                    {product.name}
                 </Typography>
                 <Typography className='max-2xl:text-sm !font-semibold'>
-                    Rs. 6000.00
+                    Rs. {product.price}
                 </Typography>
             </CardContent>
             <CardActions>

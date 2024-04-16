@@ -1,5 +1,6 @@
 import { Carousel, Flowbite } from 'flowbite-react';
 import ProductImage from '../assets/images/product.jpg';
+import PropTypes from 'prop-types';
 
 const customTheme = {
     carousel: {
@@ -17,18 +18,22 @@ const customTheme = {
 };
 
 
-function ImgCarousel() {
+function ImgCarousel(props) {
+    const images = props.images;
+
     return (
         <Flowbite theme={{theme: customTheme}}>
             <Carousel slide={false} className={'h-[40em] max-2xl:h-[30em]'}>
-                <img src={ProductImage} alt="..." />
-                <img src={ProductImage} alt="..." />
-                <img src={ProductImage} alt="..." />
-                <img src={ProductImage} alt="..." />
-                <img src={ProductImage} alt="..." />
+                {images.map((image, index) => (
+                    <img key={index} src={'http://localhost:3000/'+image.image_path} alt="..." />
+                ))}
             </Carousel>
         </Flowbite>
     );
+}
+
+ImgCarousel.propTypes = {
+    images: PropTypes.object.isRequired
 }
 
 export default ImgCarousel;

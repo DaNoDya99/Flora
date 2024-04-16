@@ -4,12 +4,12 @@ import ImgMediaCard from "../../components/card.jsx";
 import DescriptiveCard from "../../components/descriptive-card.jsx";
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
-// import { useSelector, useDispatch } from 'react-redux'
-// import {addProduct, removeProduct} from "../../store/slices/product_slice.js";
+import { useSelector, useDispatch } from 'react-redux'
+import {getProducts} from "../../store/slices/product_slice.js";
 
 function Home() {
-    // const products = useSelector(state => state.product);
-    // const dispatch = useDispatch();
+    const products = useSelector(state => state.product.data.products);
+    const dispatch = useDispatch();
     const [noOfCards, setNoOfCards] = useState(0);
 
     useEffect(() => {
@@ -28,7 +28,8 @@ function Home() {
         };
 
         window.addEventListener('resize', handleResize);
-    },[setNoOfCards]);
+        dispatch(getProducts())
+    },[dispatch, setNoOfCards]);
 
     const cardsArray = Array.from({ length: noOfCards }, (_, index) => index);
 
@@ -108,7 +109,7 @@ function Home() {
                     {
                         cardsArray.map((index) => (
                             <Link key={index} to={'product/birthday/001'}>
-                                <ImgMediaCard/>
+                                <ImgMediaCard product={products[index]}/>
                             </Link>
                         ))
                     }

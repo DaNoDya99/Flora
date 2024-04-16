@@ -155,6 +155,13 @@ function AdminEmployee() {
         return createData(employee.id, employee.image, `${employee.firstName} ${employee.lastName}`, employee.age, employee.contact, employee.email, employee.role, employee.id);
     });
 
+    const isLoggedIn = useSelector(state => state.employeeAuth.loggedIn);
+    const employeeLogged = useSelector(state => state.employeeAuth.localStorage);
+
+    if (!isLoggedIn || employeeLogged.role !== 'admin') {
+        window.location.href = '/employee/login';
+    }
+
     return (
         <>
             <div className={'flex justify-between items-center'}>
