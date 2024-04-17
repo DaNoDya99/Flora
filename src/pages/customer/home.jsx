@@ -31,6 +31,8 @@ function Home() {
         dispatch(getProducts())
     },[dispatch, setNoOfCards]);
 
+    console.log(products);
+
     const cardsArray = Array.from({ length: noOfCards }, (_, index) => index);
 
     const collections = [
@@ -108,7 +110,7 @@ function Home() {
                 <div className={'mt-10 px-[10em] flex justify-between w-full max-2xl:px-[6em]'}>
                     {
                         cardsArray.map((index) => (
-                            <Link key={index} to={'product/birthday/001'}>
+                            <Link key={index} to={'product/'+products[index].product_code}>
                                 <ImgMediaCard product={products[index]}/>
                             </Link>
                         ))

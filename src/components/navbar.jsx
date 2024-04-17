@@ -294,11 +294,11 @@ function ResponsiveAppBar(props) {
                                 🎉 Occasional Delights
                             </div>
                             <div className={'ms-14 my-4 max-2xl:my-2 space-y-4 max-2xl:space-y-2'}>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/birthday'} onClick={toggleDrawer(false)}>Birthday</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Love & Romance</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Anniversary</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Wedding</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Congratulations</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/1'} onClick={toggleDrawer(false)}>Birthday</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/2'}>Love & Romance</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/3'}>Anniversary</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/4'}>Wedding</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/5'}>Congratulations</Link></h2>
                             </div>
                         </div>
                         <div>
@@ -306,11 +306,11 @@ function ResponsiveAppBar(props) {
                                 🌷 Flower Type Elegance
                             </div>
                             <div className={'ms-14 my-4 max-2xl:my-2 space-y-4 max-2xl:space-y-2'}>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Lilies</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Roses</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Chrysanthemums</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Gerbera</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Mix</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/6'}>Lilies</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/7'}>Roses</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/8'}>Chrysanthemums</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/9'}>Gerbera</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/10'}>Mix</Link></h2>
                             </div>
                         </div>
                         <div>
@@ -318,10 +318,10 @@ function ResponsiveAppBar(props) {
                                 🌈 Colorful Blossoms
                             </div>
                             <div className={'ms-14 my-4 max-2xl:my-2 space-y-4 max-2xl:space-y-2'}>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Pink</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Red</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>White</Link></h2>
-                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'#'}>Yellow</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/11'}>Pink</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/12'}>Red</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/13'}>White</Link></h2>
+                                <h2 className={'hover:font-semibold max-2xl:text-sm max-2xl:font-semibold'}>- <Link to={'/products/14'}>Yellow</Link></h2>
                             </div>
                         </div>
                     </div>

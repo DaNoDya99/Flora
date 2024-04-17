@@ -1,24 +1,33 @@
-import {useLoaderData} from "react-router-dom";
+import {useLoaderData, useLocation} from "react-router-dom";
 import ImgCarousel from "../../components/carousel.jsx";
 import Breadcrumb from "../../components/breadcrumb.jsx";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import NumberInput from "../../components/number-input.jsx";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import {useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useSelector, useDispatch} from "react-redux";
+import React, {useEffect} from "react";
+import all from "../../utils/functions.js";
+import {getProducts} from "../../store/slices/product_slice.js";
+import {addItemToCart} from "../../store/slices/cart_slice.js";
 
 function Product() {
-    const product = useLoaderData();
-    console.log(product);
+    const product_code = useLoaderData();
+    const location = useLocation();
+    const products = useSelector(state => state.product.data.products);
+    const dispatch = useDispatch();
+    const quantity = location.state && location.state.quantity;
+    const product = products.find(product => product.product_code === product_code.product_code);
 
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
     const role = useSelector(state => state.customer.data.role);
+    const localStorage = useSelector(state => state.customer.data.localStorage);
     useEffect(() => {
         if (!loggedIn || role !== 'customer') {
             window.location.href = '/auth/login';
         }
-    }, [loggedIn, role]);
+        dispatch(getProducts());
+    }, [dispatch, loggedIn, role]);
 
     const paths = [{ path: '/', name: 'Home', last: false },
             { path: '', name: 'Categories', last: false },
@@ -26,7 +35,15 @@ function Product() {
             {path: '/product/birthday/001',name:'Affairs of Hearts', last:true}
         ]
 
+    const handleAddToCart = () => {
+        const cartItem = {
+            product_code: product.product_code,
+            quantity: quantity,
+            customer : localStorage.id
+        }
 
+        dispatch(addItemToCart(cartItem))
+    }
 
     return (
         <div className={'py-14 max-2xl:py-10 px-[10em] max-2xl:px-[6em]'}>
@@ -35,7 +52,7 @@ function Product() {
             </div>
             <div className={'flex w-full'}>
                 <div className={'w-[50%] mr-12'}>
-                    <ImgCarousel/>
+                    <ImgCarousel images={product.images}/>
                     <div className={'mt-10 max-2xl:mt-5 space-y-10 max-2xl:space-y-5 text-xl max-2xl:text-sm'}>
                         <div className={'flex items-center'}>
                             <LocalOfferIcon className={'text-secondary3 mr-3'}/>
@@ -58,17 +75,17 @@ function Product() {
                 </div>
                 <div className={'w-[50%] ml-12'}>
                     <div className={'space-y-4 max-2xl:space-y-2'}>
-                        <h1 className={'text-3xl font-semibold'}>AFFAIRS OF HEARTS</h1>
+                        <h1 className={'text-3xl font-semibold'}>{product.name}</h1>
                         <div className={'flex text-2xl'}>
                             <h1 className={'font-semibold'}>Product Code :</h1>
-                            <h1>&nbsp; 001</h1>
+                            <h1>&nbsp; {product.product_code}</h1>
                         </div>
                         <div className={'text-2xl font-semibold'}>
-                            Rs. 6000.00
+                            Rs. {product.price}
                         </div>
-                        <NumberInput small={false}/>
+                        <NumberInput small={false} productQuantity={product.quantity} productCode={product.product_code}/>
                         <div className={'flex flex-col items-center py-10 space-y-4'}>
-                            <Button variant="contained" color="secondary3" className={'w-[60%] h-12'}>
+                            <Button variant="contained" color="secondary3" className={'w-[60%] h-12'} onClick={handleAddToCart}>
                                 <Typography className={'!text-xl font-semibold'}>Add to Cart</Typography>
                             </Button>
                             <Button variant="outlined" sx={{border : 2.5}} color="secondary3" className={'w-[60%] h-12 !bg-secondary'}>
@@ -78,14 +95,16 @@ function Product() {
                     </div>
                     <div className={'space-y-10'}>
                         {/* eslint-disable-next-line react/no-unescaped-entities */}
-                        <p className={'text-justify text-xl max-2xl:text-sm'}>Brighten Women's Day with our charming flower bunch—a delightful mix of hues symbolizing the
-                            joy and strength of women. This bouquet is a simple yet heartfelt way to honor the incredible women in your life. Share
-                            these blooms to express gratitude and celebrate the unique contributions of women everywhere.</p>
+                        <p className={'text-justify text-xl max-2xl:text-sm'}>{product.description}</p>
 
                         <div className={'space-y-2'}>
                             <h1 className={'text-2xl font-semibold max-2xl:text-xl'}>Bloom Contains:</h1>
-                            <p className={'text-justify text-xl ms-5 max-2xl:text-sm'}>Gerbera: 03 stems</p>
-                            <p className={'text-justify text-xl ms-5 max-2xl:text-sm'}>Chrysanthemums: 08 stems</p>
+                            {
+                                product.flowers.map((flower) => {
+                                // eslint-disable-next-line react/jsx-key
+                                return <p className={'text-justify text-xl ms-5 max-2xl:text-sm'}>{all.getFlowerByFlowerType(flower.flower_type.toString()).name}: {flower.quantity} stems</p>
+                                })
+                            }
                         </div>
 
                         <div className={'space-y-2'}>

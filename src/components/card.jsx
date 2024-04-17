@@ -21,7 +21,7 @@ export default function ImgMediaCard(props) {
                 component="img"
                 alt="green iguana"
                 height="140"
-                image={'http://localhost:3000/'+product.images[0].image_path}
+                image={product ? 'http://localhost:3000/'+product.images[0].image_path : ProductImage}
                 sx={{
                     objectFit: 'contain',
                     objectPosition: 'center',
@@ -33,10 +33,10 @@ export default function ImgMediaCard(props) {
             />
             <CardContent className={'flex flex-col items-center'} sx={{ py: 0.5 }}>
                 <Typography gutterBottom component="div" className='max-2xl:text-sm !font-bold'>
-                    {product.name}
+                    {product ? product.name : 'Product Name'}
                 </Typography>
                 <Typography className='max-2xl:text-sm !font-semibold'>
-                    Rs. {product.price}
+                    Rs. {product ? product.price : '00.00'}
                 </Typography>
             </CardContent>
             <CardActions>

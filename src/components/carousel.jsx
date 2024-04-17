@@ -27,6 +27,8 @@ function ImgCarousel(props) {
                 {images.map((image, index) => (
                     <img key={index} src={'http://localhost:3000/'+image.image_path} alt="..." />
                 ))}
+
+                {/*<img src={ProductImage} alt="..." />*/}
             </Carousel>
         </Flowbite>
     );

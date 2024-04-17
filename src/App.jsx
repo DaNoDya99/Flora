@@ -42,10 +42,9 @@ const router = createBrowserRouter(createRoutesFromElements(
             <Route path={"products/:category"} element={<Products/>} loader={({params}) => {
                 return params.category;
             }}/>
-            <Route path={"product/:category/:id"} element={<Product/>} loader={({params}) => {
+            <Route path={"product/:product_code"} element={<Product/>} loader={({params}) => {
                 return {
-                    category: params.category,
-                    id: params.id
+                    product_code: params.product_code
                 }
             }}/>
             <Route path={'orders'} element={<Orders/>} />

@@ -5,18 +5,25 @@ import AuthBackgroundImage from "../../assets/images/auth-background.jpg";
 import Typography from "@mui/material/Typography";
 import ImgMediaCard from "../../components/card.jsx";
 import {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
+import {useSelector,useDispatch} from "react-redux";
+import {getProducts} from "../../store/slices/product_slice.js";
 
 function Products() {
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
     const role = useSelector(state => state.customer.data.role);
+    const dispatch = useDispatch();
+    
     useEffect(() => {
         if (!loggedIn || role !== 'customer') {
             window.location.href = '/auth/login';
         }
-    }, [loggedIn, role]);
+        dispatch(getProducts());
+    }, [dispatch, loggedIn, role]);
 
     const category = useLoaderData();
+    const products = useSelector(state => state.product.data.products);
+
+    const filteredProducts = products.filter(product => product.sub_category.toString() === category.toString());
 
     const path = [
         { path: '/', name: 'Home', last: false },
@@ -87,12 +94,13 @@ function Products() {
                         </FormControl>
                     </div>
                 </div>
-                <div className={'flex flex-wrap flex-row justify-between gap-5 ms-10 w-[80%]'}>
+                <div className={'flex flex-wrap flex-row justify-center gap-5 ms-10 w-[80%]'}>
                     {
                         cardsArray.map((index) => (
-                            <Link key={index} to={'/product/' + category + '/001'}>
-                                <ImgMediaCard />
-                            </Link>
+                            index <= filteredProducts.length - 1 ?
+                            <Link key={index} to={'/product/'+filteredProducts[index].product_code}>
+                                <ImgMediaCard product={filteredProducts[index]}/>
+                            </Link> : ''
                         ))
 
                     }

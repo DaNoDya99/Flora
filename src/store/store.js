@@ -5,6 +5,7 @@ import employeeSlice from './slices/employee_slice'
 import categorySlice from './slices/category_slice'
 import subCategorySlice from './slices/sub_category_slice'
 import employeeAuthSlice from "./slices/employee_auth_slice.js";
+import cartSlice from "./slices/cart_slice.js";
 
 export default configureStore({
     reducer: {
@@ -13,6 +14,7 @@ export default configureStore({
         employee: employeeSlice,
         category: categorySlice,
         subCategory: subCategorySlice,
-        employeeAuth: employeeAuthSlice
+        employeeAuth: employeeAuthSlice,
+        cart : cartSlice
     }
 })
