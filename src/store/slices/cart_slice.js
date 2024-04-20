@@ -24,6 +24,13 @@ const cartSlice = createSlice({
                 state.data.errors = action.payload.errors;
                 state.data.messages.addItem = action.payload.message;
             }
+        }).addCase(getCart.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.cart = action.payload.cart;
+                state.data.errors = {};
+            } else {
+                state.data.errors = action.payload.errors;
+            }
         });
     }
 });
@@ -48,6 +55,25 @@ export const addItemToCart = createAsyncThunk(
                 errors: error.response.data,
                 status: error.response.status,
                 message: error.response.data.message
+            }
+        });
+    }
+);
+
+export const getCart = createAsyncThunk(
+    'cart/getCart',
+    async (customer) => {
+        return api.get('/cart/get-cart/' + customer).then((response) => {
+            return {
+                statusFlag: 'success',
+                cart: response.data.cart,
+                status: response.status
+            }
+        }).catch((error) => {
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data,
+                status: error.response.status
             }
         });
     }

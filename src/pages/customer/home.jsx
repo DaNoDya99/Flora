@@ -110,9 +110,9 @@ function Home() {
                 <div className={'mt-10 px-[10em] flex justify-between w-full max-2xl:px-[6em]'}>
                     {
                         cardsArray.map((index) => (
-                            <Link key={index} to={'product/'+products[index].product_code}>
+                            // <Link key={index} to={'product/'+products[index].product_code}>
                                 <ImgMediaCard product={products[index]}/>
-                            </Link>
+                            // </Link>
                         ))
                     }
                 </div>

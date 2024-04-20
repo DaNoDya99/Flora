@@ -54,6 +54,7 @@ export const login = createAsyncThunk(
                 status : response.status
             }
         }).catch(error => {
+            console.log(error.response)
             return {
                 statusFlag : "failed",
                 errors : error.response.data,

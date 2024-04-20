@@ -27,6 +27,8 @@ import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/customer_slice';
+import {useEffect} from "react";
+import {getCart} from "../store/slices/cart_slice.js";
 
 const pages = ["Categories", "About", "Contact"];
 
@@ -73,6 +75,16 @@ function ResponsiveAppBar(props) {
     const [openModal, setOpenModal] = React.useState(false);
     const [openSettingsModal, setOpenSettingsModal] = React.useState(false);
     const dispatch = useDispatch();
+    const customer = useSelector(state => state.customer.data.localStorage);
+    const cart = useSelector(state => state.cart.data.cart);
+
+    useEffect(() => {
+        dispatch(getCart(customer.id))
+    }, [customer.id, dispatch]);
+
+    const handleCheckout = () => {
+        window.location.href = '/order/shopping-cart';
+    }
 
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -243,7 +255,7 @@ function ResponsiveAppBar(props) {
                             <IconButton>
                                 <ShoppingCartOutlinedIcon onClick={() => setOpenModal(true)} />
                             </IconButton>
-                            <div className='rounded-full bg-secondary2/60 absolute top-3 right-0 h-5 w-5 flex justify-center items-center'>0</div>
+                            <div className='rounded-full bg-secondary2/60 absolute top-3 right-0 h-5 w-5 flex justify-center items-center'>{cart ? cart.length : 0}</div>
                         </div>
                         
                         <div>
@@ -258,23 +270,47 @@ function ResponsiveAppBar(props) {
                                             Your Bag
                                         </Typography>
                                         <div className='flex text-gray-500 items-center gap-2'>
-                                            <div>{0} item(s)</div>
+                                            <div>{cart ? cart.length : 0} item(s)</div>
                                             <CloseIcon onClick={() => setOpenModal(false)} className={'text-red-600'} />
                                         </div>
                                     </div>
                                     <Divider variant="middle" className='!my-2' />
-                                    <div className='w-full flex flex-col items-center py-8'>
-                                        <ProductionQuantityLimitsOutlinedIcon className={'!text-6xl text-gray-400'} />
-                                        <p className={'text-gray-400'}>No items in the cart</p>
-                                    </div>
+                                    {
+                                        cart.length > 0 ? cart.map((item) => (
+                                            // eslint-disable-next-line react/jsx-key
+                                            <div className={'flex justify-between items-center py-4'}>
+                                                <div className='flex gap-2 items-center'>
+                                                    <img src={'http://localhost:3000/'+item.images[0].image_path} alt={item.name} className='w-12 h-12 rounded object-cover' />
+                                                    <div>
+                                                        <div>{item.name}</div>
+                                                        <div className='flex gap-2 items-center'>
+                                                            <div className='text-gray-400'>Qty: {item.quantity}</div>
+                                                            <div className='text-gray-400'>Rs. {item.price}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <IconButton>
+                                                        <CloseIcon className='text-gray-400' />
+                                                    </IconButton>
+                                                </div>
+                                            </div>
+                                        )) : <div className='w-full flex flex-col items-center py-8'>
+                                            <ProductionQuantityLimitsOutlinedIcon className={'!text-6xl text-gray-400'} />
+                                            <p className={'text-gray-400'}>No items in the cart</p>
+                                        </div>
+                                    }
+
                                     <div className={'flex justify-between'}>
                                         <Typography className={'!font-semibold !text-gray-600'}>SUB TOTAL</Typography>
-                                        <Typography className={'!font-semibold !text-gray-600'}>Rs. 00.00</Typography>
+                                        <Typography className={'!font-semibold !text-gray-600'}>Rs. {
+                                            cart.length > 0 ? cart.reduce((acc, item) => acc + parseFloat(item.price.replace(/,/g, ''))*parseInt(item.quantity), 0)+'.00' : 0
+                                        }</Typography>
                                     </div>
                                     <div className={'text-[.7em]'}>Taxes and shipping calculated at the checkout</div>
                                     <div className={'flex justify-center mt-5'}>
-                                        <Button variant="contained" color="secondary3" className={'w-[60%] !h-9'}>
-                                            <Typography className={'!text-sm font-semibold'}>Continue Shopping</Typography>
+                                        <Button variant="contained" color="secondary3" className={'w-[60%] !h-9'} disabled={!cart} onClick={handleCheckout}>
+                                            <Typography className={'!text-sm font-semibold'}>Checkout</Typography>
                                         </Button>
                                     </div>
                                 </Box>

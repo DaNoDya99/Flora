@@ -17,8 +17,10 @@ function NumberInput(props) {
         } else {
             setDisabled(false);
         }
-        
-        navigate('/product/'+productCode, { state: { quantity: quantity } });
+
+        if(window.location.pathname === '/product/'+productCode) {
+            navigate('/product/'+productCode, { state: { quantity: quantity } });
+        }
     }, [navigate, productCode, productQuantity, quantity]);
 
     return (

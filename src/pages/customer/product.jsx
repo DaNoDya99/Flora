@@ -10,11 +10,18 @@ import React, {useEffect} from "react";
 import all from "../../utils/functions.js";
 import {getProducts} from "../../store/slices/product_slice.js";
 import {addItemToCart} from "../../store/slices/cart_slice.js";
+import {useNavigate} from "react-router-dom";
 
 function Product() {
-    const product_code = useLoaderData();
+    let product_code = useLoaderData();
+    if(product_code === undefined){
+        //get product code from url
+        product_code = {product_code: window.location.pathname.split('/').pop()};
+    }
+    const navigate = useNavigate();
     const location = useLocation();
     const products = useSelector(state => state.product.data.products);
+    console.log(products);
     const dispatch = useDispatch();
     const quantity = location.state && location.state.quantity;
     const product = products.find(product => product.product_code === product_code.product_code);
@@ -43,6 +50,8 @@ function Product() {
         }
 
         dispatch(addItemToCart(cartItem))
+
+        window.location.href = '/';
     }
 
     return (
