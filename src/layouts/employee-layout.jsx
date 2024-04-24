@@ -7,15 +7,12 @@ import GradingIcon from '@mui/icons-material/Grading';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AdminImage from "../assets/images/administrator.png";
 import DeliveryManImage from "../assets/images/delivery-man.png";
-import { useLocation } from "react-router-dom";
 import Sidebar from "../components/sidebar.jsx";
 
 
 function EmployeeLayout() {
-    const location = useLocation();
-
-    // const employee = location.state && location.state.employee;
-    const employee = 'admin';
+    const url = window.location.href;
+    const employee = url.includes('admin') ? 'admin' : 'delivery';
 
     let sidebarItems = employee === 'admin' ? [
         {name: 'Dashboard', icon: DashboardIcon},

@@ -165,11 +165,10 @@ function AdminEmployee() {
     return (
         <>
             <div className={'flex justify-between items-center'}>
-                <div className={'text-3xl font-semibold'}>Inventory</div>
+                <div className={'text-3xl font-semibold'}>Employee</div>
                 <Button variant="contained" color="secondary3" className={'w-[16.8em] h-8 2xl:h-10 !font-semibold'} onClick={handleOpenAddEmp}>
                     Add Employee
                 </Button>
-
             </div>
             <div className={'mt-10 max-h-[70vh]'}>
                 <TableContainer className={'h-[70vh]'}>

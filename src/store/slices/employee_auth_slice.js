@@ -25,14 +25,15 @@ const employeeAuthSlice = createSlice({
                 state.message.login = action.payload.message;
                 state.errors.login = {};
                 state.role = action.payload.employee.role;
-                setTimeout(() => {
-                    // if (state.employee.role === 'admin') {
-                    //     window.location.href = '/admin/dashboard';
-                    // } else {
-                    //     window.location.href = '/delivery/dashboard';
-                    // }
-                    window.location.href = '/admin/dashboard';
-                }, 1500);
+                if(state.role === 'admin'){
+                    setTimeout(() => {
+                        window.location.href = '/admin/dashboard';
+                    }, 1500);
+                }else if(state.role === 'delivery'){
+                    setTimeout(() => {
+                        window.location.href = '/delivery/dashboard';
+                    }, 1500);
+                }
             } else {
                 state.errors.login = action.payload.errors;
             }

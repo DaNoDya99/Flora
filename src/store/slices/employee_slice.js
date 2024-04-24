@@ -43,6 +43,18 @@ const employeeSlice = createSlice({
                 action.payload.errors.message = all.formatString(action.payload.errors.message.replace(/"/g, ''));
                 state.errors.updateEmployee = action.payload.errors;
             }
+        }).addCase(getDeliveryPersonnel.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.employees = action.payload.employees;
+            }else {
+                state.errors.getEmployees = action.payload.errors;
+            }
+        }).addCase(getDeliveryPersonnelAssignedOrderCounts.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.employees = action.payload.employees;
+            }else {
+                state.errors.getEmployees = action.payload.errors;
+            }
         });
     }
 });
@@ -111,6 +123,40 @@ export const updateEmployee = createAsyncThunk(
             return {
                 status: error.response.status,
                 errors: error.response.data,
+                statusFlag: 'failed'
+            };
+        });
+    });
+
+export const getDeliveryPersonnel = createAsyncThunk(
+    'employee/getDeliveryPersonnel',
+    async () => {
+        return api.get('/employees/get-delivery-personnel').then(response => {
+            return {
+                employees: response.data.employees,
+                status: response.status,
+                statusFlag: 'success'
+            };
+        }).catch(error => {
+            return {
+                status: error.response.status,
+                statusFlag: 'failed'
+            };
+        });
+    });
+
+export const getDeliveryPersonnelAssignedOrderCounts = createAsyncThunk(
+    'employee/getDeliveryPersonnelAssignedOrderCounts',
+    async () => {
+        return api.get('/employees/get-delivery-personnel-assigned-order-counts').then(response => {
+            return {
+                employees: response.data.employees,
+                status: response.status,
+                statusFlag: 'success'
+            };
+        }).catch(error => {
+            return {
+                status: error.response.status,
                 statusFlag: 'failed'
             };
         });

@@ -7,6 +7,7 @@ import {api} from "../../api/api.js"
     initialState: {
         data : {
             orders : [],
+            orderCountsByCity : [],
             order : {
                 order_items : [],
                 total : 0,
@@ -24,7 +25,8 @@ import {api} from "../../api/api.js"
             }
         },
         message : {
-            placeOrder : ''
+            placeOrder : '',
+            assignDeliveryPerson : ''
         },
         errors : {
             placeOrder : {},
@@ -71,7 +73,37 @@ import {api} from "../../api/api.js"
             } else {
                 state.errors.addOrder = action.payload.errors;
             }
-        })
+        }).addCase(getCustomerOrders.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.orders = action.payload.orders;
+            } else {
+                state.errors.getOrders = action.payload.errors;
+            }
+        }).addCase(getOrderDetailsById.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.order = action.payload.order;
+            } else {
+                state.errors.getOrder = action.payload.errors;
+            }
+        }).addCase(getOrderDetailsByStatus.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.orders = action.payload.orders;
+            } else {
+                state.errors.getOrders = action.payload.errors;
+            }
+        }).addCase(getOrderPendingOrderCountsGroupedByCity.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.orderCountsByCity = action.payload.orders;
+            } else {
+                state.errors.getOrders = action.payload.errors;
+            }
+        }).addCase(assignDeliveryPerson.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.message.assignDeliveryPerson = action.payload.message;
+            } else {
+                state.errors.assignDeliveryPerson = action.payload.errors;
+            }
+        });
     }
 })
 
@@ -100,6 +132,89 @@ export const placeOrder = createAsyncThunk(
                 errors: error.response.data,
                 status: error.response.status,
                 message: error.response.data.message
+            }
+        });
+    })
+
+ export const getCustomerOrders = createAsyncThunk(
+    'order/getCustomerOrders',
+    async (customer) => {
+        return api.get('/orders/get-customer-orders/'+customer).then(response => {
+            return {
+                statusFlag: 'success',
+                orders: response.data
+            }
+        }).catch(error => {
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data.errors
+            }
+        });
+    })
+
+ export const getOrderDetailsById = createAsyncThunk(
+    'order/getOrderDetailsById',
+    async (order_id) => {
+        return api.get('/orders/get-order/'+order_id).then(response => {
+            return {
+                statusFlag: 'success',
+                order: response.data
+            }
+        }).catch(error => {
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data.errors
+            }
+        });
+    })
+
+ export const getOrderDetailsByStatus = createAsyncThunk(
+    'order/getOrderDetailsByStatus',
+    async (status) => {
+        return api.get('/orders/get-orders/'+status).then(response => {
+            // console.log(response)
+            return {
+                statusFlag: 'success',
+                orders: response.data
+            }
+        }).catch(error => {
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data.errors
+            }
+        });
+    })
+
+ export const getOrderPendingOrderCountsGroupedByCity = createAsyncThunk(
+    'order/getOrderPendingOrderCountsGroupedByCity',
+    async () => {
+        return api.get('/orders/get-pending-order_counts-groupedby-city').then(response => {
+            return {
+                statusFlag: 'success',
+                orders: response.data
+            }
+        }).catch(error => {
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data.errors
+            }
+        });
+    })
+
+ export const assignDeliveryPerson = createAsyncThunk(
+    'order/assignDeliveryPerson',
+    async (data) => {
+        return api.post('/orders/assign-delivery-person', data).then(response => {
+            console.log(response)
+            return {
+                statusFlag: 'success',
+                message: response.data.message
+            }
+        }).catch(error => {
+            console.log(error.response)
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data.errors
             }
         });
     })
