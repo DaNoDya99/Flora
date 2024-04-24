@@ -17,9 +17,6 @@ const productSlice = createSlice({
         }
     },
     reducers: {
-        // addProduct(state, action) {
-        //     state.products.push(action.payload);
-        // },
         removeProduct(state, action) {
             state.products = state.products.filter(product => product.id !== action.payload);
         }
@@ -28,6 +25,7 @@ const productSlice = createSlice({
         builder.addCase(addProduct.fulfilled, (state, action) => {
             if (action.payload.statusFlag === 'success') {
                 state.message.addProduct = action.payload.message;
+                window.location.reload();
             }else{
                 state.errors.addProduct = action.payload.errors;
             }

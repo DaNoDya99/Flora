@@ -26,7 +26,8 @@ import {api} from "../../api/api.js"
         },
         message : {
             placeOrder : '',
-            assignDeliveryPerson : ''
+            assignDeliveryPerson : '',
+            updateOrderStatus : ''
         },
         errors : {
             placeOrder : {},
@@ -103,7 +104,13 @@ import {api} from "../../api/api.js"
             } else {
                 state.errors.assignDeliveryPerson = action.payload.errors;
             }
-        });
+        }).addCase(updateOrderStatus.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.message.updateOrderStatus = action.payload.message;
+            } else {
+                state.errors.updateOrderStatus = action.payload.errors;
+            }
+        })
     }
 })
 
@@ -205,6 +212,24 @@ export const placeOrder = createAsyncThunk(
     'order/assignDeliveryPerson',
     async (data) => {
         return api.post('/orders/assign-delivery-person', data).then(response => {
+            console.log(response)
+            return {
+                statusFlag: 'success',
+                message: response.data.message
+            }
+        }).catch(error => {
+            console.log(error.response)
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data.errors
+            }
+        });
+    })
+
+ export const updateOrderStatus = createAsyncThunk(
+    'order/updateOrderStatus',
+    async (data) => {
+        return api.post('/orders/update-order-status', data).then(response => {
             console.log(response)
             return {
                 statusFlag: 'success',

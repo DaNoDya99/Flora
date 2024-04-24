@@ -25,6 +25,7 @@ const employeeSlice = createSlice({
             if (action.payload.statusFlag === 'success') {
                 state.message.addEmployee = action.payload.message;
                 state.errors.addEmployee = {};
+                window.location.reload();
             } else {
                 action.payload.errors.message = all.formatString(action.payload.errors.message.replace(/"/g, ''));
                 state.errors.addEmployee = action.payload.errors;
@@ -39,6 +40,7 @@ const employeeSlice = createSlice({
             if (action.payload.statusFlag === 'success') {
                 state.message.updateEmployee = action.payload.message;
                 state.errors.updateEmployee = {};
+                window.location.reload();
             } else {
                 action.payload.errors.message = all.formatString(action.payload.errors.message.replace(/"/g, ''));
                 state.errors.updateEmployee = action.payload.errors;

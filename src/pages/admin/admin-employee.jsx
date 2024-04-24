@@ -141,7 +141,6 @@ function AdminEmployee() {
 
     const handleAddEmpSubmit = (e) => {
         e.preventDefault();
-        // console.log(newEmp);
         dispatch(addEmployee(newEmp));
     }
 

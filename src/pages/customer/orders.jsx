@@ -2,7 +2,6 @@ import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import Divider from "@mui/material/Divider";
 import dayjs from "dayjs";
-import ProductImage from "../../assets/images/product.jpg";
 import {getCustomerOrders} from "../../store/slices/order_slice.js";
 import {useDispatch} from "react-redux";
 import {getProducts} from "../../store/slices/product_slice.js";
@@ -37,7 +36,7 @@ function Orders() {
     }
 
     return (
-        <div className={'px-[10em] py-[5em] flex justify-between w-full max-2xl:px-[6em]'}>
+        <div className={'px-[10em] py-[5em] flex justify-between w-full max-2xl:px-[6em] h-[92vh]'}>
             <div className={'w-[35%] border-2 border-secondary3 rounded-lg p-2'}>
                 <div className={'pb-4 font-semibold text-2xl'}>Orders</div>
                 {

@@ -16,6 +16,15 @@ const employeeAuthSlice = createSlice({
             login : ''
         }
     },
+    reducers : {
+        logout(state) {
+            state.localStorage = {};
+            localStorage.removeItem('user');
+            state.errors = {};
+
+            window.location.href = '/employee/login';
+        },
+    },
     extraReducers : (builder) => {
         builder.addCase(login.fulfilled, (state, action) => {
             if (action.payload.statusFlag === 'success') {
@@ -41,6 +50,7 @@ const employeeAuthSlice = createSlice({
     }
 })
 
+export const {logout} = employeeAuthSlice.actions
 export default employeeAuthSlice.reducer
 
 export const login = createAsyncThunk(

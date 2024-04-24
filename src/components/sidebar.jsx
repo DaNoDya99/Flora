@@ -2,9 +2,11 @@ import PropTypes from "prop-types";
 import LogoOnlyImage from "../assets/images/logo-only-image.png";
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {logout} from "../store/slices/employee_auth_slice.js";
 
 function Sidebar(props) {
-
+    const dispatch = useDispatch();
     const sidebarItems = props.items;
     const empType = props.empType;
     const [dashboardItem, setDashboardItem] = useState({});
@@ -32,9 +34,11 @@ function Sidebar(props) {
             dashboardItem[activeItem] = true;
         }
         setDashboardItem(dashboardItem);
-    }, [sidebarItems]);
+    }, [activeItem, sidebarItems]);
 
-    console.log(dashboardItem);
+    const handleLogout = () => {
+        dispatch(logout())
+    }
 
     return (
         <div>
@@ -50,10 +54,15 @@ function Sidebar(props) {
                         return (
                             <div key={index} className={dashboardItem[item.name] ? 'flex gap-3 justify-start items-center scale-110 font-semibold'
                                 : 'flex gap-3 justify-start items-center'} onClick={() => setActiveItem(item.name)}>
-                                <Link to={urls[item.name]} key={index} className={'flex gap-3 justify-start items-center'}>
-                                    <item.icon className={'!text-3xl 2xl:!text-4xl'}/>
-                                    <div className={'text-sm 2xl:text-lg'}>{item.name}</div>
-                                </Link>
+                                {
+                                    item.name !== 'Logout' ? <Link to={urls[item.name]} key={index} className={'flex gap-3 justify-start items-center'}>
+                                        <item.icon className={'!text-3xl 2xl:!text-4xl'}/>
+                                        <div className={'text-sm 2xl:text-lg'}>{item.name}</div>
+                                    </Link> : <div key={index} className={'flex gap-3 justify-start items-center'} onClick={handleLogout}>
+                                            <item.icon className={'!text-3xl 2xl:!text-4xl'}/>
+                                        <div className={'text-sm 2xl:text-lg'}>{item.name}</div>
+                                    </div>
+                                }
                             </div>
                         );
                     })}

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -24,7 +24,10 @@ import LinearProgress from "@mui/material/LinearProgress";
 import CachedIcon from '@mui/icons-material/Cached';
 import GradingIcon from '@mui/icons-material/Grading';
 import {Circle} from "@mui/icons-material";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {getOrderDetailsByStatus, updateOrderStatus} from "../../store/slices/order_slice.js";
+import {getProducts} from "../../store/slices/product_slice.js";
+import dayjs from "dayjs";
 
 const style1 = {
     position: 'absolute',
@@ -51,29 +54,7 @@ function createData(id, receiver, receiver_contact, delivery_address, total, pay
     return { id, receiver, receiver_contact, delivery_address, total, payment_method, delivery_date, actions,state};
 }
 
-const rows = [
-    createData('odr-001-012', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-012','processed'),
-    createData('odr-001-013', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-013', 'dispatched'),
-    createData('odr-001-014', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-014', 'delivered'),
-    createData('odr-001-015', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-015','ordered'),
-    createData('odr-001-016', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-016', 'ordered'),
-    createData('odr-001-017', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-017', 'ordered'),
-    createData('odr-001-018', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-018', 'ordered'),
-    createData('odr-001-019', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-019', 'ordered'),
-    createData('odr-001-020', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-020', 'ordered'),
-    createData('odr-001-021', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-021', 'ordered'),
-    createData('odr-001-022', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-022', 'ordered'),
-    createData('odr-001-023', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-023', 'ordered'),
-    createData('odr-001-024', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-024', 'ordered'),
-    createData('odr-001-025', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-025', 'ordered'),
-    createData('odr-001-026', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-026', 'ordered'),
-    createData('odr-001-027', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-027', 'ordered'),
-    createData('odr-001-028', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-028', 'ordered'),
-    createData('odr-001-029', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-029', 'ordered'),
-    createData('odr-001-030', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-030', 'ordered'),
-    createData('odr-001-031', 'Jane Doe', '9876543211', '108/5 A, Weragama Road, Wadduwa', 1500, 'Cash on Delivery', '2022-12-12', 'odr-001-031', 'ordered'),
-    createData('odr-001-032', 'John Doe', '9876543210', '108/5 A, Weragama Road, Wadduwa', 1000, 'Cash on Delivery', '2022-12-12', 'odr-001-032', 'ordered'),
-];
+let rows = [];
 
 
 
@@ -86,21 +67,59 @@ function DeliveryPendingOrders() {
     const [states, setStates] = useState({ordered : true, processed: false, dispatched: false,  delivered : false});
     const isLoggedIn = useSelector(state => state.employeeAuth.loggedIn);
     const employee = useSelector(state => state.employeeAuth.localStorage);
+    const [deliveryStatus, setDeliveryStatus] = useState('processing');
+    const dispatch = useDispatch();
+    const orders = useSelector(state => state.order.data.orders);
+    const allProducts = useSelector(state => state.product.data.products);
+    rows = orders.map((order) => {
+        return createData(order.order_id, order.recipient_name, order.recipient_phone, order.recipient_address.slice(0,18)+'...', order.total, order.payment_method === 'cash' ? 'Cash on delivery' : 'Paid', order.delivery_date, order.order_id);
+    });
+    const [order, setOrder] = React.useState({});
+    const [products, setProducts] = React.useState([]);
 
     if (!isLoggedIn || employee.role !== 'delivery') {
         window.location.href = '/employee/login';
     }
 
-    const handleDeliveryStatusOpen = () => {
+    useEffect(() => {
+        dispatch(getOrderDetailsByStatus('processing'));
+        dispatch(getProducts());
+    }, [dispatch]);
+
+    const handleChange = (event) => {
+        setDeliveryStatus(event.target.value);
+        dispatch(getOrderDetailsByStatus(event.target.value))
+    }
+    const handleDeliveryStatusOpen = (order_id) => {
         setOpenDeliveryStatus(true);
+        const odr = orders.find(order => order.order_id === order_id);
+        setOrder(odr);
+
+        if(odr.order_status === 'pending'){
+            setStates({ordered : true, processed: false, dispatched: false,  delivered : false});
+        }else if(odr.order_status === 'processing'){
+            setStates({ordered : true, processed: true, dispatched: false,  delivered : false});
+        }else if(odr.order_status === 'dispatched'){
+            setStates({ordered : true, processed: true, dispatched: true,  delivered : false});
+        }else if(odr.order_status === 'delivered'){
+            setStates({ordered : true, processed: true, dispatched: true,  delivered : true});
+        }
     }
 
     const handleDeliveryStatusClose = () => {
         setOpenDeliveryStatus(false);
     }
 
-    const handleOrderDetailsOpen = () => {
+    const handleOrderDetailsOpen = (order_id) => {
         setOpenOrderDetails(true);
+        const odr = orders.find(order => order.order_id === order_id);
+        setOrder(odr);
+        let prdcts = [];
+        for(let i =0; i < odr.order_items.length; i++){
+            const product = allProducts.find(product => product.product_code === odr.order_items[i].product_code);
+            prdcts.push(product);
+        }
+        setProducts(prdcts);
     }
 
     const handleOrderDetailsClose = () => {
@@ -115,6 +134,16 @@ function DeliveryPendingOrders() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    const handleUpdateDeliveryStatus = (order_id) => {
+        const data = {
+            order_id : order_id,
+            order_status : deliveryStatus === 'processing' ? 'dispatched' : 'delivered'
+        }
+
+        dispatch(updateOrderStatus(data));
+        window.location.reload();
+    }
 
     return (
         <div>
@@ -131,12 +160,12 @@ function DeliveryPendingOrders() {
                                 name: 'type',
                                 id: 'uncontrolled-native',
                             }}
+                            name={'delivery-status'}
+                            onChange={handleChange}
                         >
-                            <option value={'today'}>Today - Pending</option>
-                            <option value={'love&romance'}>Cash on delivery - Pending</option>
-                            <option value={'birthday'}>Paid - Pending</option>
-                            <option value={'anniversary'}>Successfully Delivered</option>
-                            <option value={'anniversary'}>Failed Deliveries</option>
+                            <option value={'processing'}>Assigned Deliveries</option>
+                            <option value={'dispatched'}>Dispatched Deliveries</option>
+                            <option value={'delivered'}>Delivered Deliveries</option>
                         </NativeSelect>
                     </FormControl>
                 </div>
@@ -164,7 +193,7 @@ function DeliveryPendingOrders() {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code} className={row.state === 'processed' ? 'bg-[#9b59b6] bg-opacity-20' : row.state === 'dispatched' ? 'bg-[#f39c12] bg-opacity-20' : row.state === 'delivered' ? 'bg-[#2ecc71] bg-opacity-20' : ''}>
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                             {columns.map((column) => {
                                                 const value = row[column.id];
                                                 return (
@@ -173,9 +202,9 @@ function DeliveryPendingOrders() {
                                                     </TableCell> : column.id === 'actions' ? <TableCell key={column.id} align={column.align}
                                                                                                         className={'flex items-center justify-center gap-5'}>
                                                             <InfoIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-blue-600 bg-white'}
-                                                                               onClick={handleOrderDetailsOpen}/>
+                                                                      onClick={() => handleOrderDetailsOpen(value)}/>
                                                             <LocalShippingIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-green-600 bg-white'}
-                                                                               onClick={handleDeliveryStatusOpen}/>
+                                                                               onClick={() => handleDeliveryStatusOpen(value)}/>
                                                         </TableCell> :
                                                         <TableCell key={column.id} align={column.align} className={'!text-lg'}>
                                                             {column.format && typeof value === 'number'
@@ -214,112 +243,97 @@ function DeliveryPendingOrders() {
                         </Typography>
                         <CloseIcon onClick={handleOrderDetailsClose} className={'text-red-600'} />
                     </div>
-                    <div className={'w-full bg-primary rounded-lg shadow-lg px-5 py-8'}>
-                        <div className={"space-y-2"}>
-                            <div className={"flex justify-between items-center px-5 py-2 bg-white rounded-md shadow-sm"}>
-                                <div className={"flex gap-10"}>
-                                    <img src={ProductImage} alt="Product"
-                                         className={"w-20 h-20 rounded-lg shadow-md"}/>
-
-                                    <div className={"flex flex-col justify-center"}>
-                                        <div className={"font-semibold"}>Hearts of Love</div>
-                                        <div className={"font-semibold text-sm text-gray-500"}>Unit Price : Rs 6000.00</div>
+                    {
+                        order && products.length > 0 ? <div className={'w-full'}>
+                            <div className={'w-full p-2 border-2 border-secondary3 rounded-lg pb-5'}>
+                                <div className={"space-y-2 py-5"}>
+                                    {
+                                        products.map((product, index) => (
+                                            <div key={index} className={"flex justify-between items-center px-5 py-2 bg-white rounded-md shadow-sm"}>
+                                                <div className={"flex gap-10"}>
+                                                    <img src={'http://localhost:3000/'+product.images[0].image_path} alt="Product"
+                                                         className={"w-20 h-20 rounded-lg shadow-md"}/>
+                                                    <div className={"flex flex-col justify-center"}>
+                                                        <div className={"font-semibold"}>{product.name}</div>
+                                                        <div className={"font-semibold text-sm text-gray-500"}>Unit Price : Rs {product.price}.00</div>
+                                                    </div>
+                                                </div>
+                                                <div>Qty {order.order_items.find(item => item.product_code === product.product_code).quantity}</div>
+                                                <div>Rs {product.price}.00</div>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                                <div className={"w-full"}>
+                                    <Divider sx={{border : 1, borderColor : '#FDCEDF'}} variant="middle"/>
+                                </div>
+                                <div className={'flex justify-between mt-4 px-5 py-2 bg-white rounded-md shadow-sm'}>
+                                    <div>
+                                        <div className={"text-sm font-semibold 2xl:text-lg"}>Receiver Name</div>
+                                        <div className={"text-[.7rem] 2xl:text-sm"}>{order.recipient_name}</div>
+                                    </div>
+                                    <div>
+                                        <div className={"text-sm font-semibold 2xl:text-lg"}>Receiver Address</div>
+                                        <div className={"text-[.7rem] 2xl:text-sm"}>{order.recipient_address.split(',')[0] ? order.recipient_address.split(',')[0] : 'Address'}</div>
+                                        <div className={"text-[.7rem] 2xl:text-sm"}>{order.recipient_address.split(',')[1] ? order.recipient_address.split(',')[1] : 'Line 1'}</div>
+                                        <div className={"text-[.7rem] 2xl:text-sm"}>{order.recipient_address.split(',')[2] ? order.recipient_address.split(',')[2] : 'Line 2'}</div>
+                                        <div className={"text-[.7rem] 2xl:text-sm"}>{order.recipient_address.split(',')[3] ? order.recipient_address.split(',')[3] : ''}</div>
+                                    </div>
+                                    <div>
+                                        <div className={"text-sm font-semibold 2xl:text-lg"}>Receiver Phone</div>
+                                        <div className={"text-[.7rem] 2xl:text-sm"}>{order.recipient_phone ? order.recipient_phone : ''}</div>
+                                    </div>
+                                    <div>
+                                        <div className={"text-sm font-semibold 2xl:text-lg"}>Delivery Date</div>
+                                        <div className={"text-[.7rem] 2xl:text-sm"}>{order.delivery_date ? dayjs(order.delivery_date).format('YY MMMM DD') : ''}</div>
                                     </div>
                                 </div>
-                                <div>Qty 1</div>
-                                <div>Rs 6000.00</div>
-                            </div>
-                            <div className={"flex justify-between items-center px-5 py-2 bg-white rounded-md shadow-sm"}>
-                                <div className={"flex gap-10"}>
-                                    <img src={ProductImage} alt="Product"
-                                         className={"w-20 h-20 rounded-lg shadow-md"}/>
-
-                                    <div className={"flex flex-col justify-center"}>
-                                        <div className={"font-semibold"}>A New Hope</div>
-                                        <div className={"font-semibold text-sm text-gray-500"}>Unit Price : Rs 6000.00</div>
+                                <div className={'flex justify-between mt-4 px-5 py-2 bg-white rounded-md shadow-sm'}>
+                                    <div>
+                                        <div className={"text-sm font-semibold 2xl:text-lg"}>Sender Name</div>
+                                        <div className={"text-[.7rem] 2xl:text-sm"}>{order.sender_name}</div>
+                                    </div>
+                                    <div>
+                                        <div className={"text-sm font-semibold 2xl:text-lg"}>Sender Phone</div>
+                                        <div className={"text-[.7rem] 2xl:text-sm"}>{order.sender_phone}</div>
                                     </div>
                                 </div>
-                                <div>Qty 1</div>
-                                <div>Rs 6000.00</div>
-                            </div>
-                        </div>
-                        <div className={"w-full mt-4"}>
-                            <Divider sx={{border : 1, borderColor : '#FDCEDF'}} variant="middle"/>
-                        </div>
-                        <div className={'flex justify-between mt-4 px-5 py-2 bg-white rounded-md shadow-sm'}>
-                            <div>
-                                <div className={"text-sm font-semibold 2xl:text-lg"}>Receiver Name</div>
-                                <div className={"text-[.7rem] 2xl:text-sm"}>Edward Samuel</div>
-                            </div>
-                            <div>
-                                <div className={"text-sm font-semibold 2xl:text-lg"}>Receiver Address</div>
-                                <div className={"text-[.7rem] 2xl:text-sm"}>107 / 2</div>
-                                <div className={"text-[.7rem] 2xl:text-sm"}>Weragama Road</div>
-                                <div className={"text-[.7rem] 2xl:text-sm"}>Wadduwa</div>
-                            </div>
-                            <div>
-                                <div className={"text-sm font-semibold 2xl:text-lg"}>Receiver Phone</div>
-                                <div className={"text-[.7rem] 2xl:text-sm"}>0778965445</div>
-                            </div>
-                            <div>
-                                <div className={"text-sm font-semibold 2xl:text-lg"}>Delivery Date</div>
-                                <div className={"text-[.7rem] 2xl:text-sm"}>2024-04-06</div>
-                            </div>
-                        </div>
-                        <div className={'flex justify-between mt-4 px-5 py-2 bg-white rounded-md shadow-sm'}>
-                            <div>
-                                <div className={"text-sm font-semibold 2xl:text-lg"}>Sender Name</div>
-                                <div className={"text-[.7rem] 2xl:text-sm"}>John Doe</div>
-                            </div>
-                            <div>
-                                <div className={"text-sm font-semibold 2xl:text-lg"}>Sender Phone</div>
-                                <div className={"text-[.7rem] 2xl:text-sm"}>0778965446</div>
-                            </div>
-                            <div>
-                                <div className={"text-sm font-semibold 2xl:text-lg"}>Ordered Date</div>
-                                <div className={"text-[.7rem] 2xl:text-sm"}>2024-04-04</div>
-                            </div>
-                        </div>
-
-                        <div className={"w-full py-4"}>
-                            <Divider sx={{border : 1, borderColor : '#FDCEDF'}} variant="middle"/>
-                        </div>
-
-                        {/* Payment details */}
-
-                        <div>
-                            <div className={'flex justify-between items-center px-5'}>
-                                <div className={'font-semibold 2xl:!text-xl'}>Order Summary</div>
-                                <div className={'text-sm'}>{2}&nbsp;Item(s)</div>
-                            </div>
-                            <div className={'mt-8 space-y-4'}>
-                                <div className={'flex justify-between items-center px-5 text-sm'}>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg'}>Sub Total</div>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg'}>Rs. 12000.00</div>
-                                </div>
-                                <div className={'flex justify-between items-center px-5 text-sm'}>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg'}>Flat Discount</div>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg'}>-Rs. 500.00</div>
-                                </div>
-                                <div className={'flex justify-between items-center px-5 text-sm'}>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg'}>Promotional Discount</div>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg'}>-Rs. 00.00</div>
-                                </div>
-                                <div className={'flex justify-between items-center px-5 text-sm'}>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg'}>Delivery charges</div>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg'}>Rs. 800.00</div>
+                                <div className={"w-full py-4"}>
+                                    <Divider sx={{border : 1, borderColor : '#FDCEDF'}} variant="middle"/>
                                 </div>
 
-                                <Divider variant="middle" />
+                                {/* Payment details */}
 
-                                <div className={'flex justify-between items-center px-5 text-sm'}>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg font-bold'}>Total</div>
-                                    <div className={'!nunito-sans-light 2xl:!text-lg font-bold'}>Rs. 12300.00</div>
+                                <div>
+                                    <div className={'flex justify-between items-center px-5'}>
+                                        <div className={'font-semibold 2xl:!text-xl'}>Order Summary</div>
+                                        <div className={'text-sm'}>{2}&nbsp;Item(s)</div>
+                                    </div>
+                                    <div className={'mt-8 space-y-4'}>
+                                        <div className={'flex justify-between items-center px-5 text-sm'}>
+                                            <div className={'!nunito-sans-light 2xl:!text-lg'}>Sub Total</div>
+                                            <div className={'!nunito-sans-light 2xl:!text-lg'}>Rs. {order.total ? order.total : ''}</div>
+                                        </div>
+                                        <div className={'flex justify-between items-center px-5 text-sm'}>
+                                            <div className={'!nunito-sans-light 2xl:!text-lg'}>Flat Discount</div>
+                                            <div className={'!nunito-sans-light 2xl:!text-lg'}>-Rs. 00.00</div>
+                                        </div>
+                                        <div className={'flex justify-between items-center px-5 text-sm'}>
+                                            <div className={'!nunito-sans-light 2xl:!text-lg'}>Promotional Discount</div>
+                                            <div className={'!nunito-sans-light 2xl:!text-lg'}>-Rs. 00.00</div>
+                                        </div>
+
+                                        <Divider variant="middle" />
+
+                                        <div className={'flex justify-between items-center px-5 text-sm'}>
+                                            <div className={'!nunito-sans-light 2xl:!text-lg font-bold'}>Total</div>
+                                            <div className={'!nunito-sans-light 2xl:!text-lg font-bold'}>Rs. {order.total ? order.total : ''}</div>
+                                        </div>
+                                    </div>
                                 </div>
-
                             </div>
-                        </div>
-                    </div>
+                        </div> : ""
+                    }
                 </Box>
             </Modal>
             {/**/}
@@ -332,7 +346,7 @@ function DeliveryPendingOrders() {
                 <Box sx={style1} className={'w-[50%]'}>
                     <div className={'flex justify-between items-center'}>
                         <Typography id="modal-modal-title" variant="h6" component="h3">
-                            Update Delivery Status - odr-001-012
+                            Update Delivery Status - {order.order_id}
                         </Typography>
                         <CloseIcon onClick={handleDeliveryStatusClose} className={'text-red-600'} />
                     </div>
@@ -370,29 +384,49 @@ function DeliveryPendingOrders() {
                     <div className={'w-full bg-primary rounded-lg shadow-lg px-5 py-8'}>
                         <div className={'font-bold text-xl'}>Choose delivery status</div>
                         <div className={'mt-5'}>
-                            <div className={'flex py-2 px-5 bg-secondary rounded-md shadow-sm justify-between items-center border-2 border-secondary3'}>
-                                <div>Ordered</div>
-                                <Circle className={'w-10 h-10 text-secondary3 border-2 rounded-full border-white'}/>
-                            </div>
 
-                            <div className={'flex py-2 px-5 bg-white rounded-md shadow-sm justify-between items-center mt-5'}>
-                                <div>Processed</div>
-                                <Circle className={'w-10 h-10 text-white !border-2 rounded-full border-secondary3'}/>
-                            </div>
+                            {
+                                states.ordered ? <div className={'flex py-2 px-5 bg-secondary rounded-md shadow-sm justify-between items-center border-2 border-secondary3'}>
+                                    <div>Ordered</div>
+                                    <Circle className={'w-10 h-10 text-secondary3 border-2 rounded-full border-white'}/>
+                                </div> : <div className={'flex py-2 px-5 bg-secondary rounded-md shadow-sm justify-between items-center '}>
+                                    <div>Ordered</div>
+                                    <Circle className={'w-10 h-10 text-secondary3 border-2 rounded-full border-white'}/>
+                                </div>
+                            }
 
-                            <div className={'flex py-2 px-5 bg-white rounded-md shadow-sm justify-between items-center mt-5'}>
-                                <div>Dispatched</div>
-                                <Circle className={'w-10 h-10 text-white !border-2 rounded-full border-secondary3'}/>
-                            </div>
+                            {
+                                states.processed ? <div className={'flex py-2 px-5 bg-secondary rounded-md shadow-sm justify-between items-center border-2 border-secondary3 mt-5'}>
+                                    <div>Processed</div>
+                                    <Circle className={'w-10 h-10 text-secondary3 border-2 rounded-full border-white'}/>
+                                </div> : <div className={'flex py-2 px-5 bg-white rounded-md shadow-sm justify-between items-center mt-5'}>
+                                    <div>Processed</div>
+                                    <Circle className={'w-10 h-10 text-white !border-2 rounded-full border-secondary3'}/>
+                                </div>
+                            }
 
-                            <div className={'flex py-2 px-5 bg-white rounded-md shadow-sm justify-between items-center mt-5'}>
-                                <div>Delivered</div>
-                                <Circle className={'w-10 h-10 text-white !border-2 rounded-full border-secondary3'}/>
-                            </div>
+                            {
+                                states.dispatched ? <div className={'flex py-2 px-5 bg-secondary rounded-md shadow-sm justify-between items-center border-2 border-secondary3 mt-5'}>
+                                    <div>Dispatched</div>
+                                    <Circle className={'w-10 h-10 text-secondary3 border-2 rounded-full border-white'}/>
+                                </div> : <div className={'flex py-2 px-5 bg-white rounded-md shadow-sm justify-between items-center mt-5'} onClick={() => deliveryStatus === 'processing' ? setStates({ordered : true, processed: true, dispatched: true,  delivered : false}) : setStates({ordered : true, processed: true, dispatched: false,  delivered : false})}>
+                                    <div>Dispatched</div>
+                                    <Circle className={'w-10 h-10 text-white !border-2 rounded-full border-secondary3'}/>
+                                </div>
+                            }
+
+                            {
+                                states.delivered ? <div className={'flex py-2 px-5 bg-secondary rounded-md shadow-sm justify-between items-center border-2 border-secondary3 mt-5'}>
+                                    <div>Delivered</div>
+                                    <Circle className={'w-10 h-10 text-secondary3 border-2 rounded-full border-white'}/>
+                                </div> : <div className={'flex py-2 px-5 bg-white rounded-md shadow-sm justify-between items-center mt-5'} onClick={() => deliveryStatus === 'dispatched' ? setStates({ordered : true, processed: true, dispatched: true,  delivered : true}) : setStates({ordered : true, processed: true, dispatched: true,  delivered : false})}>
+                                    <div>Delivered</div>
+                                    <Circle className={'w-10 h-10 text-white !border-2 rounded-full border-secondary3'}/>
+                                </div>
+                            }
                         </div>
-
                         <Button variant="contained" color="secondary3" className={'w-full h-8 2xl:h-10 !mt-5'}>
-                            <div className={'!text-sm font-semibold'}>Update status</div>
+                            <div className={'!text-sm font-semibold'} onClick={() => handleUpdateDeliveryStatus(order.order_id)}>Update status</div>
                         </Button>
                     </div>
                 </Box>
