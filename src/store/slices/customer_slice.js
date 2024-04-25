@@ -18,11 +18,13 @@ const customerSlice = createSlice({
             role : 'customer',
             errors: {
                 login: {},
-                register: {}
+                register: {},
+                update: {}
             },
             message: {
                 login: '',
-                register: ''
+                register: '',
+                update : ''
             }
         }
     },
@@ -75,7 +77,21 @@ const customerSlice = createSlice({
                 action.payload.errors.message = all.formatString(action.payload.errors.message.replace(/"/g, ''));
                 state.data.errors.register = action.payload.errors;
             }
-        });
+        }).addCase(updateCustomer.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.localStorage = action.payload.customer;
+                state.data.message.update = action.payload.message;
+                state.data.errors.update = {};
+                localStorage.setItem('user', JSON.stringify(action.payload.customer));
+
+                setTimeout(() => {
+                    window.location.href = '/';
+                },500);
+            } else {
+                action.payload.errors.message = all.formatString(action.payload.errors.message.replace(/"/g, ''));
+                state.data.errors.update = action.payload.errors;
+            }
+        })
     }
 });
 
@@ -107,6 +123,25 @@ export const login2 = createAsyncThunk(
     async (formData) => {
         return api.post('/customers/login', formData).then(response => {
             // console.log(response.data);
+            return {
+                customer : response.data.customer,
+                status: response.status,
+                statusFlag: 'success',
+                message: response.data.message
+            }
+        }).catch(error => {
+            return {
+                status: error.response.status,
+                errors: error.response.data,
+                statusFlag: 'failed'
+            };
+        });
+    });
+
+export const updateCustomer = createAsyncThunk(
+    'customer/update',
+    async (formData) => {
+        return api.put('/customers/update', formData).then(response => {
             return {
                 customer : response.data.customer,
                 status: response.status,

@@ -9,17 +9,17 @@ const productSlice = createSlice({
         },
         message: {
             addProduct: '',
-            getProducts: ''
+            getProducts: '',
+            removeProduct: ''
         },
         errors: {
             addProduct: {},
-            getProducts: {}
+            getProducts: {},
+            removeProduct: {}
         }
     },
     reducers: {
-        removeProduct(state, action) {
-            state.products = state.products.filter(product => product.id !== action.payload);
-        }
+
     },
     extraReducers: (builder) => {
         builder.addCase(addProduct.fulfilled, (state, action) => {
@@ -36,11 +36,16 @@ const productSlice = createSlice({
             }else{
                 state.errors.getProducts = action.payload.errors;
             }
-        });
+        }).addCase(removeProduct.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.message.removeProduct = action.payload.message;
+                window.location.reload();
+            }else{
+                state.errors.removeProduct = action.payload.errors;
+            }
+        })
     }
 });
-
-export const { removeProduct} = productSlice.actions;
 export default productSlice.reducer;
 
 export const addProduct = createAsyncThunk(
@@ -80,6 +85,24 @@ export const getProducts = createAsyncThunk(
                 statusFlag: 'failed',
                 errors: error.response.data.errors,
                 status: error.response.status
+            }
+        });
+    });
+
+export const removeProduct = createAsyncThunk(
+    'product/removeProduct',
+    async (id) => {
+        return api.delete(`/bouquets/remove-bouquet/${id}`).then(response => {
+            return {
+                statusFlag: 'success',
+                message: response.data.message,
+                status : response.data.status
+            }
+        }).catch(error => {
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data.errors,
+                status : error.response.data.status
             }
         });
     });

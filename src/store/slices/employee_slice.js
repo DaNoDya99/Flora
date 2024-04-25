@@ -9,12 +9,14 @@ const employeeSlice = createSlice({
             employees: [],
         },
         message: {
-            addEmployee: ''
+            addEmployee: '',
+            deleteEmployee: '',
         },
         errors: {
             addEmployee: {},
             updateEmployee: {},
-            getEmployees: {}
+            getEmployees: {},
+            deleteEmployee: {},
         },
     },
     reducers: {
@@ -57,7 +59,15 @@ const employeeSlice = createSlice({
             }else {
                 state.errors.getEmployees = action.payload.errors;
             }
-        });
+        }).addCase(deleteEmployee.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.message.deleteEmployee = action.payload.message;
+                state.errors.deleteEmployee = {};
+                window.location.reload();
+            } else {
+                state.errors.deleteEmployee = action.payload.errors;
+            }
+        })
     }
 });
 
@@ -159,6 +169,25 @@ export const getDeliveryPersonnelAssignedOrderCounts = createAsyncThunk(
         }).catch(error => {
             return {
                 status: error.response.status,
+                statusFlag: 'failed'
+            };
+        });
+    });
+
+export const deleteEmployee = createAsyncThunk(
+    'employee/deleteEmployee',
+    async (employeeId) => {
+        return api.delete(`/employees/delete/${employeeId}`).then(response => {
+            return {
+                status: response.data.status,
+                message: response.data.message,
+                statusFlag: 'success'
+            };
+        }).catch(error => {
+            console.log(error);
+            return {
+                status: error.response.status,
+                errors: error.response.data,
                 statusFlag: 'failed'
             };
         });

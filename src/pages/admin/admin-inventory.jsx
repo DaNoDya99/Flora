@@ -21,7 +21,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import {useDispatch} from "react-redux";
 import {useSelector} from "react-redux";
-import {addProduct} from "../../store/slices/product_slice.js";
+import {addProduct, removeProduct} from "../../store/slices/product_slice.js";
 import { getCategories } from "../../store/slices/category_slice.js";
 import { getSubCategories } from "../../store/slices/sub_category_slice.js";
 import { getProducts } from "../../store/slices/product_slice.js";
@@ -87,16 +87,17 @@ function AdminInventory() {
         images: []
     });
     const [productInfo,setProductInfo] = React.useState({});
+    const [deleteProduct, setDeleteProduct] = React.useState('');
+
+    const categories = useSelector((state) => state.category.data.categories);
+    const sub_categories = useSelector((state) => state.subCategory.data.subCategories);
+    const products = useSelector((state) => state.product.data.products);
 
     useEffect(() => {
         dispatch(getCategories());
         dispatch(getSubCategories());
         dispatch(getProducts());
     }, [dispatch]);
-
-    const categories = useSelector((state) => state.category.data.categories);
-    const sub_categories = useSelector((state) => state.subCategory.data.subCategories);
-    const products = useSelector((state) => state.product.data.products);
 
     const findSubCategory = (id) => {
         return sub_categories.find(sub_category => sub_category.id === id);
@@ -112,7 +113,10 @@ function AdminInventory() {
     }
     const handleEditProductClose = () => setOpenEditProduct(false);
 
-    const handleDeleteProductOpen = () => setOpenDeleteProduct(true);
+    const handleDeleteProductOpen = (id) => {
+        setOpenDeleteProduct(true);
+        setDeleteProduct(id)
+    }
 
     const handleDeleteProductClose = () => setOpenDeleteProduct(false);
 
@@ -226,7 +230,12 @@ function AdminInventory() {
             formData.append('images', productInfo.images[i]);
         }
 
-        console.log(formData.values);
+    }
+
+    const handleRemoveProduct = () => {
+        if (deleteProduct !== ''){
+            dispatch(removeProduct(deleteProduct));
+        }
     }
 
     return (
@@ -289,7 +298,7 @@ function AdminInventory() {
                                                     </TableCell> : column.id === 'actions' ? <TableCell key={column.id} align={column.align}
                                                                                                         className={'flex items-center justify-center gap-5'}>
                                                         <ModeEditIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-green-500'} onClick={() => handleEditProductOpen(row['id'])}/>
-                                                        <DeleteIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-red-700'} onClick={handleDeleteProductOpen}/>
+                                                        <DeleteIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-red-700'} onClick={() => handleDeleteProductOpen(row['id'])}/>
                                                         <InfoIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-blue-600'} onClick={() => handleProductInfoOpen(row['id'])}/>
                                                     </TableCell> :
                                                     <TableCell key={column.id} align={column.align} className={'!text-lg'}>
@@ -336,7 +345,7 @@ function AdminInventory() {
                             </Typography>
                         </div>
                         <div className={'flex justify-center mt-10'}>
-                            <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'}>
+                            <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'} onClick={handleRemoveProduct}>
                                 Remove
                             </Button>
                         </div>

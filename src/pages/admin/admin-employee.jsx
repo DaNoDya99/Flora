@@ -14,7 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import FormControl from "@mui/material/FormControl";
-import {addEmployee, getEmployees, updateEmployee} from "../../store/slices/employee_slice.js";
+import {addEmployee, getEmployees, updateEmployee, deleteEmployee} from "../../store/slices/employee_slice.js";
 import {useDispatch, useSelector} from "react-redux";
 
 const columns = [
@@ -79,6 +79,7 @@ function AdminEmployee() {
     const [openEditEmp, setOpenEditEmp] = React.useState(false);
     const [openDeleteEmp, setDeleteEmp] = React.useState(false);
     const [disabled, setDisabled] = React.useState(true);
+    const [deleteEmployee1, setDeleteEmployee1] = React.useState('');
 
     const handleClick = () => {
         setDisabled(!disabled);
@@ -98,7 +99,10 @@ function AdminEmployee() {
         setDisabled(true);
     }
 
-    const handleDeleteEmpOpen = () => setDeleteEmp(true);
+    const handleDeleteEmpOpen = (id) => {
+        setDeleteEmp(true);
+        setDeleteEmployee1(id)
+    }
 
     const handleDeleteEmpClose = () => setDeleteEmp(false);
 
@@ -142,6 +146,12 @@ function AdminEmployee() {
     const handleAddEmpSubmit = (e) => {
         e.preventDefault();
         dispatch(addEmployee(newEmp));
+    }
+
+    const handleDeleteEmployee = () => {
+        if(deleteEmployee1 !== '') {
+            dispatch(deleteEmployee(deleteEmployee1));
+        }
     }
 
     useEffect(() => {
@@ -200,7 +210,7 @@ function AdminEmployee() {
                                                         <img src={'http://localhost:3000/'+value} alt={'product'} className={'w-20 h-20 rounded-full shadow-md object-cover'}/>
                                                     </TableCell> : column.id === 'actions' ? <TableCell key={column.id} align={column.align}
                                                                                                         className={'flex items-center justify-center gap-5'}>
-                                                            <DeleteIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-red-700'} onClick={handleDeleteEmpOpen}/>
+                                                            <DeleteIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-red-700'} onClick={() => handleDeleteEmpOpen(value)}/>
                                                             <InfoIcon key={value} className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-blue-600'} onClick={() => handleEditEmpOpen(value)}/>
                                                         </TableCell> :
                                                         <TableCell key={column.id} align={column.align} className={'!text-lg'}>
@@ -460,7 +470,7 @@ function AdminEmployee() {
                             </Typography>
                         </div>
                         <div className={'flex justify-center mt-10'}>
-                            <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'}>
+                            <Button variant="contained" color="secondary3" className={'w-[50%] h-8 2xl:h-10 mt-5 !font-semibold'} onClick={handleDeleteEmployee}>
                                 Remove
                             </Button>
                         </div>

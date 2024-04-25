@@ -26,9 +26,9 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import { useDispatch } from 'react-redux';
-import { logout } from '../store/slices/customer_slice';
+import {logout, updateCustomer} from '../store/slices/customer_slice';
 import {useEffect} from "react";
-import {getCart} from "../store/slices/cart_slice.js";
+import {getCart, removeItemFromCart} from "../store/slices/cart_slice.js";
 
 const pages = ["Categories", "About", "Contact"];
 
@@ -61,8 +61,9 @@ const style2 = {
 
 function ResponsiveAppBar(props) {
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
-    const settings = loggedIn ? [{ 'name': 'Edward Samuel', 'link': '/' },
-        {'name' : 'edwardsam@gmail.com','link' : '/'},
+    const customer = useSelector(state => state.customer.data.localStorage);
+    const settings = loggedIn ? [{ 'name': customer.firstName+' '+customer.lastName, 'link': '/' },
+        {'name' : customer.email,'link' : '/'},
         {'name' : 'My Orders','link' : '/orders'},
         {'name' : 'Settings','link' : '/'},
         { 'name': 'Logout', 'link': '/auth/logout' }] : [{ 'name': 'Login', 'link': '/auth/login' },
@@ -75,8 +76,13 @@ function ResponsiveAppBar(props) {
     const [openModal, setOpenModal] = React.useState(false);
     const [openSettingsModal, setOpenSettingsModal] = React.useState(false);
     const dispatch = useDispatch();
-    const customer = useSelector(state => state.customer.data.localStorage);
     const cart = useSelector(state => state.cart.data.cart);
+    const [editCustomer, setEditCustomer] = React.useState({
+        id: customer.id,
+        firstName: customer.firstName,
+        lastName: customer.lastName,
+        email: customer.email,
+    })
 
     useEffect(() => {
         dispatch(getCart(customer.id))
@@ -122,6 +128,27 @@ function ResponsiveAppBar(props) {
 
     const handleLogout = () => {
         dispatch(logout());
+    }
+
+    function handleRemoveCartItem(product_code) {
+        const data = {
+            customer: customer.id,
+            product_code: product_code
+        }
+
+        dispatch(removeItemFromCart(data));
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(updateCustomer(editCustomer));
+    }
+
+    const handleChange = (e) => {
+        setEditCustomer({
+            ...editCustomer,
+            [e.target.name]: e.target.value
+        })
     }
 
     return (
@@ -290,7 +317,7 @@ function ResponsiveAppBar(props) {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <IconButton>
+                                                    <IconButton onClick={() => handleRemoveCartItem(item.product_code)}>
                                                         <CloseIcon className='text-gray-400' />
                                                     </IconButton>
                                                 </div>
@@ -377,25 +404,25 @@ function ResponsiveAppBar(props) {
                         <CloseIcon onClick={closeSettings} className={'text-red-600'} />
                     </div>
                     <div className={'w-full mt-10'}>
-                        <form action="" className={'w-full space-y-6'}>
+                        <form action="" className={'w-full space-y-6'} onSubmit={handleSubmit}>
                             <div className={'flex gap-2 w-full'}>
                                 <FormControl className={'w-[50%]'}>
                                     <InputLabel htmlFor="firstName">First name</InputLabel>
-                                    <Input id="firstName" name={'firstName'} value={'Edward'}/>
+                                    <Input id="firstName" name={'firstName'} value={editCustomer.firstName} onChange={handleChange}/>
                                 </FormControl>
 
                                 <FormControl className={'w-[50%]'}>
                                     <InputLabel htmlFor="lastName">Last name</InputLabel>
-                                    <Input id="lastName" name={'lastName'} value={'Samuel'}/>
+                                    <Input id="lastName" name={'lastName'} value={editCustomer.lastName} onChange={handleChange}/>
                                 </FormControl>
                             </div>
 
                             <FormControl className={'w-full'}>
                                 <InputLabel htmlFor="email">Email</InputLabel>
-                                <Input id="email" name={'email'} value={'edwardsam@gmail.com'}/>
+                                <Input id="email" name={'email'} value={editCustomer.email} onChange={handleChange}/>
                             </FormControl>
 
-                            <Button variant="contained" color="secondary2" className={'w-full !mt-14'}>
+                            <Button variant="contained" color="secondary2" className={'w-full !mt-14'} type={'submit'}>
                                 <span className={'font-semibold'}>Save</span>
                             </Button>
                         </form>

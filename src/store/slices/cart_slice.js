@@ -8,7 +8,8 @@ const cartSlice = createSlice({
             cart: [],
             errors: {},
             messages : {
-                addItem : ''
+                addItem : '',
+                removeItem : ''
             }
         }
     },
@@ -31,7 +32,16 @@ const cartSlice = createSlice({
             } else {
                 state.data.errors = action.payload.errors;
             }
-        });
+        }).addCase(removeItemFromCart.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.messages.removeItem = action.payload.message;
+                state.data.errors = {};
+                window.location.reload();
+            } else {
+                state.data.errors = action.payload.errors;
+                state.data.messages.removeItem = action.payload.message;
+            }
+        })
     }
 });
 
@@ -74,6 +84,26 @@ export const getCart = createAsyncThunk(
                 statusFlag: 'failed',
                 errors: error.response.data,
                 status: error.response.status
+            }
+        });
+    }
+);
+
+export const removeItemFromCart = createAsyncThunk(
+    'cart/removeItemFromCart',
+    async (item) => {
+        return api.post('/cart/remove-item',item).then((response) => {
+            return {
+                statusFlag: 'success',
+                status: response.status,
+                message: response.data.message
+            }
+        }).catch((error) => {
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data,
+                status: error.response.status,
+                message: error.response.data.message
             }
         });
     }
