@@ -26,9 +26,10 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
 import { useDispatch } from 'react-redux';
-import {logout, updateCustomer} from '../store/slices/customer_slice';
+import {logout, resetCustomerPassword, updateCustomer} from '../store/slices/customer_slice';
 import {useEffect} from "react";
 import {getCart, removeItemFromCart} from "../store/slices/cart_slice.js";
+import {Bounce, toast, ToastContainer} from "react-toastify";
 
 const pages = ["Categories", "About", "Contact"];
 
@@ -60,6 +61,8 @@ const style2 = {
 };
 
 function ResponsiveAppBar(props) {
+
+
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
     const customer = useSelector(state => state.customer.data.localStorage);
     const settings = loggedIn ? [{ 'name': customer.firstName+' '+customer.lastName, 'link': '/' },
@@ -75,6 +78,7 @@ function ResponsiveAppBar(props) {
     const [open, setOpen] = React.useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [openSettingsModal, setOpenSettingsModal] = React.useState(false);
+    const [openResetPasswordModal, setOpenResetPasswordModal] = React.useState(false);
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart.data.cart);
     const [editCustomer, setEditCustomer] = React.useState({
@@ -83,10 +87,32 @@ function ResponsiveAppBar(props) {
         lastName: customer.lastName,
         email: customer.email,
     })
+    const [resetPassword, setResetPassword] = React.useState({
+        id: customer.id,
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    })
+    const message = useSelector(state => state.customer.data.message.resetPassword);
 
     useEffect(() => {
-        dispatch(getCart(customer.id))
-    }, [customer.id, dispatch]);
+        const notify = () => toast.success(message, {
+            position: "bottom-left",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
+
+        dispatch(getCart(customer.id));
+        if (message) {
+            notify();
+        }
+    }, [customer.id, dispatch, message]);
 
     const handleCheckout = () => {
         window.location.href = '/order/shopping-cart';
@@ -150,6 +176,38 @@ function ResponsiveAppBar(props) {
             [e.target.name]: e.target.value
         })
     }
+
+    const handleChangeResetPassword = (e) => {
+        setResetPassword({
+            ...resetPassword,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const openResetPassword = () => {
+        setOpenResetPasswordModal(true);
+    }
+
+    const closeResetPassword = () => {
+        setOpenResetPasswordModal(false);
+    }
+
+    const handleResetPasswordSubmit = (e) => {
+        e.preventDefault();
+
+        if (resetPassword.newPassword !== resetPassword.confirmPassword) {
+            alert('Passwords do not match');
+        } else {
+            const data = {
+                id: customer.id,
+                currentPassword: resetPassword.currentPassword,
+                newPassword: resetPassword.newPassword
+            }
+            dispatch(resetCustomerPassword(data));
+        }
+    }
+
+    
 
     return (
         <AppBar position={sticky ? 'sticky' : 'fixed'} color={"primary"} className={'nunito-sans-light'}>
@@ -422,9 +480,57 @@ function ResponsiveAppBar(props) {
                                 <Input id="email" name={'email'} value={editCustomer.email} onChange={handleChange}/>
                             </FormControl>
 
-                            <Button variant="contained" color="secondary2" className={'w-full !mt-14'} type={'submit'}>
-                                <span className={'font-semibold'}>Save</span>
-                            </Button>
+                            <div className={'flex justify-between gap-5'}>
+                                <Button variant="contained" color="secondary2" className={'w-full'} type={'submit'}>
+                                    <span className={'font-semibold'}>Save</span>
+                                </Button>
+                                <Button variant="contained" color="secondary3" className={'w-full'} onClick={openResetPassword}>
+                                    <span className={'font-semibold'}>Reset Password</span>
+                                </Button>
+                            </div>
+
+                        </form>
+                    </div>
+                </Box>
+            </Modal>
+
+        {/*    Reset password modal*/}
+            <Modal
+                open={openResetPasswordModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style2}>
+                    <div className={'flex justify-between items-center'}>
+                        <Typography id="modal-modal-title" variant="h6" component="h3">
+                            Reset Password
+                        </Typography>
+                        <CloseIcon onClick={closeResetPassword} className={'text-red-600'} />
+                    </div>
+                    <div className={'w-full mt-10'}>
+                        <ToastContainer/>
+                        <form action="" className={'w-full space-y-6'} onSubmit={handleResetPasswordSubmit}>
+                            <FormControl className={'w-full'}>
+                                <InputLabel htmlFor="currentPassword">Current Password</InputLabel>
+                                <Input id="currentPassword" type={'password'} name={'currentPassword'} onChange={handleChangeResetPassword}/>
+                            </FormControl>
+
+                            <FormControl className={'w-full'}>
+                                <InputLabel htmlFor="newPassword">New Password</InputLabel>
+                                <Input id="newPassword" type={'password'} name={'newPassword'} onChange={handleChangeResetPassword}/>
+                            </FormControl>
+
+                            <FormControl className={'w-full'}>
+                                <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
+                                <Input id="confirmPassword" type={'password'} name={'confirmPassword'} onChange={handleChangeResetPassword}/>
+                            </FormControl>
+
+                            <div className={'flex justify-between gap-5'}>
+                                <Button variant="contained" color="secondary2" className={'w-full'} type={'submit'}>
+                                    <span className={'font-semibold'}>Save</span>
+                                </Button>
+                            </div>
+
                         </form>
                     </div>
                 </Box>

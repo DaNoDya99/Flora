@@ -180,7 +180,7 @@ function DeliveryPendingOrders() {
                                         key={column.id}
                                         align={column.align}
                                         style={{minWidth: column.minWidth}}
-                                        className={'!font-semibold !text-xl'}
+                                        className={'!font-semibold !text-xl max-2xl:!text-[1rem]'}
                                     >
                                         {column.label}
                                     </TableCell>
@@ -206,7 +206,7 @@ function DeliveryPendingOrders() {
                                                             <LocalShippingIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-green-600 bg-white'}
                                                                                onClick={() => handleDeliveryStatusOpen(value)}/>
                                                         </TableCell> :
-                                                        <TableCell key={column.id} align={column.align} className={'!text-lg'}>
+                                                        <TableCell key={column.id} align={column.align} className={'!text-lg max-2xl:!text-sm'}>
                                                             {column.format && typeof value === 'number'
                                                                 ? column.format(value)
                                                                 : value}

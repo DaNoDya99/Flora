@@ -2,14 +2,20 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import {BarChart} from "@mui/x-charts";
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
-import {useSelector} from "react-redux";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {useSelector,useDispatch} from "react-redux";
+import {useEffect, useState} from "react";
+import {
+    dailyIncomeThisWeekVsLastWeek,
+    lowQuantityProducts,
+    numberOfOrdersDeliveredYesterday,
+    numberOfOrdersYesterday,
+    numberOfPendingOrders, topSellingBouquetsWithinTheWeek,
+    totalIncomeThisWeek
+} from "../../store/slices/reports_slice.js";
 dayjs.extend(customParseFormat);
 
-const thisWeek = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
-const lastWeek = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
-const quantity = [5,7,10,12,14,15,16];
-const products = ['P001', 'P002', 'P003', 'P004', 'P005', 'P006', 'P007'];
+
 
 function getWeekdays() {
     let currentDate = dayjs();
@@ -30,21 +36,56 @@ function createData(id, name, quantity, price) {
 
 const xLabels = getWeekdays();
 
-const rows = [
-    createData('P001', 'Affairs of Hearts', 1, 2000.00),
-    createData('P002', 'Affairs of Hearts', 1, 2000.00),
-    createData('P003', 'Affairs of Hearts', 1, 2000.00),
-    createData('P004', 'Affairs of Hearts', 1, 2000.00),
-    createData('P005', 'Affairs of Hearts', 1, 2000.00),
-  ];
+let rows = [];
 
 function AdminDashboard() {
     const isLoggedIn = useSelector(state => state.employeeAuth.loggedIn);
     const employee = useSelector(state => state.employeeAuth.localStorage);
 
+    const dispatch = useDispatch();
+
     if (!isLoggedIn || employee.role !== 'admin') {
         window.location.href = '/employee/login';
     }
+
+    const totalIncome = useSelector(state => state.reports.data.weeklyTotalIncome);
+    const pendingOrders = useSelector(state => state.reports.data.pendingOrders);
+    const ordersReceived = useSelector(state => state.reports.data.ordersReceived);
+    const deliveredOrdersLastDay = useSelector(state => state.reports.data.deliveredOrdersLastDay);
+    const topSellingBouquets = useSelector(state => state.reports.data.topSellingBouquets);
+    const incomeComparison = useSelector(state => state.reports.data.incomeComparison);
+    const lowQuantityBouquets = useSelector(state => state.reports.data.lowQuantityProducts);
+
+    useEffect(() => {
+        dispatch(totalIncomeThisWeek())
+        dispatch(numberOfOrdersYesterday())
+        dispatch(numberOfPendingOrders())
+        dispatch(numberOfOrdersDeliveredYesterday())
+        dispatch(topSellingBouquetsWithinTheWeek())
+        dispatch(lowQuantityProducts())
+        dispatch(dailyIncomeThisWeekVsLastWeek())
+    }, [dispatch]);
+
+    let products = ['Name'];
+    let quantity = [0];
+
+    topSellingBouquets.forEach((item) => {
+        if (products.pop() === 'Name')
+        {
+            products = [];
+            quantity = [];
+        }
+
+        products.push(item.bouquet_name);
+        quantity.push(item.quantity);
+    })
+
+    let thisWeek = [-1];
+    let lastWeek = [-1];
+
+    rows = lowQuantityBouquets.map((item) => {
+        return createData(item.product_code, item.name, item.quantity, item.price);
+    });
 
     return (
         <div className={'flex flex-col gap-5 w-full max-2xl:gap-2'}>
@@ -53,23 +94,23 @@ function AdminDashboard() {
                     <div className={'flex gap-2 w-full justify-between'}>
                         <div className={'w-[50%] text-center py-2 border-2 border-secondary2 rounded-md h-[19vh] flex flex-col justify-center'}>
                             <h1 className={'text-2xl font-semibold text-center max-2xl:text-sm'}>Total Income: This Week</h1>
-                            <div className={'text-center text-2xl font-semibold'}>Rs. 100,000.00</div>
+                            <div className={'text-center text-2xl font-semibold'}>Rs. {totalIncome}.00</div>
                         </div>
                         
                         <div className={'w-[50%] text-center py-2 border-2 border-secondary2 rounded-md h-[19vh] flex flex-col justify-center'}>
                             <h1 className={'text-2xl font-semibold text-center max-2xl:text-sm'}># Orders Received: Today</h1>
-                            <div className={'text-center text-2xl font-semibold'}>15</div>
+                            <div className={'text-center text-2xl font-semibold'}>{ordersReceived}</div>
                         </div>
                     </div>
                     <div className={'flex gap-2 w-full justify-between'}>
                         <div className={'w-[50%] text-center py-2 border-2 border-secondary2 rounded-md h-[19vh] flex flex-col justify-center'}>
                             <h1 className={'text-2xl font-semibold text-center max-2xl:text-sm'}># Pending Orders</h1>
-                            <div className={'text-center text-2xl font-semibold'}>23</div>
+                            <div className={'text-center text-2xl font-semibold'}>{pendingOrders}</div>
                         </div>
                         
                         <div className={'w-[50%] text-center py-2 border-2 border-secondary2 rounded-md h-[19vh] flex flex-col justify-center'}>
                             <h1 className={'text-2xl font-semibold text-center max-2xl:text-sm'}># Orders Delivered: Last Day</h1>
-                            <div className={'text-center text-2xl font-semibold'}>43</div>
+                            <div className={'text-center text-2xl font-semibold'}>{deliveredOrdersLastDay}</div>
                         </div>
                     </div>
 
@@ -105,7 +146,7 @@ function AdminDashboard() {
                             series={[
                                 { data: quantity, label: 'Quantity', id: 'pvId' },
                             ]}
-                            xAxis={[{ data: products, scaleType: 'band' ,label:"Product ID", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
+                            xAxis={[{ data: products ? products : ['Name'], scaleType: 'band' ,label:"Product ID", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
                             slotProps={{legend : {
                                 position: {vertical: 'top', horizontal: 'right'},
                                 direction: 'column',

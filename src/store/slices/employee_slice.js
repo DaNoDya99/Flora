@@ -123,7 +123,6 @@ export const updateEmployee = createAsyncThunk(
                 'Content-Type': 'multipart/form-data'
             }
         }).then(response => {
-            console.log(response.data);
             return {
                 employees: response.data.employee,
                 status: response.data.status,
@@ -131,7 +130,6 @@ export const updateEmployee = createAsyncThunk(
                 statusFlag: 'success'
             };
         }).catch(error => {
-            console.log(error);
             return {
                 status: error.response.status,
                 errors: error.response.data,

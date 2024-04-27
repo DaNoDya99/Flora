@@ -51,7 +51,6 @@ export const addItemToCart = createAsyncThunk(
     'cart/addItemToCart',
     async (item) => {
         return api.post('/cart/add-item', item).then((response) => {
-            console.log(response);
             return {
                 statusFlag: 'success',
                 cart: response.data.cart,
@@ -59,7 +58,6 @@ export const addItemToCart = createAsyncThunk(
                 message: response.data.message
             }
         }).catch((error) => {
-            console.log(error.response);
             return {
                 statusFlag: 'failed',
                 errors: error.response.data,

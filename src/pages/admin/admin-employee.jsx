@@ -189,7 +189,7 @@ function AdminEmployee() {
                                         key={column.id}
                                         align={column.align}
                                         style={{minWidth: column.minWidth}}
-                                        className={'!font-semibold !text-xl'}
+                                        className={'!font-semibold !text-xl max-2xl:!text-lg'}
                                     >
                                         {column.label}
                                     </TableCell>
@@ -207,13 +207,13 @@ function AdminEmployee() {
                                                 const value = row[column.id];
                                                 return (
                                                     column.id === 'image' ? <TableCell key={column.id} align={column.align}>
-                                                        <img src={'http://localhost:3000/'+value} alt={'product'} className={'w-20 h-20 rounded-full shadow-md object-cover'}/>
+                                                        <img src={'http://localhost:3000/'+value} alt={'product'} className={'w-20 h-20 rounded-full shadow-md object-cover max-2xl:w-16 max-2xl:h-16'}/>
                                                     </TableCell> : column.id === 'actions' ? <TableCell key={column.id} align={column.align}
                                                                                                         className={'flex items-center justify-center gap-5'}>
                                                             <DeleteIcon className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-red-700'} onClick={() => handleDeleteEmpOpen(value)}/>
                                                             <InfoIcon key={value} className={'cursor-pointer mx-2 p-1 shadow-md rounded-md !h-8 !w-8 text-blue-600'} onClick={() => handleEditEmpOpen(value)}/>
                                                         </TableCell> :
-                                                        <TableCell key={column.id} align={column.align} className={'!text-lg'}>
+                                                        <TableCell key={column.id} align={column.align} className={'!text-lg max-2xl:!text-sm'}>
                                                             {column.format && typeof value === 'number'
                                                                 ? column.format(value)
                                                                 : value}
@@ -348,7 +348,7 @@ function AdminEmployee() {
                                         >
                                             <option value={'none'}></option>
                                             <option value={'delivery'}>Delivery</option>
-                                            <option value={'customer'}>Manager</option>
+                                            <option value={'delivery-manger'}>Delivery Manager</option>
                                         </NativeSelect>
                                     </FormControl>
                                 </div>

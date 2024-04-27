@@ -19,12 +19,14 @@ const customerSlice = createSlice({
             errors: {
                 login: {},
                 register: {},
-                update: {}
+                update: {},
+                resetPassword: {}
             },
             message: {
                 login: '',
                 register: '',
-                update : ''
+                update : '',
+                resetPassword: ''
             }
         }
     },
@@ -91,6 +93,21 @@ const customerSlice = createSlice({
                 action.payload.errors.message = all.formatString(action.payload.errors.message.replace(/"/g, ''));
                 state.data.errors.update = action.payload.errors;
             }
+        }).addCase(resetCustomerPassword.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.loggedIn = true;
+                state.data.localStorage = action.payload.customer;
+                localStorage.setItem('user', JSON.stringify(action.payload.customer));
+                state.data.message.resetPassword = action.payload.message;
+                state.data.errors.resetPassword = {};
+
+                setTimeout(() => {
+                    window.location.href = '/';
+                },1500);
+            } else {
+                action.payload.errors.message = all.formatString(action.payload.errors.message.replace(/"/g, ''));
+                state.data.errors.resetPassword = action.payload.errors;
+            }
         })
     }
 });
@@ -147,6 +164,26 @@ export const updateCustomer = createAsyncThunk(
                 status: response.status,
                 statusFlag: 'success',
                 message: response.data.message
+            }
+        }).catch(error => {
+            return {
+                status: error.response.status,
+                errors: error.response.data,
+                statusFlag: 'failed'
+            };
+        });
+    });
+
+export const resetCustomerPassword = createAsyncThunk(
+    'customer/resetPassword',
+    async (formData) => {
+        return api.put('/customers/reset-password', formData).then(response => {
+            console.log(response.data);
+            return {
+                status: response.status,
+                statusFlag: 'success',
+                message: response.data.message,
+                customer: response.data.customer
             }
         }).catch(error => {
             return {
