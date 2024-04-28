@@ -83,6 +83,9 @@ function AdminDashboard() {
     let thisWeek = [-1];
     let lastWeek = [-1];
 
+    thisWeek = incomeComparison.thisWeekIncome;
+    lastWeek = incomeComparison.lastWeekIncome;
+
     rows = lowQuantityBouquets.map((item) => {
         return createData(item.product_code, item.name, item.quantity, item.price);
     });
@@ -120,19 +123,22 @@ function AdminDashboard() {
                         <h1 className={'text-2xl font-semibold max-2xl:text-sm'}>Comparison of Daily Income: This Week vs. Last Week</h1>
                     </div>
                     <div className={'w-[90%] h-[35vh] flex justify-center max-2xl:w-full'}>
-                        <LineChart
-                            series={[
-                                { data: lastWeek, label: 'This Week', id: 'pvId'},
-                                { data: thisWeek, label: 'Last Week', id: 'uvId' },
-                            ]}
-                            xAxis={[{ scaleType: 'point', data: xLabels, label:"Week Days", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
-                            yAxis={[{ scaleType: 'linear', label: 'Income',labelStyle: {fontSize: '1rem',fontWeight: 'bold'}, position: 'right'}]}
-                            slotProps={{legend : {
-                                position: {vertical: 'top', horizontal: 'right'},
-                                direction: 'column',
-                                labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
-                            }}}
-                        />
+                        {
+                            thisWeek === undefined || lastWeek === undefined? <div className={'text-center text-2xl font-semibold'}>No Data Available</div> :
+                            <LineChart
+                                series={[
+                                    { data: lastWeek, label: 'This Week', id: 'pvId'},
+                                    { data: thisWeek, label: 'Last Week', id: 'uvId' },
+                                ]}
+                                xAxis={[{ scaleType: 'point', data: xLabels, label:"Week Days", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
+                                yAxis={[{ scaleType: 'linear', label: 'Income',labelStyle: {fontSize: '1rem',fontWeight: 'bold'}, position: 'right'}]}
+                                slotProps={{legend : {
+                                    position: {vertical: 'top', horizontal: 'right'},
+                                    direction: 'column',
+                                    labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
+                                }}}
+                            />
+                        }
                     </div>
                 </div>
             </div>

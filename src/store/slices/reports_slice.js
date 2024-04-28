@@ -76,7 +76,7 @@ const reportsSlice = createSlice({
             }
         }).addCase(ordersDeliveredWithinTheWeek.fulfilled, (state, action) => {
             if (action.payload.statusFlag === 'success') {
-                state.data.ordersDeliveredWithinTheWeek = action.payload.ordersDeliveredWithinTheWeek;
+                state.data.ordersDeliveredWithinTheWeek = action.payload.ordersDeliveredWithinTheWeek.reverse();
             }
         }).addCase(ordersDeliveredByEachDeliveryPerson.fulfilled, (state, action) => {
             if (action.payload.statusFlag === 'success') {
@@ -210,7 +210,7 @@ export const dailyIncomeThisWeekVsLastWeek = createAsyncThunk(
 export const pendingDeliveryCounts = createAsyncThunk(
     'reports/pendingDeliveryCounts',
     async (id) => {
-        return api.get('/reports/pending-delivery-counts/'+id).then((response) => {
+        return api.get('/reports/pending-delivery-orders-count/'+id).then((response) => {
             return {
                 pendingDeliveries : response.data.pendingDeliveries,
                 statusFlag : 'success'
@@ -227,7 +227,7 @@ export const pendingDeliveryCounts = createAsyncThunk(
 export const completedOrdersCount = createAsyncThunk(
     'reports/completedOrdersCount',
     async (id) => {
-        return api.get('/reports/completed-orders-count/'+id).then((response) => {
+        return api.get('/reports/completed-delivery-orders/'+id).then((response) => {
             return {
                 completedDeliveries : response.data.completedDeliveries,
                 statusFlag : 'success'
@@ -244,7 +244,7 @@ export const completedOrdersCount = createAsyncThunk(
 export const failedOrdersCount = createAsyncThunk(
     'reports/failedOrdersCount',
     async (id) => {
-        return api.get('/reports/failed-orders-count/'+id).then((response) => {
+        return api.get('/reports/failed-delivery-orders/'+id).then((response) => {
             return {
                 failedDeliveries : response.data.failedDeliveries,
                 statusFlag : 'success'

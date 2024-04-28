@@ -101,6 +101,7 @@ import {api} from "../../api/api.js"
         }).addCase(assignDeliveryPerson.fulfilled, (state, action) => {
             if (action.payload.statusFlag === 'success') {
                 state.message.assignDeliveryPerson = action.payload.message;
+                window.location.reload()
             } else {
                 state.errors.assignDeliveryPerson = action.payload.errors;
             }

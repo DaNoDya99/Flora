@@ -2,7 +2,15 @@ import {LineChart} from "@mui/x-charts/LineChart";
 import all from "../../utils/functions.js";
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {PieChart} from "@mui/x-charts";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import {useEffect} from "react";
+import {
+    completedOrdersCount, deliveryFailureDetails,
+    deliveryPerformance,
+    failedOrdersCount, ordersDeliveredByEachDeliveryPerson, ordersDeliveredWithinTheWeek,
+    pendingDeliveryCounts
+} from "../../store/slices/reports_slice.js";
+import moment from "moment";
 
 const xLabels = all.getWeekdays();
 
@@ -10,19 +18,50 @@ function createData(id, ordered_date, delivery_date, days_passed) {
     return { id, ordered_date, delivery_date, days_passed  };
 }
 
-const rows = [
-    createData('odr-001-012', '2021-10-01', '2021-10-10', 9),
-    createData('odr-001-013', '2021-10-02', '2021-10-11', 9),
-    createData('odr-001-014', '2021-10-03', '2021-10-12', 9),
-];
+function createDataPie(id, label, value) {
+    return { id : id, label : label, value : value  };
+}
+
+const rows = [];
+const pieData = [];
 
 function DeliveryDashboard(){
     const isLoggedIn = useSelector(state => state.employeeAuth.loggedIn);
     const employee = useSelector(state => state.employeeAuth.localStorage);
+    const dispatch = useDispatch();
 
     if (!isLoggedIn || employee.role !== 'delivery') {
         window.location.href = '/employee/login';
     }
+
+    useEffect(() => {
+        dispatch(pendingDeliveryCounts(employee.id))
+        dispatch(completedOrdersCount(employee.id))
+        dispatch(failedOrdersCount(employee.id))
+        dispatch(deliveryPerformance(employee.id))
+        dispatch(deliveryFailureDetails(employee.id))
+        dispatch(ordersDeliveredWithinTheWeek(employee.id))
+        dispatch(ordersDeliveredByEachDeliveryPerson())
+    }, [dispatch, employee.id]);
+
+    const _pendingDeliveryCounts = useSelector(state => state.reports.data.pendingDeliveryCounts);
+    const _completedDeliveryCounts = useSelector(state => state.reports.data.completedDeliveryCounts);
+    const _failedDeliveryCounts = useSelector(state => state.reports.data.failedDeliveryCounts);
+    const _overallDeliveryPerformance = useSelector(state => state.reports.data.deliveryPerformance);
+    const _deliveryFailureDetails = useSelector(state => state.reports.data.deliveryFailureDetails);
+    const _ordersDeliveredWithinTheWeek = useSelector(state => state.reports.data.ordersDeliveredWithinTheWeek);
+    const _ordersDeliveredByEachDeliveryPerson = useSelector(state => state.reports.data.ordersDeliveredByEachDeliveryPerson);
+
+    _deliveryFailureDetails.forEach((item, index) => {
+        rows.push(createData(index, item.ordered_date, item.delivery_date, moment().diff(item.delivery_date, 'days')));
+    })
+
+    _ordersDeliveredByEachDeliveryPerson.forEach((item, index) => {
+        pieData.push(createDataPie(index, item.firstName +' '+ item.lastName, item.orderCount));
+    })
+
+    const uniquePieData = pieData.filter((v, i, a) => a.findIndex(t => (t.label === v.label)) === i);
+    const uniqueRows = rows.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
 
     return (
         <div className={'flex flex-col gap-5 w-full max-2xl:gap-2'}>
@@ -33,13 +72,13 @@ function DeliveryDashboard(){
                             <div className={'h-[20vh] border-2 border-secondary3 w-[50%] rounded-lg flex justify-center items-center'}>
                                 <div className={'space-y-2'}>
                                     <h1 className={'text-2xl font-semibold text-center max-2xl:text-sm'}># Pending Deliveries:</h1>
-                                    <div className={'text-center text-2xl font-semibold'}>33</div>
+                                    <div className={'text-center text-2xl font-semibold'}>{_pendingDeliveryCounts}</div>
                                 </div>
                             </div>
                             <div className={'h-[20vh] border-2 border-secondary3 w-[50%] rounded-lg flex justify-center items-center'}>
                                 <div className={'space-y-2'}>
                                     <h1 className={'text-2xl font-semibold text-center max-2xl:text-sm'}># Completed Deliveries:<br/>This Week</h1>
-                                    <div className={'text-center text-2xl font-semibold'}>103</div>
+                                    <div className={'text-center text-2xl font-semibold'}>{_completedDeliveryCounts}</div>
                                 </div>
                             </div>
                         </div>
@@ -47,13 +86,15 @@ function DeliveryDashboard(){
                             <div className={'h-[20vh] border-2 border-secondary3 w-[50%] rounded-lg flex justify-center items-center'}>
                                 <div className={'space-y-2'}>
                                     <h1 className={'text-2xl font-semibold text-center max-2xl:text-sm'}># Delivery Failures:<br/>This Week</h1>
-                                    <div className={'text-center text-2xl font-semibold'}>3</div>
+                                    <div className={'text-center text-2xl font-semibold'}>{_failedDeliveryCounts}</div>
                                 </div>
                             </div>
                             <div className={'h-[20vh] border-2 border-secondary3 w-[50%] rounded-lg flex justify-center items-center'}>
                                 <div className={'space-y-2'}>
                                     <h1 className={'text-2xl font-semibold text-center max-2xl:text-sm'}>Overall Delivery Accuracy:</h1>
-                                    <div className={'text-center text-2xl font-semibold'}>97.08%</div>
+                                    <div className={'text-center text-2xl font-semibold'}>
+                                        {_overallDeliveryPerformance === undefined ? 0 : _overallDeliveryPerformance}%
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -64,21 +105,25 @@ function DeliveryDashboard(){
                         <h1 className={'text-2xl font-semibold max-2xl:text-sm'}>Orders Delivered with in the Week</h1>
                     </div>
                     <div className={'w-[90%] h-[35vh] flex justify-center max-2xl:w-full'}>
-                        <LineChart
-                            xAxis={[{ scaleType: 'point', data: xLabels, label:"Week Days", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
-                            yAxis={[{ scaleType: 'linear', label: '# Orders Delivered',labelStyle: {fontSize: '1rem',fontWeight: 'bold'}, position: 'right'}]}
-                            series={[
-                                {
-                                    data: [30, 28, 20, 31, 35, 22, 20],
-                                },
-                            ]}
-                            slotProps={{
-                                legend : {
-                                    position: {vertical: 'top', horizontal: 'right'},
-                                    direction: 'column',
-                                    labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
-                                }}}
-                        />
+                        {
+                            _ordersDeliveredWithinTheWeek === undefined ? <div>No Data</div> :
+                                <LineChart
+                                    xAxis={[{ scaleType: 'point', data: xLabels, label:"Week Days", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
+                                    yAxis={[{ scaleType: 'linear', label: '# Orders Delivered',labelStyle: {fontSize: '1rem',fontWeight: 'bold'}, position: 'right'}]}
+                                    series={[
+                                        {
+                                            data: _ordersDeliveredWithinTheWeek,
+                                        },
+                                    ]}
+                                    slotProps={{
+                                        legend : {
+                                            position: {vertical: 'top', horizontal: 'right'},
+                                            direction: 'column',
+                                            labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
+                                        }}}
+                                />
+                        }
+
                     </div>
                 </div>
             </div>
@@ -99,7 +144,7 @@ function DeliveryDashboard(){
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows.map((row) => (
+                                    {uniqueRows.map((row) => (
                                         <TableRow
                                             key={row.id}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -122,32 +167,30 @@ function DeliveryDashboard(){
                         <h1 className={'text-2xl font-semibold max-2xl:text-sm'}>Distribution of Deliveries by Delivery Personnel</h1>
                     </div>
                     <div className={'w-[60%] h-[35vh] flex justify-center max-2xl:w-full'}>
-                        <PieChart
-                            series={[
-                                {
-                                    data: [
-                                        { id: 0, value: 103, label: 'Person 1' },
-                                        { id: 1, value: 80, label: 'Person 2' },
-                                        { id: 2, value: 97, label: 'Person 3' },
-                                        { id: 3, value: 110, label: 'Person 4' },
-                                    ],
-                                    innerRadius: 80,
-                                    outerRadius: 140,
-                                    paddingAngle: 2,
-                                    cornerRadius: 3,
-                                    startAngle: -90,
-                                    endAngle: 270,
-                                    cx: 150,
-                                    cy: 150,
-                                },
-                            ]}
-                            slotProps={{
-                                legend : {
-                                    position: {vertical: 'top', horizontal: 'right'},
-                                    direction: 'column',
-                                    labelStyle: {fontSize: '0.8rem',fontWeight: 'bold'}
-                                }}}
-                        />
+                        {
+                            pieData === [] ? <div>No Data</div> :
+                                <PieChart
+                                    series={[
+                                        {
+                                            data: uniquePieData,
+                                            innerRadius: 80,
+                                            outerRadius: 140,
+                                            paddingAngle: 2,
+                                            cornerRadius: 3,
+                                            startAngle: -90,
+                                            endAngle: 270,
+                                            cx: 150,
+                                            cy: 150,
+                                        },
+                                    ]}
+                                    slotProps={{
+                                        legend : {
+                                            position: {vertical: 'top', horizontal: 'right'},
+                                            direction: 'column',
+                                            labelStyle: {fontSize: '0.8rem',fontWeight: 'bold'}
+                                        }}}
+                                />
+                        }
                     </div>
                 </div>
             </div>
