@@ -25,6 +25,7 @@ import {addProduct, removeProduct} from "../../store/slices/product_slice.js";
 import { getCategories } from "../../store/slices/category_slice.js";
 import { getSubCategories } from "../../store/slices/sub_category_slice.js";
 import { getProducts } from "../../store/slices/product_slice.js";
+import {updateProduct2} from "../../store/slices/product_slice.js";
 import all from "../../utils/functions.js";
 import {list} from "postcss";
 
@@ -193,8 +194,6 @@ function AdminInventory() {
     const updateProduct = (e) => {
         e.preventDefault();
 
-        console.log(productInfo.id);
-
         let formData = new FormData();
 
         formData.append('id', productInfo.id);
@@ -226,10 +225,11 @@ function AdminInventory() {
 
         formData.append('flowers', productInfo.flowers);
 
-        for (let i = 0; i < productInfo.images.length; i++){
-            formData.append('images', productInfo.images[i]);
-        }
+        // for (let i = 0; i < productInfo.images.length; i++){
+        //     formData.append('images', productInfo.images[i]);
+        // }
 
+        dispatch(updateProduct2(formData));
     }
 
     const handleRemoveProduct = () => {
@@ -489,17 +489,17 @@ function AdminInventory() {
                             <div className={'mt-20 w-full flex justify-between gap-5'}>
                                 <div className={'w-[50%] space-y-8'}>
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="firstName">Product name</InputLabel>
+                                        <InputLabel htmlFor="firstName">Product name <span className={"text-red-700"}>*</span></InputLabel>
                                         <Input id="productName" name={'productName'} onChange={handleChangeAdd} value={product.productName}/>
                                     </FormControl>
                                 {/*    Reorder level*/}
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="firstName">Reorder Level</InputLabel>
+                                        <InputLabel htmlFor="firstName">Reorder Level <span className={"text-red-700"}>*</span></InputLabel>
                                         <Input id="reorderLevel" name={'reorderLevel'} type={'number'} onChange={handleChangeAdd} value={product.reorderLevel}/>
                                     </FormControl>
 
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="category">Category</InputLabel>
+                                        <InputLabel htmlFor="category">Category <span className={"text-red-700"}>*</span></InputLabel>
                                         <NativeSelect
                                             defaultValue={'none'}
                                             inputProps={{
@@ -513,6 +513,7 @@ function AdminInventory() {
                                             <option value={''}></option>
                                             {   
                                                 categories.map((category) => {
+                                                    // eslint-disable-next-line react/jsx-key
                                                     return <option value={category.id}>{category.name}</option>
                                                 })
                                             }
@@ -520,7 +521,7 @@ function AdminInventory() {
                                     </FormControl>
 
                                     <div className={'mt-5'}>
-                                        <div className={'font-semibold text-xl'}>Select flower types</div>
+                                        <div className={'font-semibold text-xl'}>Select flower types <span className={"text-red-700"}>*</span></div>
                                         <FormGroup className={'ms-10'}>
                                             <FormControlLabel control={<Checkbox name={'lilies'} onChange={handleChangeAdd} value={product.lilies}/>} label="Lilies" />
                                             <FormControlLabel control={<Checkbox name={'chrysanthemums'} onChange={handleChangeAdd} value={product.chrysanthemums}/>} label="Chrysanthemums" />
@@ -531,17 +532,17 @@ function AdminInventory() {
                                 </div>
                                 <div className={'w-[50%] space-y-8'}>
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="firstName">Quantity</InputLabel>
+                                        <InputLabel htmlFor="firstName">Quantity <span className={"text-red-700"}>*</span></InputLabel>
                                         <Input id="quantity" name={'quantity'} type={'number'} onChange={handleChangeAdd} value={product.quantity}/>
                                     </FormControl>
                                 {/*    Price*/}
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="firstName">Price</InputLabel>
+                                        <InputLabel htmlFor="firstName">Price <span className={"text-red-700"}>*</span></InputLabel>
                                         <Input id="price" name={'price'}  onChange={handleChangeAdd} value={product.price}/>
                                     </FormControl>
 
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="sub_category">Sub Category</InputLabel>
+                                        <InputLabel htmlFor="sub_category">Sub Category <span className={"text-red-700"}>*</span></InputLabel>
                                         <NativeSelect
                                             defaultValue={'none'}
                                             inputProps={{
@@ -562,26 +563,26 @@ function AdminInventory() {
                                     </FormControl>
 
                                     <div className={'space-y-8'}>
-                                        <div className={'font-semibold text-xl'}>Select flower quantities</div>
+                                        <div className={'font-semibold text-xl'}>Select flower quantities <span className={"text-red-700"}>*</span></div>
                                         <div className={'flex w-full justify-between gap-5'}>
                                             <div className={'w-[50%] space-y-8'}>
                                                 <FormControl className={'w-full'}>
-                                                    <InputLabel htmlFor="firstName">Lilies Quantity</InputLabel>
+                                                    <InputLabel htmlFor="firstName">Lilies Quantity <span className={"text-red-700"}>*</span></InputLabel>
                                                     <Input id="lilies" name={'liliesQuantity'} type={'number'} disabled={!product.lilies} onChange={handleChangeAdd} value={product.liliesQuantity}/>
                                                 </FormControl>
 
                                                 <FormControl className={'w-full'}>
-                                                    <InputLabel htmlFor="chrysanthemums">Chrysanthemums Quantity</InputLabel>
+                                                    <InputLabel htmlFor="chrysanthemums">Chrysanthemums Quantity <span className={"text-red-700"}>*</span></InputLabel>
                                                     <Input id="chrysanthemums" name={'chrysanthemumsQuantity'} type={'number'} disabled={!product.chrysanthemums}  onChange={handleChangeAdd} value={product.chrysanthemumsQuantity}/>
                                                 </FormControl>
                                             </div>
                                             <div className={'w-[50%] space-y-8'}>
                                                 <FormControl className={'w-full'}>
-                                                    <InputLabel htmlFor="firstName">Roses Quantity</InputLabel>
+                                                    <InputLabel htmlFor="firstName">Roses Quantity <span className={"text-red-700"}>*</span></InputLabel>
                                                     <Input id="roses" name={'rosesQuantity'} type={'number'} disabled={!product.roses} onChange={handleChangeAdd} value={product.rosesQuantity}/>
                                                 </FormControl>
                                                 <FormControl className={'w-full'}>
-                                                    <InputLabel htmlFor="firstName">Gerbera Quantity</InputLabel>
+                                                    <InputLabel htmlFor="firstName">Gerbera Quantity <span className={"text-red-700"}>*</span></InputLabel>
                                                     <Input id="gerbera" name={'gerberaQuantity'} type={'number'} disabled={!product.gerbera} onChange={handleChangeAdd} value={product.gerberaQuantity}/>
                                                 </FormControl>
                                             </div>
@@ -592,7 +593,7 @@ function AdminInventory() {
                             </div>
 
                             <div className={'mt-10 w-full'}>
-                                <div className={'font-semibold text-xl'}>Bouquet Description</div>
+                                <div className={'font-semibold text-xl'}>Bouquet Description <span className={"text-red-700"}>*</span></div>
                                 <FormControl className={'w-full !mt-5'}>
                                     <TextareaAutosize id="description" name={'description'} className={'!border-gray-400'} minRows={10} onChange={handleChangeAdd} value={product.description}/>
                                 </FormControl>
@@ -650,25 +651,24 @@ function AdminInventory() {
                             <div className={'mt-20 w-full flex justify-between gap-5'}>
                                 <div className={'w-[50%] space-y-8'}>
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="productName">Product name</InputLabel>
-                                        <Input id="productName" name={'productName'} value={productInfo.name} onChange={handleChangeEdit}/>
+                                        <InputLabel htmlFor="productName">Product name <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="productName" name={'name'} defaultValue={productInfo.name} onChange={handleChangeEdit}/>
                                     </FormControl>
                                     {/*    Reorder level*/}
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="firstName">Reorder Level</InputLabel>
-                                        <Input id="reorderLevel" name={'reorderLevel'} type={'number'} value={productInfo.reorder_level} onChange={handleChangeEdit}/>
+                                        <InputLabel htmlFor="firstName">Reorder Level <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="reorderLevel" name={'reorderLevel'} type={'number'} defaultValue={productInfo.reorder_level} onChange={handleChangeEdit}/>
                                     </FormControl>
 
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="category">Category</InputLabel>
+                                        <InputLabel htmlFor="category">Category <span className={"text-red-700"}>*</span></InputLabel>
                                         <NativeSelect
-                                            defaultValue={'none'}
                                             inputProps={{
                                                 name: 'category',
                                                 id: 'category',
                                             }}
                                             // onChange={''}
-                                            value={productInfo.category}
+                                            defaultValue={productInfo.category}
                                             name={'category'}
                                             onChange={handleChangeEdit}
                                         >
@@ -683,7 +683,7 @@ function AdminInventory() {
                                     </FormControl>
 
                                     <div className={'mt-5'}>
-                                        <div className={'font-semibold text-xl'}>Select flower types</div>
+                                        <div className={'font-semibold text-xl'}>Select flower types <span className={"text-red-700"}>*</span></div>
                                         <FormGroup className={'ms-10'}>
                                             {/*<FormControlLabel control={<Checkbox />} label="Lilies" checked={true}/>*/}
                                             {/*<FormControlLabel control={<Checkbox />} label="Chrysanthemums" />*/}
@@ -700,31 +700,30 @@ function AdminInventory() {
                                 </div>
                                 <div className={'w-[50%] space-y-8'}>
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="firstName">Quantity</InputLabel>
-                                        <Input id="quantity" name={'quantity'} type={'number'} value={productInfo.quantity} onChange={handleChangeEdit}/>
+                                        <InputLabel htmlFor="firstName">Quantity <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="quantity" name={'quantity'} type={'number'} defaultValue={productInfo.quantity} onChange={handleChangeEdit}/>
                                     </FormControl>
                                     {/*    Price*/}
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="firstName">Price</InputLabel>
-                                        <Input id="price" name={'price'} value={productInfo.price} onChange={handleChangeEdit}/>
+                                        <InputLabel htmlFor="firstName">Price <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="price" name={'price'} defaultValue={productInfo.price} onChange={handleChangeEdit}/>
                                     </FormControl>
 
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="sub_category">Sub Category</InputLabel>
+                                        <InputLabel htmlFor="sub_category">Sub Category <span className={"text-red-700"}>*</span></InputLabel>
                                         <NativeSelect
-                                            defaultValue={'none'}
                                             inputProps={{
                                                 name: 'sub_category',
                                                 id: 'sub_category',
                                             }}
                                             onChange={handleChangeEdit}
-                                            value={productInfo.sub_category}
+                                            defaultValue={productInfo.sub_category}
                                             name={'sub_category'}
                                         >
                                             <option value={''}></option>
                                             {
                                                 sub_categories.map((sub_category) => {
-                                                    return openEditProduct ? sub_category.category_id.toString() === productInfo.category.toString() ? <option value={sub_category.id}>{sub_category.name}</option> : null : null;
+                                                    return openEditProduct ? sub_category.category_id.toString() === productInfo.category.toString() ? <option defaultValue={sub_category.id}>{sub_category.name}</option> : null : null;
                                                     // console.log(sub_category.category_id.toString() === productInfo.category.toString() ? 'True': 'False');
                                                 })
                                             }
@@ -732,7 +731,7 @@ function AdminInventory() {
                                     </FormControl>
 
                                     <div className={'space-y-8'}>
-                                        <div className={'font-semibold text-xl'}>Select flower quantities</div>
+                                        <div className={'font-semibold text-xl'}>Select flower quantities <span className={"text-red-700"}>*</span></div>
                                         <div className={'flex w-full justify-between gap-5'}>
                                             <div className={'w-[50%] space-y-8'}>
 
@@ -741,7 +740,7 @@ function AdminInventory() {
                                                         // eslint-disable-next-line react/jsx-key
                                                         return index < 2 ? <FormControl className={'w-full'}>
                                                             <InputLabel htmlFor={flower.name}>{flower.name} Quantity</InputLabel>
-                                                            <Input id={flower.name} name={flower.name.toLowerCase()+'Quantity'} type={'number'} value={flower.quantity} onChange={handleChangeEdit}/>
+                                                            <Input id={flower.name} name={flower.name.toLowerCase()+'Quantity'} type={'number'} defayltValue={flower.quantity} onChange={handleChangeEdit}/>
                                                         </FormControl> : null;
                                                     }) : null
                                                 }
@@ -754,7 +753,7 @@ function AdminInventory() {
                                                         // eslint-disable-next-line react/jsx-key
                                                         return index >= 2 ? <FormControl className={'w-full'}>
                                                             <InputLabel htmlFor={flower.name}>{flower.name} Quantity</InputLabel>
-                                                            <Input id={flower.name} name={flower.name.toLowerCase()+'Quantity'} type={'number'} value={flower.quantity} onChange={handleChangeEdit}/>
+                                                            <Input id={flower.name} name={flower.name.toLowerCase()+'Quantity'} type={'number'} defaultValue={flower.quantity} onChange={handleChangeEdit}/>
                                                         </FormControl> : null;
                                                     }) : null
                                                 }
@@ -767,10 +766,10 @@ function AdminInventory() {
                             </div>
 
                             <div className={'mt-10 w-full'}>
-                                <div className={'font-semibold text-xl'}>Bouquet Description</div>
+                                <div className={'font-semibold text-xl'}>Bouquet Description <span className={"text-red-700"}>*</span></div>
                                 <FormControl className={'w-full !mt-5'}>
                                     <TextareaAutosize id="description" name={'description'} className={'!border-gray-400'} minRows={10}
-                                    value={productInfo.description} onChange={handleChangeEdit}/>
+                                    defaultValue={productInfo.description} onChange={handleChangeEdit}/>
                                 </FormControl>
                             </div>
 

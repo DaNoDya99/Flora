@@ -66,19 +66,6 @@ function AdminDashboard() {
         dispatch(dailyIncomeThisWeekVsLastWeek())
     }, [dispatch]);
 
-    let products = ['Name'];
-    let quantity = [0];
-
-    topSellingBouquets.forEach((item) => {
-        if (products.pop() === 'Name')
-        {
-            products = [];
-            quantity = [];
-        }
-
-        products.push(item.bouquet_name);
-        quantity.push(item.quantity);
-    })
 
     let thisWeek = [-1];
     let lastWeek = [-1];
@@ -148,17 +135,21 @@ function AdminDashboard() {
                         <h1 className={'text-2xl font-semibold max-2xl:text-sm'}>Top Selling Bouquets with in the Week</h1>
                     </div>
                     <div className={'w-[90%] h-[35vh] flex justify-center max-2xl:w-full'}>
-                        <BarChart
-                            series={[
-                                { data: quantity, label: 'Quantity', id: 'pvId' },
-                            ]}
-                            xAxis={[{ data: products ? products : ['Name'], scaleType: 'band' ,label:"Product ID", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
-                            slotProps={{legend : {
-                                position: {vertical: 'top', horizontal: 'right'},
-                                direction: 'column',
-                                labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
-                            }}}
-                        />
+                        {
+                             topSellingBouquets ? <div className={'text-center text-2xl font-semibold'}>No Data Available</div> :
+                                <BarChart
+                                    series={[
+                                        { data: topSellingBouquets.quantity, label: 'Quantity', id: 'pvId'},
+                                    ]}
+                                    xAxis={[{ data : topSellingBouquets.products, scaleType: 'band' ,label:"Product ID", labelStyle: {fontSize: '1rem',fontWeight: 'bold'}}]}
+                                    slotProps={{legend : {
+                                            position: {vertical: 'top', horizontal: 'right'},
+                                            direction: 'column',
+                                            labelStyle: {fontSize: '0.5rem',fontWeight: 'bold'}
+                                        }}}
+                                />
+
+                        }
                     </div>
                 </div>
                 <div className={'w-[50%] h-[43vh] shadow-lg space-y-2 flex flex-col items-center justify-center max-2xl:h-[42vh]'}>

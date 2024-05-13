@@ -261,12 +261,12 @@ function AdminEmployee() {
                                 </div>
                                 <div className={'w-[70%] space-y-12'}>
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="firstName">First name</InputLabel>
+                                        <InputLabel htmlFor="firstName">First name <span className={"text-red-700"}>*</span></InputLabel>
                                         <Input id="firstName" name={'firstName'} onChange={handleChange} value={newEmp.firstName}/>
                                     </FormControl>
 
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="lastName">Last name</InputLabel>
+                                        <InputLabel htmlFor="lastName">Last name <span className={"text-red-700"}>*</span></InputLabel>
                                         <Input id="lastName" name={'lastName'} onChange={handleChange} value={newEmp.lastName}/>
                                     </FormControl>
                                 </div>
@@ -275,28 +275,28 @@ function AdminEmployee() {
                             <div className={'flex justify-between gap-3 mt-5'}>
                                 <div className={'w-[50%] space-y-12'}>
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="email">Email</InputLabel>
-                                        <Input id="email" name={'email'} onChange={handleChange} value={newEmp.email}/>
+                                        <InputLabel htmlFor="email">Email <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="email" name={'email'} onChange={handleChange} value={newEmp.email} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="emergencyContact">Emergency Contact</InputLabel>
-                                        <Input id="emergencyContact" name={'emergencyContact'} onChange={handleChange} value={newEmp.emergencyContact}/>
+                                        <InputLabel htmlFor="emergencyContact">Emergency Contact <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="emergencyContact" name={'emergencyContact'} onChange={handleChange} value={newEmp.emergencyContact} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="address1">Address Line 1</InputLabel>
-                                        <Input id="address1" name={'address1'} onChange={handleChange} value={newEmp.address1}/>
+                                        <InputLabel htmlFor="address1">Address Line 1 <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="address1" name={'address1'} onChange={handleChange} value={newEmp.address1} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="address3">Address Line 3</InputLabel>
-                                        <Input id="address3" name={'address3'} onChange={handleChange} value={newEmp.address3}/>
+                                        <InputLabel htmlFor="address3">Address Line 3 <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="address3" name={'address3'} onChange={handleChange} value={newEmp.address3} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="nic">NIC</InputLabel>
-                                        <Input id="nic" name={'nic'} onChange={handleChange} value={newEmp.nic}/>
+                                        <InputLabel htmlFor="nic">NIC <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="nic" name={'nic'} onChange={handleChange} value={newEmp.nic} required/>
                                     </FormControl>
                                     {/*Select Gender*/}
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="gender">Gender</InputLabel>
+                                        <InputLabel htmlFor="gender">Gender <span className={"text-red-700"}>*</span></InputLabel>
                                         <NativeSelect
                                             defaultValue={'none'}
                                             inputProps={{
@@ -306,6 +306,7 @@ function AdminEmployee() {
                                             onChange={handleChange}
                                             value={newEmp.gender}
                                             name={'gender'}
+                                            required
                                         >
                                             <option value={'none'}></option>
                                             <option value={'male'}>Male</option>
@@ -315,27 +316,27 @@ function AdminEmployee() {
                                 </div>
                                 <div className={'w-[50%] space-y-12'}>
                                     <FormControl className={'w-full'}>
-                                        <InputLabel htmlFor="contact">Contact</InputLabel>
-                                        <Input id="contact" name={'contact'} onChange={handleChange} value={newEmp.contact}/>
+                                        <InputLabel htmlFor="contact">Contact <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="contact" name={'contact'} onChange={handleChange} value={newEmp.contact} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="age">Age</InputLabel>
-                                        <Input id="age" name={'age'} onChange={handleChange} value={newEmp.age}/>
+                                        <InputLabel htmlFor="age">Age <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="age" name={'age'} onChange={handleChange} value={newEmp.age} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="address2">Address Line 2</InputLabel>
-                                        <Input id="address2" name={'address2'} onChange={handleChange} value={newEmp.address2}/>
+                                        <InputLabel htmlFor="address2">Address Line 2 <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="address2" name={'address2'} onChange={handleChange} value={newEmp.address2} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="city">City</InputLabel>
-                                        <Input id="city" name={'city'} onChange={handleChange} value={newEmp.city}/>
+                                        <InputLabel htmlFor="city">City <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="city" name={'city'} onChange={handleChange} value={newEmp.city} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="password">Password</InputLabel>
-                                        <Input id="password" name={'password'} onChange={handleChange} value={newEmp.password}/>
+                                        <InputLabel htmlFor="password">Password <span className={"text-red-700"}>*</span></InputLabel>
+                                        <Input id="password" name={'password'} onChange={handleChange} value={newEmp.password} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
-                                        <InputLabel htmlFor="role">Role</InputLabel>
+                                        <InputLabel htmlFor="role">Role <span className={"text-red-700"}>*</span></InputLabel>
                                         <NativeSelect
                                             defaultValue={'none'}
                                             inputProps={{
@@ -345,6 +346,7 @@ function AdminEmployee() {
                                             onChange={handleChange}
                                             value={newEmp.role}
                                             name={'role'}
+                                            required
                                         >
                                             <option value={'none'}></option>
                                             <option value={'delivery'}>Delivery</option>

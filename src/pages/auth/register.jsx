@@ -89,12 +89,12 @@ function Register() {
 
                             <FormControl>
                                 <InputLabel htmlFor="password">Password</InputLabel>
-                                <Input id="password" name={'password'} value={formData.password} onChange={handleChange}/>
+                                <Input id="password" name={'password'} value={formData.password} onChange={handleChange} type={'password'}/>
                             </FormControl>
 
                             <FormControl>
                                 <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
-                                <Input id="confirmPassword" name={'confirmPassword'} value={formData.confirmPassword} onChange={handleChange}/>
+                                <Input id="confirmPassword" name={'confirmPassword'} value={formData.confirmPassword} onChange={handleChange} type={"password"}/>
                             </FormControl>
 
                             <Button variant="contained" color="secondary2" type={'submit'}>
