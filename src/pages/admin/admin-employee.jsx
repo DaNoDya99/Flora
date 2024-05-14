@@ -292,7 +292,7 @@ function AdminEmployee() {
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="nic">NIC <span className={"text-red-700"}>*</span></InputLabel>
-                                        <Input id="nic" name={'nic'} onChange={handleChange} value={newEmp.nic} required/>
+                                        <Input id="nic" name={'nic'} onChange={handleChange} value={newEmp.nic} required inputProps={{maxLength : 13, minLength :13}}/>
                                     </FormControl>
                                     {/*Select Gender*/}
                                     <FormControl className={'w-full mt-5'}>
@@ -350,7 +350,6 @@ function AdminEmployee() {
                                         >
                                             <option value={'none'}></option>
                                             <option value={'delivery'}>Delivery</option>
-                                            <option value={'delivery-manger'}>Delivery Manager</option>
                                         </NativeSelect>
                                     </FormControl>
                                 </div>
