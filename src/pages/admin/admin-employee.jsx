@@ -276,7 +276,7 @@ function AdminEmployee() {
                                 <div className={'w-[50%] space-y-12'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="email">Email <span className={"text-red-700"}>*</span></InputLabel>
-                                        <Input id="email" name={'email'} onChange={handleChange} value={newEmp.email} required/>
+                                        <Input id="email" type={"email"} name={'email'} onChange={handleChange} value={newEmp.email} required/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="emergencyContact">Emergency Contact <span className={"text-red-700"}>*</span></InputLabel>
@@ -288,7 +288,7 @@ function AdminEmployee() {
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="address3">Address Line 3 <span className={"text-red-700"}>*</span></InputLabel>
-                                        <Input id="address3" name={'address3'} onChange={handleChange} value={newEmp.address3} required/>
+                                        <Input id="address3" name={'address3'} onChange={handleChange} value={newEmp.address3}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="nic">NIC <span className={"text-red-700"}>*</span></InputLabel>
@@ -407,7 +407,7 @@ function AdminEmployee() {
                                 <div className={'w-[50%] space-y-12'}>
                                     <FormControl className={'w-full'}>
                                         <InputLabel htmlFor="email">Email</InputLabel>
-                                        <Input id="email" name={'email'} defaultValue={employee.email} disabled={disabled} onChange={handleChangeEdit} value={employee.email}/>
+                                        <Input id="email" type={"email"} name={'email'} defaultValue={employee.email} disabled={disabled} onChange={handleChangeEdit} value={employee.email}/>
                                     </FormControl>
                                     <FormControl className={'w-full mt-5'}>
                                         <InputLabel htmlFor="emergencyContact">Emergency Contact</InputLabel>
