@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import {getProducts} from "../../store/slices/product_slice.js";
+import {addItemToCart} from "../../store/slices/cart_slice.js";
 
 function Home() {
     const products = useSelector(state => state.product.data.products);
@@ -30,8 +31,6 @@ function Home() {
         window.addEventListener('resize', handleResize);
         dispatch(getProducts())
     },[dispatch, setNoOfCards]);
-
-    console.log(products);
 
     const cardsArray = Array.from({ length: noOfCards }, (_, index) => index);
 
@@ -89,18 +88,21 @@ function Home() {
                         <h1 className={'text-6xl text-black font-bold'}>Discover the Beauty of Blooms...</h1>
                         <p className={'text-black text-5xl'}>Welcome to Flower Hub - Where </p>
                         <p className={'text-black text-5xl'}>Nature Meets Elegance! </p>
-                        <Button variant="contained"
-                                color="secondary3"
-                                sx={{fontSize: '1.5em',
-                                    fontWeight: 'bold',
-                                    padding: '0.5em 1em',
-                                    textTransform: 'none',
-                                    width: '10em',
-                                    height: '3em',
-                                    fontFamily: 'monospace',
-                                }}
-                        >Shop Now
-                        </Button>
+                        <Link to={'/products/1'}>
+                            <Button variant="contained"
+                                    color="secondary3"
+                                    sx={{fontSize: '1.5em',
+                                        fontWeight: 'bold',
+                                        padding: '0.5em 1em',
+                                        textTransform: 'none',
+                                        width: '10em',
+                                        height: '3em',
+                                        fontFamily: 'monospace',
+                                    }}
+                            >Shop Now
+                            </Button>
+                        </Link>
+
                     </div>
                 </div>
             </div>

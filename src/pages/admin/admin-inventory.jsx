@@ -21,7 +21,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import {useDispatch} from "react-redux";
 import {useSelector} from "react-redux";
-import {addProduct, removeProduct} from "../../store/slices/product_slice.js";
+import {addProduct, getProductsByCategory, removeProduct} from "../../store/slices/product_slice.js";
 import { getCategories } from "../../store/slices/category_slice.js";
 import { getSubCategories } from "../../store/slices/sub_category_slice.js";
 import { getProducts } from "../../store/slices/product_slice.js";
@@ -238,6 +238,14 @@ function AdminInventory() {
         }
     }
 
+    const filterByCategory = (e) => {
+        if (e.target.value === 'all'){
+            dispatch(getProducts());
+        }else{
+            dispatch(getProductsByCategory(e.target.value))
+        }
+    }
+
     return (
         <>
             <div className={'flex justify-between items-center'}>
@@ -253,11 +261,12 @@ function AdminInventory() {
                                 name: 'age',
                                 id: 'uncontrolled-native',
                             }}
+                            onChange={filterByCategory}
                         >
                             <option value={'all'}>All</option>
-                            <option value={'love&romance'}>Love & Romance</option>
-                            <option value={'birthday'}>Birthday</option>
-                            <option value={'anniversary'}>Anniversary</option>
+                            <option value={'1'}>Occasional Delights</option>
+                            <option value={'2'}>Flower Type Elegance</option>
+                            <option value={'3'}>Colorful Blossoms</option>
                         </NativeSelect>
                     </FormControl>
                     <Button variant="contained" color="secondary3" className={'w-[16.8em] h-8 2xl:h-10 !font-semibold'} onClick={handleAddProductOpen}>

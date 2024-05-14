@@ -50,6 +50,13 @@ const productSlice = createSlice({
             }else{
                 state.errors.addProduct = action.payload.errors;
             }
+        }).addCase(getProductsByCategory.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.products = action.payload.products;
+                state.message.getProducts = action.payload.message;
+            }else{
+                state.errors.getProducts = action.payload.errors;
+            }
         });
     }
 });
@@ -134,6 +141,25 @@ export const updateProduct2 = createAsyncThunk(
                 statusFlag: 'failed',
                 errors: error.response.data.errors,
                 status : error.response.data.status
+            }
+        });
+    });
+
+export const getProductsByCategory = createAsyncThunk(
+    'product/getProductsByCategory',
+    async (category) => {
+        return api.get(`/bouquets/get-bouquets-by-category/${category}`).then(response => {
+            return {
+                products: response.data.bouquets,
+                statusFlag: 'success',
+                status: response.data.status
+            }
+        }).catch(error => {
+            console.log(error.response.data);
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data.errors,
+                status: error.response.status
             }
         });
     });

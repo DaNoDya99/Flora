@@ -58,8 +58,8 @@ function Products() {
         <div className={'min-h-[90vh] py-14 px-[10em] max-2xl:px-[6em]  max-2xl:py-10'}>
             <Breadcrumb path={path} />
             <div className={'w-full flex min-h-[78vh] mt-5 nunito-sans-light'}>
-                <div className={'w-[20%] border-2 border-secondary3 rounded relative max-h-[60.4vh] max-2xl:w-[30%] max-2xl:max-h-[90vh]'}>
-                    <img src={AuthBackgroundImage} alt="background image" className={'h-[60vh] max-2xl:h-[89.3vh] object-cover opacity-30'} />
+                <div className={'w-[20%] border-2 border-secondary3 rounded relative max-h-[75.4vh] max-2xl:w-[30%] max-2xl:max-h-[90vh]'}>
+                    <img src={AuthBackgroundImage} alt="background image" className={'h-[75vh] max-2xl:h-[89.3vh] object-cover opacity-30'} />
                     <div className={'space-y-10 absolute top-10 left-5'}>
                         <FormControl className={'nunito-sans-light'}>
                             <FormLabel id="demo-radio-buttons-group-label" sx={{ fontWeight: 'bold', fontSize: 25, color: 'black' }}

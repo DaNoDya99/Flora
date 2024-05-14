@@ -4,7 +4,7 @@ import NumberInput from '../../components/number-input';
 import { useNavigate } from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
-import {getCart} from "../../store/slices/cart_slice.js";
+import {getCart, removeItemFromCart} from "../../store/slices/cart_slice.js";
 import {setOrderItems, setOrderTotal} from "../../store/slices/order_slice.js";
 
 function ShoppingCart() {
@@ -41,6 +41,17 @@ function ShoppingCart() {
         navigate('/order/cart-details', { state: { component : 'shopping_cart', state : true } });
     }
 
+    function handleRemoveCartItem(product_code) {
+        const data = {
+            customer: customer.id,
+            product_code: product_code
+        }
+
+        dispatch(removeItemFromCart(data));
+
+        window.location.href = '/products/1';
+    }
+
     return (
         <>
             <div className={'px-[10em] max-2xl:px-[6em] mb-14 max-2xl:mb-10'}>
@@ -71,7 +82,7 @@ function ShoppingCart() {
                                             </TableCell>
                                             <TableCell align="center" className={'!nunito-sans-light 2xl:!text-xl'}>Rs. {parseFloat(item.price.replace(/,/g, ''))*parseInt(item.quantity)}.00</TableCell>
                                             <TableCell align="center" className={'!nunito-sans-light'}>
-                                                <DeleteIcon className={'text-red-700'} />
+                                                <DeleteIcon className={'text-red-700 cursor-pointer'} onClick={() => handleRemoveCartItem(item.product_code)}/>
                                             </TableCell>
                                         </TableRow>
                                     ))}
