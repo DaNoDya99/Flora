@@ -57,6 +57,13 @@ const productSlice = createSlice({
             }else{
                 state.errors.getProducts = action.payload.errors;
             }
+        }).addCase(getBouquetsByPriceRange2.fulfilled, (state, action) => {
+            if (action.payload.statusFlag === 'success') {
+                state.data.products = action.payload.products;
+                state.message.getProducts = action.payload.message;
+            }else{
+                state.errors.getProducts = action.payload.errors;
+            }
         });
     }
 });
@@ -163,3 +170,23 @@ export const getProductsByCategory = createAsyncThunk(
             }
         });
     });
+
+export const getBouquetsByPriceRange2 = createAsyncThunk(
+    'product/getBouquetsByPriceRange',
+    async (data) => {
+        return api.get(`/bouquets/get-bouquets-by-price-range/${data.min}/${data.max}/${data.cat}`).then(response => {
+            return {
+                products: response.data.bouquets,
+                statusFlag: 'success',
+                status: response.data.status
+            }
+        }).catch(error => {
+            console.log(error.response.data);
+            return {
+                statusFlag: 'failed',
+                errors: error.response.data.errors,
+                status: error.response.status
+            }
+        });
+    });
+

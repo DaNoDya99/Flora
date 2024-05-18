@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import ImgMediaCard from "../../components/card.jsx";
 import {useEffect, useState} from "react";
 import {useSelector,useDispatch} from "react-redux";
-import {getProducts} from "../../store/slices/product_slice.js";
+import {getBouquetsByPriceRange2, getProducts, getProductsByCategory} from "../../store/slices/product_slice.js";
 
 function Products() {
     const loggedIn = useSelector(state => state.customer.data.loggedIn);
@@ -52,6 +52,19 @@ function Products() {
         window.addEventListener('resize', handleResize);
     }, [setNoOfCards]);
 
+    const getBouquetsByPriceRange = (min, max) => {
+        const data = {
+            min: min,
+            max: max,
+            cat : category
+        }
+        dispatch(getBouquetsByPriceRange2(data))
+    }
+
+    const getAllBouquets = () => {
+        window.location.reload();
+    }
+
     const cardsArray = Array.from({ length: noOfCards }, (_, index) => index);
 
     return (
@@ -70,7 +83,7 @@ function Products() {
                                 name="radio-buttons-group"
                                 className={'ms-5'}
                             >
-                                <FormControlLabel value="all" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>All</Typography>} />
+                                <FormControlLabel value="all" control={<Radio />}  onClick={getAllBouquets} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>All</Typography>} />
                                 <FormControlLabel value="latest" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Latest</Typography>} />
                                 <FormControlLabel value="top" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Featured</Typography>} />
                             </RadioGroup>
@@ -85,11 +98,11 @@ function Products() {
                                 name="radio-buttons-group"
                                 className={'ms-5'}
                             >
-                                <FormControlLabel value="<=1499" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Below Rs. 1499.00</Typography>} />
-                                <FormControlLabel value="1500 - 3499" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Rs. 1500.00 - Rs. 3499.00</Typography>} />
-                                <FormControlLabel value="3500 - 5499" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Rs. 3500.00 - Rs. 5499.00</Typography>} />
-                                <FormControlLabel value="5500 - 7499" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Rs. 5500.00 - Rs. 7499.00</Typography>} />
-                                <FormControlLabel value=">=7500" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Above Rs. 7500.00</Typography>} />
+                                <FormControlLabel value="<=1499" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Below Rs. 1499.00</Typography>} onClick={() => getBouquetsByPriceRange(0,1499)}/>
+                                <FormControlLabel value="1500 - 3499" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Rs. 1500.00 - Rs. 3499.00</Typography>} onClick={() => getBouquetsByPriceRange(1500,3499)}/>
+                                <FormControlLabel value="3500 - 5499" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Rs. 3500.00 - Rs. 5499.00</Typography>} onClick={() => getBouquetsByPriceRange(3500,5499)}/>
+                                <FormControlLabel value="5500 - 7499" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Rs. 5500.00 - Rs. 7499.00</Typography>} onClick={() => getBouquetsByPriceRange(5500,7499)}/>
+                                <FormControlLabel value=">=7500" control={<Radio />} label={<Typography sx={{ fontWeight: 'bold' }} className={'nunito-sans-light max-2xl:!text-sm'}>Above Rs. 7500.00</Typography>} onClick={() => getBouquetsByPriceRange(7500,15000)}/>
                             </RadioGroup>
                         </FormControl>
                     </div>
